@@ -2,14 +2,15 @@ package com.noelrmrz.pokedex.utilities;
 
 public class RetrofitClient {
 
+    // TODO change URL
     private static final String BASE_URL = "https://d17h27t6h515a5.cloudfront.net/";
 
     public static void getRecipeListObjects(Callback<JsonArray> callback) {
         Retrofit retrofit = retrofitBuilder();
 
-        RecipeService service = retrofit.create(RecipeService.class);
-        Call<JsonArray> recipes = service.getRecipes();
-        recipes.enqueue(callback);
+        PokemonService service = retrofit.create(PokemonService.class);
+        Call<JsonArray> monsters = service.getPokemon();
+        monsters.enqueue(callback);
     }
 
     private static Retrofit retrofitBuilder() {
