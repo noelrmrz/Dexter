@@ -1,7 +1,27 @@
 package com.noelrmrz.pokedex.ui.main;
 
-import androidx.lifecycle.ViewModel;
+import android.app.Application;
 
-public class MainViewModel extends ViewModel {
-    // TODO: Implement the ViewModel
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+
+import com.noelrmrz.pokedex.POJO.Pokemon;
+
+import java.util.List;
+
+public class MainViewModel extends AndroidViewModel {
+
+    private LiveData<List<Pokemon>> favoritePokemon;
+
+    public MainViewModel(@NonNull Application application) {
+        super(application);
+
+        PokemonDatabase pokemonDatabase = PokemonDatabase.getInstance(this.getApplication());
+        favoritePokemon = pokemonDatabase.pokemonDAO().loadFavoritePokemon();
+    }
+
+    public LiveData<List<Pokemon>> getFavoritePokemon() {
+        return favoritePokemon;
+    }
 }
