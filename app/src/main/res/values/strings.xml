@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Pokedex</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="fab_favorite">add/remove from favorites</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="pokemon_sprite_content_description">pokemon image</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="transition_name">profile</string>
 </resources>

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/tv_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="The flame that burns at the tip of its tail is an indication of its emotions.  The flame waivers when Charmander is enjoying itself.  If the pokemon becomes enraged, the flame burns fiercely." />
+
+    <TextView
+        android:id="@+id/tv_label_pokemon_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/tv_description"
+        app:layout_constraintTop_toBottomOf="@+id/tv_description"
+        tools:text="Pokemon Data" />
+
+    <TextView
+        android:id="@+id/tv_label_species"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/tv_label_pokemon_data"
+        app:layout_constraintTop_toBottomOf="@+id/tv_label_pokemon_data"
+        tools:text="Species" />
+
+    <TextView
+        android:id="@+id/tv_species"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/tv_label_pokemon_data"
+        app:layout_constraintTop_toTopOf="@+id/tv_label_species"
+        tools:text="Lizard Pokemon" />
+
+    <TextView
+        android:id="@+id/tv_label_height"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/tv_label_species"
+        app:layout_constraintTop_toBottomOf="@+id/tv_label_species"
+        tools:text="Height" />
+
+    <TextView
+        android:id="@+id/tv_height"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/tv_species"
+        app:layout_constraintTop_toTopOf="@+id/tv_label_height"
+        tools:text="0.6m" />
+
+    <TextView
+        android:id="@+id/tv_label_weight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/tv_label_height"
+        app:layout_constraintTop_toBottomOf="@+id/tv_label_height"
+        tools:text="Weight" />
+
+    <TextView
+        android:id="@+id/tv_weight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/tv_height"
+        app:layout_constraintTop_toTopOf="@+id/tv_label_weight"
+        tools:text="8.5kg" />
+
+    <TextView
+        android:id="@+id/tv_label_Abilities"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/tv_label_weight"
+        app:layout_constraintTop_toBottomOf="@+id/tv_label_weight"
+        tools:text="Abilities" />
+
+    <TextView
+        android:id="@+id/tv_ability_primary_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/tv_label_Abilities"
+        app:layout_constraintTop_toBottomOf="@+id/tv_label_Abilities"
+        tools:text="Solar Power" />
+
+    <TextView
+        android:id="@+id/tv_ability_primary_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="italic"
+        app:layout_constraintStart_toStartOf="@+id/tv_ability_primary_name"
+        app:layout_constraintTop_toBottomOf="@+id/tv_ability_primary_name"
+        tools:text="secondary" />
+
+    <TextView
+        android:id="@+id/tv_ability_primary_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="@+id/tv_ability_primary_type"
+        app:layout_constraintTop_toBottomOf="@+id/tv_ability_primary_type"
+        tools:text="hidden" />
+
+    <TextView
+        android:id="@+id/tv_label_evolutions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/tv_ability_primary_description"
+        app:layout_constraintTop_toBottomOf="@+id/tv_ability_primary_description"
+        tools:text="Evolutions" />
+
+    <TextView
+        android:id="@+id/tv_label_training_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        tools:layout_editor_absoluteX="2dp"
+        tools:layout_editor_absoluteY="417dp"
+        tools:text="Training Data" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
