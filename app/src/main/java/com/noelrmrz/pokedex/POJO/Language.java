@@ -3,7 +3,7 @@ package com.noelrmrz.pokedex.POJO;
 import com.google.gson.annotations.SerializedName;
 
 public class Language {
-    @SerializedName("language")
+    @SerializedName("name")
     private String language;
 
     @SerializedName("url")

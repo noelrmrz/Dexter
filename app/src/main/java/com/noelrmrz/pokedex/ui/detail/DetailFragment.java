@@ -1,14 +1,19 @@
 package com.noelrmrz.pokedex.ui.detail;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
@@ -17,7 +22,8 @@ import com.noelrmrz.pokedex.POJO.Pokemon;
 import com.noelrmrz.pokedex.R;
 import com.noelrmrz.pokedex.ui.TabsAdapter;
 import com.noelrmrz.pokedex.utilities.GsonClient;
-import com.noelrmrz.pokedex.utilities.PicassoClient;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,6 +33,7 @@ import com.noelrmrz.pokedex.utilities.PicassoClient;
 public class DetailFragment extends Fragment {
 
     Pokemon savedPokemon;
+    private static final String BASE_URL = "https://assets.pokemon.com//assets/cms2/img/pokedex/detail/";
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -37,6 +44,7 @@ public class DetailFragment extends Fragment {
 
     // TODO: Rename and change types of parameters
     private String mParam1;
+    private AppBarConfiguration appBarConfiguration;
 
     public DetailFragment() {
         // Required empty public constructor
@@ -66,16 +74,29 @@ public class DetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            savedPokemon = GsonClient.getGsonClient().fromJson(mParam1, Pokemon.class);
+            // Get the arguments
+            String args = DetailFragmentArgs.fromBundle(getArguments()).getPokemonJsonString();
+            savedPokemon = GsonClient.getGsonClient().fromJson(args, Pokemon.class);
+            mTabsAdapter = new TabsAdapter(this, args);
         }
 
-        mTabsAdapter = new TabsAdapter(this);
+        Intent intentThatStartedThisActivity = getActivity().getIntent();
 
-/*        Transition transition = TransitionInflater.from(requireContext())
-                .inflateTransition(R.transition.image_shared_element_transition);
-        setSharedElementEnterTransition(transition);*/
+        // Check for extras in the Intent
+        if (intentThatStartedThisActivity != null) {
+            if (intentThatStartedThisActivity.hasExtra(Intent.EXTRA_TEXT)) {
+                savedPokemon = GsonClient.getGsonClient().fromJson(
+                        intentThatStartedThisActivity.getStringExtra(Intent.EXTRA_TEXT),
+                Pokemon.class);
+            }
+        }
+
+/*        postponeEnterTransition();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            setSharedElementEnterTransition(TransitionInflater.from(getContext()).inflateTransition(android.R.transition.move));
+        }*/
     }
 
     /*
@@ -84,7 +105,7 @@ public class DetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        setHasOptionsMenu(true);
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_detail, container, false);
     }
@@ -96,24 +117,51 @@ public class DetailFragment extends Fragment {
     */
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        NavHostFragment navHostFragment = (NavHostFragment) getActivity().getSupportFragmentManager()
+                .findFragmentById(R.id.nav_host_fragment_container);
+        NavController navController = navHostFragment.getNavController();
+        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
+        NavigationUI.setupActionBarWithNavController((AppCompatActivity) getActivity(), navController, appBarConfiguration);
 
-        Toolbar toolbar = view.findViewById(R.id.toolbar);
 //        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getActivity().finish();
-            }
-        });
+//        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+/*        NavController navController = Navigation.findNavController(view);
+        AppBarConfiguration appBarConfiguration =
+                new AppBarConfiguration.Builder(navController.getGraph()).build();
+        Toolbar toolbar = view.findViewById(R.id.detail_toolbar);
+        CollapsingToolbarLayout layout = view.findViewById(R.id.collapsing_toolbar);
+
+        NavigationUI.setupWithNavController(layout, toolbar, navController, appBarConfiguration);*/
 
         // Setup the ViewPager
         viewPager = view.findViewById(R.id.tab_pager);
         viewPager.setAdapter(mTabsAdapter);
 
+        // FAB
+        view.findViewById(R.id.favorite_fab);
+
         // Setup the views
         ImageView imageView = view.findViewById(R.id.iv_fragment_detail);
-        PicassoClient.postponedDownloadImage(savedPokemon.getProfileUrl(), imageView, this);
+/*        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            imageView.setTransitionName("Charmander");
+        }*/
+        //PicassoClient.postponedDownloadImage(savedPokemon.getProfileUrl(), imageView, this.getActivity());
+
+        String completeUrl = BASE_URL.concat(savedPokemon.getProfileUrl());
+        Picasso.get().load(completeUrl).into(imageView, new Callback() {
+            @Override
+            public void onSuccess() {
+                Log.v("ppicaasso", "success");
+                //startPostponedEnterTransition();
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+        });
 
         // Setup the TabLayout
         TabLayout tabLayout = view.findViewById(R.id.tab_layout);

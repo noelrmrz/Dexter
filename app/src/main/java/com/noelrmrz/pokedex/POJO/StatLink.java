@@ -2,14 +2,14 @@ package com.noelrmrz.pokedex.POJO;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Ability {
+public class StatLink {
     @SerializedName("name")
     private String name;
 
     @SerializedName("url")
     private String url;
 
-    public Ability(String name, String url) {
+    public StatLink(String name, String url) {
         this.name = name;
         this.url = url;
     }
@@ -29,4 +29,6 @@ public class Ability {
     public void setUrl(String url) {
         this.url = url;
     }
+
+
 }

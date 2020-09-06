@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <item
+        android:id="@+id/search"
+        android:title="@string/search_title"
+        android:icon="@android:drawable/ic_menu_search"
+        app:showAsAction="collapseActionView|ifRoom"
+        app:actionViewClass="android.widget.SearchView" />
+
+    <item
+        android:title="@string/title_options_menu_settings"
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+
+    <!--    <SearchView
+            android:id="@+id/searchview"
+            android:padding="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:iconifiedByDefault="false"
+            android:queryHint="Search"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/searchview"
+            android:queryBackground="@android:color/transparent"
+            />-->
+
+</menu>

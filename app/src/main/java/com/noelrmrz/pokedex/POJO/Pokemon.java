@@ -8,8 +8,6 @@ import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
-import me.sargunvohra.lib.pokekotlin.model.Stat;
-
 @Entity(tableName="favorite_pokemon")
 public class Pokemon {
 
@@ -31,10 +29,6 @@ public class Pokemon {
     @ColumnInfo(name="weight")
     private int mWeight;
 
-    @SerializedName("moves")
-    @Ignore
-    private Move[] mMoveList;
-
     @SerializedName("stats")
     @Ignore
     private Stat[] mStatList;
@@ -45,7 +39,15 @@ public class Pokemon {
 
     @SerializedName("abilities")
     @Ignore
-    private Ability[] mAbilityList;
+    private AbilityLink[] mAbilityList;
+
+    @SerializedName("moves")
+    @Ignore
+    private MoveLink[] mMoveList;
+
+    @SerializedName("species")
+    @Ignore
+    private PokemonSpecies pokemonSpecies;
 
     @SerializedName("image_url")
     @ColumnInfo(name="image_url")
@@ -62,8 +64,8 @@ public class Pokemon {
 
     }
 
-    public Pokemon(int mId, String mName, int mHeight, int mWeight, Move[] mMoveList,
-                   Stat[] mStatList, TypeLink[] mTypeList, Ability[] mAbilityList, String mImageUrl,
+    public Pokemon(int mId, String mName, int mHeight, int mWeight, MoveLink[] mMoveList,
+                   Stat[] mStatList, TypeLink[] mTypeList, AbilityLink[] mAbilityLinkList, String mImageUrl,
                    String mUrl) {
         this.mId = mId;
         this.mName = mName;
@@ -72,7 +74,7 @@ public class Pokemon {
         this.mMoveList = mMoveList;
         this.mStatList = mStatList;
         this.mTypeList = mTypeList;
-        this.mAbilityList = mAbilityList;
+        this.mAbilityList = mAbilityLinkList;
         this.mImageUrl = mImageUrl;
         this.mUrl = mUrl;
     }
@@ -140,4 +142,37 @@ public class Pokemon {
     public String getProfileUrl() {
         return profileUrl;
     }
+
+    public AbilityLink[] getAbilityList() {
+        return mAbilityList;
+    }
+
+    public void setAbilityList(AbilityLink[] abilityList) {
+        mAbilityList = abilityList;
+    }
+
+    public MoveLink[] getMoveList() {
+        return mMoveList;
+    }
+
+    public void setMoveList(MoveLink[] moveList) {
+        mMoveList = moveList;
+    }
+
+    public PokemonSpecies getPokemonSpecies() {
+        return pokemonSpecies;
+    }
+
+    public void setPokemonSpecies(PokemonSpecies pokemonSpecies) {
+        this.pokemonSpecies = pokemonSpecies;
+    }
+
+    public Stat[] getStatList() {
+        return mStatList;
+    }
+
+    public void setStatList(Stat[] statList) {
+        mStatList = statList;
+    }
 }
+

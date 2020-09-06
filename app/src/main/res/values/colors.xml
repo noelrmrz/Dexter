@@ -6,7 +6,7 @@
     <color name="black_overlay">#66000000</color>
     <color name="white">#FFFFFF</color>
     <color name="water">#42A5F5</color>
-    <color name="fire">#EC407A</color>
+    <color name="fire">#EF5350</color>
     <color name="grass">#66BB6A</color>
     <color name="bug">#D4E157</color>
     <color name="flying">#26A69A</color>
@@ -15,11 +15,12 @@
     <color name="poison">#7E57C2</color>
     <color name="ground">#8D6E63</color>
     <color name="ice">#29B6F6</color>
-    <color name="psychic"></color>
+    <color name="psychic">#AB47BC</color>
     <color name="fighting">#FF7043</color>
-    <color name="steel"></color>
+    <color name="steel">#8E8E8E</color>
+    <color name="rock">#6C544B</color>
     <color name="dragon">#FFA726</color>
     <color name="fairy">#EC407A</color>
-    <color name="dark"></color>
+    <color name="dark">#333333</color>
     <color name="ghost">#5C6BC0</color>
 </resources>

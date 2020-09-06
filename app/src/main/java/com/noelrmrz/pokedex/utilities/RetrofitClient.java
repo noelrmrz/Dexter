@@ -1,5 +1,7 @@
 package com.noelrmrz.pokedex.utilities;
 
+import com.noelrmrz.pokedex.POJO.Ability;
+import com.noelrmrz.pokedex.POJO.Move;
 import com.noelrmrz.pokedex.POJO.Pokemon;
 import com.noelrmrz.pokedex.POJO.PokemonJsonList;
 import com.noelrmrz.pokedex.POJO.PokemonSpecies;
@@ -20,12 +22,14 @@ public class RetrofitClient {
         pokemonList.enqueue(callback);
     }
 
-    public static void getMoveList() {
-
+    public static void getMoveList(Callback<Move> callback, String nameOrId) {
+        Call<Move> moveList = service.getMoveInformation(nameOrId);
+        moveList.enqueue(callback);
     }
 
-    public static void getAbilityList() {
-
+    public static void getAbilityList(Callback<Ability> callback, String nameOrId) {
+        Call<Ability> abilityList = service.getAbilityInformation(nameOrId);
+        abilityList.enqueue(callback);
     }
 
     public static void getTypeList() {

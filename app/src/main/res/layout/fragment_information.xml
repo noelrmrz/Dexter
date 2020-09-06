@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -21,21 +20,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:text="@string/tv_label_pokemon_data"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/tv_description"
-        app:layout_constraintTop_toBottomOf="@+id/tv_description"
-        tools:text="Pokemon Data" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_description" />
 
     <TextView
         android:id="@+id/tv_label_species"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:text="@string/tv_label_species"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/tv_label_pokemon_data"
-        app:layout_constraintTop_toBottomOf="@+id/tv_label_pokemon_data"
-        tools:text="Species" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_label_pokemon_data" />
 
     <TextView
         android:id="@+id/tv_species"
@@ -52,10 +51,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:text="@string/tv_label_height"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/tv_label_species"
-        app:layout_constraintTop_toBottomOf="@+id/tv_label_species"
-        tools:text="Height" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_label_species" />
 
     <TextView
         android:id="@+id/tv_height"
@@ -70,10 +69,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:text="@string/tv_label_weight"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/tv_label_height"
-        app:layout_constraintTop_toBottomOf="@+id/tv_label_height"
-        tools:text="Weight" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_label_height" />
 
     <TextView
         android:id="@+id/tv_weight"
@@ -88,49 +87,106 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:text="@string/tv_label_abilities"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/tv_label_weight"
-        app:layout_constraintTop_toBottomOf="@+id/tv_label_weight"
-        tools:text="Abilities" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_label_weight" />
 
     <TextView
         android:id="@+id/tv_ability_primary_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="72dp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/tv_label_Abilities"
+        app:layout_constraintEnd_toStartOf="@+id/tv_ability_secondary_name"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_label_Abilities"
         tools:text="Solar Power" />
 
-    <TextView
-        android:id="@+id/tv_ability_primary_type"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textStyle="italic"
-        app:layout_constraintStart_toStartOf="@+id/tv_ability_primary_name"
-        app:layout_constraintTop_toBottomOf="@+id/tv_ability_primary_name"
-        tools:text="secondary" />
-
-    <TextView
+    <!--    <TextView
         android:id="@+id/tv_ability_primary_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="@+id/tv_ability_primary_type"
         app:layout_constraintTop_toBottomOf="@+id/tv_ability_primary_type"
-        tools:text="hidden" />
+        tools:text="Primary description" />-->
+
+    <TextView
+        android:id="@+id/tv_ability_primary_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tv_label_primary_ability"
+        android:textStyle="italic"
+        app:layout_constraintStart_toStartOf="@+id/tv_ability_primary_name"
+        app:layout_constraintTop_toBottomOf="@+id/tv_ability_primary_name" />
+
+    <TextView
+        android:id="@+id/tv_ability_secondary_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:visibility="visible"
+        app:layout_constraintEnd_toStartOf="@+id/tv_ability_hidden_name"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tv_ability_primary_name"
+        app:layout_constraintTop_toTopOf="@+id/tv_ability_primary_name"
+        tools:text="Solar Power" />
+
+    <TextView
+        android:id="@+id/tv_ability_secondary_type"
+        android:layout_width="61dp"
+        android:layout_height="16dp"
+        android:text="@string/tv_label_secondary_ability"
+        android:textStyle="italic"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="@+id/tv_ability_secondary_name"
+        app:layout_constraintTop_toBottomOf="@+id/tv_ability_secondary_name" />
+
+    <!--    <TextView
+        android:id="@+id/tv_ability_secondary_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="@+id/tv_ability_secondary_type"
+        app:layout_constraintTop_toBottomOf="@+id/tv_ability_secondary_type"
+        tools:text="Secondary description" />-->
+
+    <TextView
+        android:id="@+id/tv_ability_hidden_name"
+        android:layout_width="82dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="72dp"
+        android:textStyle="bold"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tv_ability_secondary_name"
+        app:layout_constraintTop_toTopOf="@+id/tv_ability_secondary_name"
+        tools:text="Solar Power" />
+
+    <TextView
+        android:id="@+id/tv_ability_hidden_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tv_label_hidden_ability"
+        android:textStyle="italic"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="@+id/tv_ability_hidden_name"
+        app:layout_constraintTop_toBottomOf="@+id/tv_ability_hidden_name" />
 
     <TextView
         android:id="@+id/tv_label_evolutions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/tv_ability_primary_description"
-        app:layout_constraintTop_toBottomOf="@+id/tv_ability_primary_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="505dp"
         tools:text="Evolutions" />
 
     <TextView
@@ -139,8 +195,9 @@
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:textStyle="bold"
-        tools:layout_editor_absoluteX="2dp"
-        tools:layout_editor_absoluteY="417dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="540dp"
         tools:text="Training Data" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

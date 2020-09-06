@@ -1,6 +1,7 @@
 package com.noelrmrz.pokedex.utilities;
 
 import com.noelrmrz.pokedex.POJO.Ability;
+import com.noelrmrz.pokedex.POJO.Move;
 import com.noelrmrz.pokedex.POJO.Pokemon;
 import com.noelrmrz.pokedex.POJO.PokemonJsonList;
 import com.noelrmrz.pokedex.POJO.PokemonSpecies;
@@ -18,14 +19,20 @@ public interface PokemonService {
     Call<PokemonJsonList> getPokemonList(@Query("limit") int limit, @Query("offset") int offset);
 
     @GET("pokemon/{pokemonNameOrId}")
-    Call<Pokemon> getPokemonInformationByNameOrId(@Path("pokemonNameOrId") String NameOrId);
+    Call<Pokemon> getPokemonInformationByNameOrId(@Path("pokemonNameOrId") String nameOrId);
 
     @GET("pokemon-species/{pokemonNameOrId}")
-    Call<PokemonSpecies> getSpeciesInformationByNameOrId(@Path("pokemonNameOrId") String NameOrId);
+    Call<PokemonSpecies> getSpeciesInformationByNameOrId(@Path("pokemonNameOrId") String nameOrId);
 
-    @GET("ability/{abilityId}")
-    Call<Ability> getAbilityInformation(@Path("abilityId") String id);
+    @GET("ability/{abilityNameOrId}")
+    Call<Ability> getAbilityInformation(@Path("abilityNameOrId") String nameOrId);
 
     @GET("type/{typeId}")
     Call<Type> getTypeInformation(@Path("typeId") String id);
+
+    @GET("move/{nameOrId}")
+    Call<Move> getMoveInformation(@Path("nameOrId") String nameOrId);
+
+
+
 }

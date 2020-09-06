@@ -2,31 +2,31 @@ package com.noelrmrz.pokedex.POJO;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Ability {
+public class MoveDamageClass {
     @SerializedName("name")
-    private String name;
+    private String mName;
 
     @SerializedName("url")
-    private String url;
+    private String mUrl;
 
-    public Ability(String name, String url) {
-        this.name = name;
-        this.url = url;
+    public MoveDamageClass(String mName, String mUrl) {
+        this.mName = mName;
+        this.mUrl = mUrl;
     }
 
     public String getName() {
-        return name;
+        return mName;
     }
 
     public void setName(String name) {
-        this.name = name;
+        mName = name;
     }
 
     public String getUrl() {
-        return url;
+        return mUrl;
     }
 
     public void setUrl(String url) {
-        this.url = url;
+        mUrl = url;
     }
 }

@@ -1,9 +1,11 @@
 package com.noelrmrz.pokedex.utilities;
 
+import android.app.Activity;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.RemoteViews;
 
 import androidx.fragment.app.Fragment;
 
@@ -31,14 +33,27 @@ public class PicassoClient {
         }
     }
 
-    public static void postponedDownloadImage(String url, ImageView imageView, Fragment fragment) {
+    public static void whosThatPokemon(RemoteViews remoteViews, int viewId, int[] appWidgetIds, String url) {
+        if(url != null && url.length()>0)
+        {
+            String completeUrl = BASE_URL.concat(url);
+            Picasso.get().load(completeUrl).into(remoteViews, viewId, appWidgetIds);
+        }
+        else {
+            // TODO change hardcoded string
+            Log.v(TAG, "imageView.getContext().getString(R.string.picassoErrorMessage)");
+        }
+    }
+
+    public static void postponedDownloadImage(String url, ImageView imageView, Activity activity) {
         if(url != null && url.length()>0)
         {
             String completeUrl = BASE_URL.concat(url);
             Picasso.get().load(completeUrl).into(imageView, new Callback() {
                 @Override
                 public void onSuccess() {
-                    scheduleStartPostponedTransition(imageView, fragment);
+                    Log.v("ppicaasso", "success");
+                    startPostponedEnterTransition(activity);
                 }
 
                 @Override

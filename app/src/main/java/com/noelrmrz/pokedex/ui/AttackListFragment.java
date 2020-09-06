@@ -6,8 +6,23 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.noelrmrz.pokedex.AttackListAdapter;
+import com.noelrmrz.pokedex.POJO.Move;
+import com.noelrmrz.pokedex.POJO.MoveLink;
+import com.noelrmrz.pokedex.POJO.Pokemon;
 import com.noelrmrz.pokedex.R;
+import com.noelrmrz.pokedex.utilities.GsonClient;
+import com.noelrmrz.pokedex.utilities.RetrofitClient;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,6 +39,9 @@ public class AttackListFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private Pokemon savedPokemon;
+    private AttackListAdapter attackListAdapter;
+    private static List<Move> mMoveList = new ArrayList<>();
 
     public AttackListFragment() {
         // Required empty public constructor
@@ -34,15 +52,15 @@ public class AttackListFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     *
      * @return A new instance of fragment AttackListFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static AttackListFragment newInstance(String param1, String param2) {
+    public static AttackListFragment newInstance(String param1) {
         AttackListFragment fragment = new AttackListFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        //args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -50,9 +68,18 @@ public class AttackListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        attackListAdapter = new AttackListAdapter();
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            //mParam2 = getArguments().getString(ARG_PARAM2);
+            savedPokemon = GsonClient.getGsonClient().fromJson(mParam1, Pokemon.class);
+
+            // Get detailed information for each move
+            for (MoveLink pokemonMove: savedPokemon.getMoveList()) {
+                asyncCallback(pokemonMove.getMove().getName());
+            }
         }
     }
 
@@ -61,5 +88,40 @@ public class AttackListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_attack_list, container, false);
+    }
+
+    /*
+    Triggered after onCreateView
+    only called if the view from onCreateView is non-null
+    View setup should occur here
+    */
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        // Setup the RecyclerView
+        RecyclerView mRecyclerView = view.findViewById(R.id.rv_attack_list);
+        mRecyclerView.setAdapter(attackListAdapter);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+/*        mRecyclerView.addItemDecoration(new DividerItemDecoration(requireContext()
+                .getDrawable(R.drawable.divider_item_decoration)));*/
+        mRecyclerView.setLayoutManager(layoutManager);
+    }
+
+    private void asyncCallback(String move) {
+        RetrofitClient.getMoveList(new Callback<Move>() {
+            @Override
+            public void onResponse(Call<Move> call, Response<Move> response) {
+                mMoveList.add(response.body());
+
+                // Once all the moved have been retrieved proceed to add the collection to the adapter
+                if (mMoveList.size() == savedPokemon.getMoveList().length) {
+                    attackListAdapter.setMoveList(mMoveList);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Move> call, Throwable t) {
+
+            }
+        }, move);
     }
 }

@@ -1,15 +1,16 @@
 package com.noelrmrz.pokedex.ui;
 
-import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-public class TabsAdapter extends FragmentStateAdapter {
+import com.noelrmrz.pokedex.ui.recyclerview.StatsFragment;
 
-    public TabsAdapter(Fragment fragment) {
+public class TabsAdapter extends FragmentStateAdapter {
+    private String pokemonJSON;
+    public TabsAdapter(Fragment fragment, String pokemonJSON) {
         super(fragment);
+        this.pokemonJSON = pokemonJSON;
     }
 
     @NonNull
@@ -18,17 +19,15 @@ public class TabsAdapter extends FragmentStateAdapter {
         Fragment fragment;
         // Return new fragment instance in createFragment(int)
         switch (position) {
-/*            case 1:
-                fragment = InformationFragment.newInstance();
+            case 0:
+                fragment = InformationFragment.newInstance(pokemonJSON);
                 break;
-            case 2:
-                fragment = AttackListFragment.newInstance("Param1", "Param2");
-                break;*/
+            case 1:
+                fragment = AttackListFragment.newInstance(pokemonJSON);
+                break;
             default:
-                fragment = new Fragment();
+                fragment = StatsFragment.newInstance(pokemonJSON);
         }
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
         return fragment;
     }
 

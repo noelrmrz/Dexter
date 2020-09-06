@@ -4,11 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="16dp"
     tools:context=".ui.recyclerview.StatsFragment">
+
+    <TextView
+        android:id="@+id/tv_label_base_stats"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:text="@string/tv_label_base_stats" />
 
     <com.github.mikephil.charting.charts.RadarChart
         android:id="@+id/radar_chart"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="400dp" />
 
 </FrameLayout>
