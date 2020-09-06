@@ -1,5 +1,7 @@
 package com.noelrmrz.pokedex.utilities;
 
+import android.graphics.Bitmap;
+
 import com.noelrmrz.pokedex.POJO.Ability;
 import com.noelrmrz.pokedex.POJO.Move;
 import com.noelrmrz.pokedex.POJO.Pokemon;
@@ -33,6 +35,8 @@ public interface PokemonService {
     @GET("move/{nameOrId}")
     Call<Move> getMoveInformation(@Path("nameOrId") String nameOrId);
 
+    @GET("https://assets.pokemon.com//assets/cms2/img/pokedex/detail/{url}")
+    Call<Bitmap> getBitmap(@Path("url") String url);
 
 
 }

@@ -9,9 +9,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.widget.RemoteViews;
 
+import com.noelrmrz.pokedex.MainActivity;
 import com.noelrmrz.pokedex.POJO.Pokemon;
 import com.noelrmrz.pokedex.R;
-import com.noelrmrz.pokedex.ui.detail.DetailFragment;
 import com.noelrmrz.pokedex.utilities.GsonClient;
 import com.noelrmrz.pokedex.utilities.PicassoClient;
 
@@ -21,18 +21,21 @@ public class PokedexWidgetProvider extends AppWidgetProvider {
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.whos_that_pokemon_widget);
 
-        views.setTextViewText(R.id.tv_whos_that_pokemon_title, context.getResources().getText(R.string.widget_title));
+        // Handle
         Handler uiHandler = new Handler(Looper.getMainLooper());
         uiHandler.post(() -> {
+
+            // Use Picasso to load the image into the ImageView
             PicassoClient.whosThatPokemon(views, R.id.iv_whos_that_pokemon, appWidgetIds,
                     GsonClient.getGsonClient().fromJson(pokemonJsonString, Pokemon.class).getProfileUrl());
 
+            // Set the black outline ontop of the pokemon imagea
+            views.setInt(R.id.iv_whos_that_pokemon,"setColorFilter",
+                    context.getResources().getColor(android.R.color.black));
         });
 
-        //views.setImageViewUri(R.id.iv_whos_that_pokemon, Uri.parse(GsonClient.getGsonClient().fromJson(pokemonJsonString, Pokemon.class).getProfileUrl()));
-
-
-        Intent intent = new Intent(context, DetailFragment.class);
+        // Create an intent to open the app when the user clicks on the ImageView
+        Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra(Intent.EXTRA_TEXT, pokemonJsonString);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
@@ -49,8 +52,6 @@ public class PokedexWidgetProvider extends AppWidgetProvider {
 
     public static void updateWidgetPokemon(Context context,
                                           AppWidgetManager appWidgetManager, int[] appWidgetIds, String pokemonJsonString) {
-        for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetIds, pokemonJsonString);
-        }
     }
 }

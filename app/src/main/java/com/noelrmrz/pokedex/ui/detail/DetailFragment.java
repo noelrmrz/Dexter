@@ -1,6 +1,5 @@
 package com.noelrmrz.pokedex.ui.detail;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -80,17 +79,6 @@ public class DetailFragment extends Fragment {
             String args = DetailFragmentArgs.fromBundle(getArguments()).getPokemonJsonString();
             savedPokemon = GsonClient.getGsonClient().fromJson(args, Pokemon.class);
             mTabsAdapter = new TabsAdapter(this, args);
-        }
-
-        Intent intentThatStartedThisActivity = getActivity().getIntent();
-
-        // Check for extras in the Intent
-        if (intentThatStartedThisActivity != null) {
-            if (intentThatStartedThisActivity.hasExtra(Intent.EXTRA_TEXT)) {
-                savedPokemon = GsonClient.getGsonClient().fromJson(
-                        intentThatStartedThisActivity.getStringExtra(Intent.EXTRA_TEXT),
-                Pokemon.class);
-            }
         }
 
 /*        postponeEnterTransition();

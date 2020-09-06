@@ -39,18 +39,6 @@ public class PokedexWidgetService extends JobIntentService {
     public static void startActionOpenPokemon(Context context) {
         Intent intent = new Intent(context, PokedexWidgetService.class);
         intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-        //context.startService(intent);
         enqueueWork(context, intent);
     }
-
-    private String convertIdToString(int id) {
-        if ((id / 10) < 1) {
-            return "00" + id;
-        }
-        else if ((id/ 10) < 10)
-            return "0" + id;
-        else
-            return String.valueOf(id);
-    }
-
 }

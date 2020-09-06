@@ -68,7 +68,6 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.PokemonA
         drawable.setColorFilter(filter);
         drawable.invalidateSelf();
 
-
         // Check for a secondary type
         // Make the view invisible if there is no secondary type
         if (mPokemonList.get(position).getTypeList().length > 1) {

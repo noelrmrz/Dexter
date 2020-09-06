@@ -64,8 +64,8 @@ public class MainActivity extends AppCompatActivity implements PokemonAdapter.Po
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
-        // Intent handler for search queries
-        handleIntent(getIntent());
+        // Intent handler for search queries or widget calls
+        //handleIntent(getIntent());
 
     }
 
@@ -76,8 +76,9 @@ public class MainActivity extends AppCompatActivity implements PokemonAdapter.Po
         // Get access to each fragment
         // DetailFragment detailFragment = DetailFragment.newInstance(GsonClient.getGsonClient().toJson(pokemon));
 
-        NavDirections action = MainFragmentDirections.actionMainFragmentToDetailFragment(GsonClient.getGsonClient().toJson(pokemon));
-        Navigation.findNavController(view).navigate(action);
+        navigateToDetailFragment(pokemon);
+        //NavDirections action = MainFragmentDirections.actionMainFragmentToDetailFragment(GsonClient.getGsonClient().toJson(pokemon));
+        //Navigation.findNavController(view).navigate(action);
         // Check that the device is running lollipop
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             // Inflate transitions to apply
@@ -148,30 +149,41 @@ public class MainActivity extends AppCompatActivity implements PokemonAdapter.Po
         handleIntent(intent);
     }
 
-    // for searching
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            //use the query to search your data somehow
+            handleSearchIntent(intent);
+        } else if (intent.hasExtra(Intent.EXTRA_TEXT)) {
+            handleWidgetIntent(intent);
+        } else {}
+    }
 
-            RetrofitClient.getPokemonInformation(new Callback<Pokemon>() {
-                @Override
-                public void onResponse(Call<Pokemon> call, Response<Pokemon> response) {
-                    if (response.isSuccessful()) {
-                        Pokemon pokemon = response.body();
-                        pokemon.setProfileUrl(convertIdToString(response.body().getId()) + ".png");
-                    }
+    private void handleSearchIntent(Intent intent) {
+        String query = intent.getStringExtra(SearchManager.QUERY);
+        //use the query to search your data somehow
+
+        RetrofitClient.getPokemonInformation(new Callback<Pokemon>() {
+            @Override
+            public void onResponse(Call<Pokemon> call, Response<Pokemon> response) {
+                if (response.isSuccessful()) {
+                    Pokemon pokemon = response.body();
+                    pokemon.setProfileUrl(convertIdToString(response.body().getId()) + ".png");
+                    navigateToDetailFragment(pokemon);
                 }
+            }
 
-                @Override
-                public void onFailure(Call<Pokemon> call, Throwable t) {
+            @Override
+            public void onFailure(Call<Pokemon> call, Throwable t) {
 
-                }
-            }, query);
-        }
+            }
+        }, query);
+    }
 
-        //TODO: navigate to detailFragment
-        //DetailFragment detailFragment = DetailFragment.newInstance(GsonClient.getGsonClient().toJson(pokemon));
+    private void handleWidgetIntent(Intent intent) {
+        // Check for extras in the Intent
+               Pokemon savedPokemon = GsonClient.getGsonClient().fromJson(
+                        intent.getStringExtra(Intent.EXTRA_TEXT),
+                        Pokemon.class);
+               navigateToDetailFragment(savedPokemon);
     }
 
     public String convertIdToString(int id) {
@@ -190,6 +202,15 @@ public class MainActivity extends AppCompatActivity implements PokemonAdapter.Po
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_container);
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    private void navigateToDetailFragment(Pokemon pokemon) {
+        // Navigate to DetailFragment
+        NavDirections action = MainFragmentDirections
+                .actionMainFragmentToDetailFragment(GsonClient.getGsonClient().toJson(pokemon));
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.nav_host_fragment_container);
+        navHostFragment.getNavController().navigate(action);
     }
 }
 

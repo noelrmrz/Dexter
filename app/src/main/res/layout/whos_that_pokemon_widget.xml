@@ -4,18 +4,25 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/normal"
     android:padding="16dp">
 
     <TextView
         android:id="@+id/tv_whos_that_pokemon_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/widget_title"
+        android:textAlignment="center"
+        android:textSize="16dp"
+        android:typeface="sans" />
 
     <ImageView
         android:id="@+id/iv_whos_that_pokemon"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:background="@color/dragon"/>
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"/>
 
 </LinearLayout>

@@ -194,13 +194,8 @@ public class MainFragment extends Fragment {
 
                     editor.putString("pokemon_json_string", GsonClient.getGsonClient().toJson(pokemon));
                     editor.apply();
+
                     PokedexWidgetService.startActionOpenPokemon(mContext);
-
-/*                    AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(mContext);
-                    int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(mContext, PokedexWidgetProvider.class));
-
-                    PicassoClient.whosThatPokemon(new RemoteViews(mContext.getPackageName(), R.layout.whos_that_pokemon_widget)
-                            , R.id.iv_whos_that_pokemon, appWidgetIds, pokemon.getProfileUrl());*/
                 }
             }
 

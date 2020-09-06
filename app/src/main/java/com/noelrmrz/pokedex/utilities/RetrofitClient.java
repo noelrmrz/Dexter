@@ -1,5 +1,7 @@
 package com.noelrmrz.pokedex.utilities;
 
+import android.graphics.Bitmap;
+
 import com.noelrmrz.pokedex.POJO.Ability;
 import com.noelrmrz.pokedex.POJO.Move;
 import com.noelrmrz.pokedex.POJO.Pokemon;
@@ -27,6 +29,11 @@ public class RetrofitClient {
         moveList.enqueue(callback);
     }
 
+    public static void getBitmap(Callback<Bitmap> callback, String url) {
+        Call<Bitmap> bitmapCall = service.getBitmap(url);
+        bitmapCall.enqueue(callback);
+    }
+
     public static void getAbilityList(Callback<Ability> callback, String nameOrId) {
         Call<Ability> abilityList = service.getAbilityInformation(nameOrId);
         abilityList.enqueue(callback);
@@ -49,8 +56,6 @@ public class RetrofitClient {
         Call<PokemonSpecies> pokemonSpeciesCall = service.getSpeciesInformationByNameOrId(nameOrId);
         pokemonSpeciesCall.enqueue(callback);
     }
-
-
 
     private static Retrofit retrofitBuilder() {
         return new Retrofit.Builder()
