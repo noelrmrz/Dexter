@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="listArray">
+        <item>@string/favorites</item>
+    </string-array>
+
+    <string-array name="listValues">
+        <item>@string/favorites_value</item>
+    </string-array>
+</resources>

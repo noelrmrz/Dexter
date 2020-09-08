@@ -60,6 +60,9 @@ public class Pokemon {
     @Ignore
     private String profileUrl;
 
+    @ColumnInfo(name="favorite")
+    private Boolean favorite = false;
+
     public Pokemon(){
 
     }
@@ -173,6 +176,14 @@ public class Pokemon {
 
     public void setStatList(Stat[] statList) {
         mStatList = statList;
+    }
+
+    public Boolean getFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(Boolean favorite) {
+        this.favorite = favorite;
     }
 }
 

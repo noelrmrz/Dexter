@@ -3,8 +3,10 @@ package com.noelrmrz.pokedex;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,6 +25,12 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.transition.TransitionInflater;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.noelrmrz.pokedex.POJO.Pokemon;
 import com.noelrmrz.pokedex.ui.main.MainFragment;
 import com.noelrmrz.pokedex.ui.main.MainFragmentDirections;
@@ -35,10 +43,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import timber.log.Timber;
 
-public class MainActivity extends AppCompatActivity implements PokemonAdapter.PokemonAdapterOnClickHandler {
+public class MainActivity extends AppCompatActivity implements
+        PokemonAdapter.PokemonAdapterOnClickHandler,
+        SharedPreferences.OnSharedPreferenceChangeListener {
 
     private MainFragment mainFragment = MainFragment.newInstance();
     private AppBarConfiguration appBarConfiguration;
+    private InterstitialAd mInterstitialAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +69,9 @@ public class MainActivity extends AppCompatActivity implements PokemonAdapter.Po
             Timber.plant(new Timber.DebugTree());
         }
 
+        setupSharedPreferences();
+        setupAdMob();
+
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.nav_host_fragment_container);
         NavController navController = navHostFragment.getNavController();
@@ -69,12 +83,40 @@ public class MainActivity extends AppCompatActivity implements PokemonAdapter.Po
 
     }
 
+    private void setupAdMob() {
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+
+        // Set the AdUnitId for Google's test ad.  Replace with own AppId when publishing.
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        // Load the ad
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                // Load the next interstitial.
+                mInterstitialAd.loadAd(new AdRequest.Builder().build());
+            }
+        });
+    }
+
     @Override
     public void onClick(Pokemon pokemon, int position, View view) {
         //TODO: find out how to transition fragments.  from fragment or activity?
         // Create a new step fragment
         // Get access to each fragment
         // DetailFragment detailFragment = DetailFragment.newInstance(GsonClient.getGsonClient().toJson(pokemon));
+
+        // If the ad is loaded then display it before transitioning to the detail fragment
+        if (mInterstitialAd.isLoaded()) {
+            mInterstitialAd.show();
+        } else {
+            Timber.d("The interstitial wasn't loaded yet.");
+        }
 
         navigateToDetailFragment(pokemon);
         //NavDirections action = MainFragmentDirections.actionMainFragmentToDetailFragment(GsonClient.getGsonClient().toJson(pokemon));
@@ -211,6 +253,26 @@ public class MainActivity extends AppCompatActivity implements PokemonAdapter.Po
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.nav_host_fragment_container);
         navHostFragment.getNavController().navigate(action);
+    }
+
+    private void setupSharedPreferences() {
+        SharedPreferences sharedPreferences = PreferenceManager.
+                getDefaultSharedPreferences(this);
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals(getString(R.string.pref_sort_key))) {
+            //loadMovieData(sharedPreferences.getString(key, getString(R.string.favorites_value)));
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        PreferenceManager.getDefaultSharedPreferences(this).
+                unregisterOnSharedPreferenceChangeListener(this);
     }
 }
 

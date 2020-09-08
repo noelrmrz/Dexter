@@ -15,11 +15,15 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.noelrmrz.pokedex.POJO.Pokemon;
 import com.noelrmrz.pokedex.R;
 import com.noelrmrz.pokedex.ui.TabsAdapter;
+import com.noelrmrz.pokedex.ui.main.PokemonDatabase;
+import com.noelrmrz.pokedex.utilities.AppExecutors;
 import com.noelrmrz.pokedex.utilities.GsonClient;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -40,6 +44,7 @@ public class DetailFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     private TabsAdapter mTabsAdapter;
     private ViewPager2 viewPager;
+    private PokemonDatabase pokemonDatabase;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -128,7 +133,31 @@ public class DetailFragment extends Fragment {
         viewPager.setAdapter(mTabsAdapter);
 
         // FAB
-        view.findViewById(R.id.favorite_fab);
+        FloatingActionButton fab = view.findViewById(R.id.favorite_fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO: add/remove from database
+                Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+
+                AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Negate whatever favorite is currently set to
+                        Boolean removeOrAdd = !savedPokemon.getFavorite();
+                        savedPokemon.setFavorite(removeOrAdd);
+                        if(removeOrAdd) {
+                            pokemonDatabase.pokemonDAO().insertFavoritePokemon(savedPokemon);
+                        } else {
+                            pokemonDatabase.pokemonDAO().deleteFavoritePokemon(savedPokemon);
+                        }
+                        //mMovie.setMFavorite(true);
+                        //movieDatabase.movieDAO().insertFavoriteMovie(mMovie);
+                    }
+                });
+            }
+        });
 
         // Setup the views
         ImageView imageView = view.findViewById(R.id.iv_fragment_detail);

@@ -43,4 +43,7 @@
     <string name="title_options_menu_settings">settings</string>
     <string name="search_hint">Search by name or ID</string>
     <string name="widget_title">Who\'s that Pokemon?</string>
+    <string name="favorites">Favorites</string>
+    <string name="favorites_value">favorites</string>
+    <string name="pref_sort_key">sort</string>
 </resources>

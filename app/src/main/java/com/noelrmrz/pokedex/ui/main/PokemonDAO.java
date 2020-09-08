@@ -13,7 +13,7 @@ import com.noelrmrz.pokedex.POJO.Pokemon;
 import java.util.List;
 
 @Dao
-interface PokemonDAO {
+public interface PokemonDAO {
 
     @Query("SELECT * FROM favorite_pokemon")
     LiveData<List<Pokemon>> loadFavoritePokemon();
