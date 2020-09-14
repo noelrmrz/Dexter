@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,16 +19,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.noelrmrz.pokedex.POJO.Pokemon;
 import com.noelrmrz.pokedex.R;
+import com.noelrmrz.pokedex.utilities.HelperTools;
 import com.noelrmrz.pokedex.utilities.PicassoClient;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.PokemonAdapterViewHolder> {
+public class PokemonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
     private List<Pokemon> mPokemonList = new ArrayList<>();
     private final PokemonAdapterOnClickHandler mClickHandler;
+    private final int VIEW_TYPE_ITEM = 0;
+    private final int VIEW_TYPE_LOADING = 1;
 
     public PokemonAdapter(PokemonAdapterOnClickHandler clickHandler) {
         mClickHandler = clickHandler;
@@ -35,26 +39,46 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.PokemonA
 
     @NonNull
     @Override
-    public PokemonAdapter.PokemonAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup,
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup,
                                                                       int viewType) {
+        int layoutIdForListItem;
         // Get the Context and ID of our layout for the list items in RecyclerView
         mContext = viewGroup.getContext();
-        int layoutIdForListItem = R.layout.rv_pokemon_list_item;
 
         // Get the LayoutInflater
         LayoutInflater inflater = LayoutInflater.from(mContext);
         boolean shouldAttachToParentImmediately = false;
 
         // Inflate our layout into the view
-        View view = inflater.inflate(layoutIdForListItem, viewGroup,
-                shouldAttachToParentImmediately);
-        return new PokemonAdapterViewHolder(view);
+        View view;
+
+        if (viewType == VIEW_TYPE_ITEM) {
+            layoutIdForListItem = R.layout.rv_pokemon_list_item;
+            view = inflater.inflate(layoutIdForListItem, viewGroup,
+                    shouldAttachToParentImmediately);
+            return new PokemonAdapterViewHolder(view);
+        } else {
+            layoutIdForListItem = R.layout.rv_pokemon_list_loading;
+            view = inflater.inflate(layoutIdForListItem, viewGroup,
+                    shouldAttachToParentImmediately);
+            return new LoadingViewHolder(view);
+        }
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PokemonAdapterViewHolder viewHolder,
-                                 int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
+        if (viewHolder instanceof PokemonAdapterViewHolder) {
+            populateItemView((PokemonAdapterViewHolder) viewHolder, position);
+        } else if (viewHolder instanceof LoadingViewHolder) {
+            showLoadingView((LoadingViewHolder) viewHolder, position);
+        }
+    }
 
+    private void showLoadingView(LoadingViewHolder viewHolder, int position) {
+        // Progress bar displays
+    }
+
+    private void populateItemView(PokemonAdapterViewHolder viewHolder, int position) {
         String name = capitalizeName(mPokemonList.get(position).getName());
         viewHolder.pokemonName.setText(name);
         viewHolder.pokemonId.setText(String.valueOf(convertIdToString(mPokemonList.get(position).getId())));
@@ -63,8 +87,8 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.PokemonA
         // Change the background color depending on the primary type
         Drawable drawable = viewHolder.constraintLayout.getBackground().mutate();
         PorterDuffColorFilter filter = new PorterDuffColorFilter(mContext.getResources()
-                .getColor(getColor(mPokemonList.get(position).getTypeList()[0]
-                                .getType().getName())), PorterDuff.Mode.SRC_ATOP);
+                .getColor(HelperTools.getColor(mContext, mPokemonList.get(position).getTypeList()[0]
+                        .getType().getName())), PorterDuff.Mode.SRC_ATOP);
         drawable.setColorFilter(filter);
         drawable.invalidateSelf();
 
@@ -76,9 +100,8 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.PokemonA
             viewHolder.pokemonSecondaryType.setVisibility(View.INVISIBLE);
         }
 
-        //TODO Change the URL of the image
         if ((mPokemonList.get(position).getId() != -1)) {
-            PicassoClient.downloadImage(mPokemonList.get(position).getProfileUrl(),
+            PicassoClient.downloadProfileImage(String.valueOf(mPokemonList.get(position).getId()),
                     viewHolder.pokemonImage);
         }
         else {
@@ -100,8 +123,26 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.PokemonA
         }
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        if (mPokemonList.get(position) == null) {
+            return VIEW_TYPE_LOADING;
+        } else {
+            return VIEW_TYPE_ITEM;
+        }
+    }
+
     public interface PokemonAdapterOnClickHandler {
         void onClick(Pokemon pokemon, int position, View view);
+    }
+
+    public class LoadingViewHolder extends RecyclerView.ViewHolder {
+        ProgressBar progressBar;
+
+        public LoadingViewHolder(View view) {
+            super(view);
+            progressBar = view.findViewById(R.id.indeterminate_bar);
+        }
     }
 
     public class PokemonAdapterViewHolder extends RecyclerView.ViewHolder
@@ -134,7 +175,7 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.PokemonA
     }
 
     public void setPokemonList(List<Pokemon> pokemonList) {
-        mPokemonList = pokemonList;
+        mPokemonList.addAll(pokemonList);
         notifyDataSetChanged();
     }
 
@@ -142,46 +183,6 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.PokemonA
         // TODO: sort list
         mPokemonList.add(pokemon);
         notifyDataSetChanged();
-    }
-
-    public int getColor(String type) {
-        if (mContext.getString(R.string.fire).equals(type)) {
-            return R.color.fire;
-        } else if (mContext.getString(R.string.water).equals(type)) {
-            return R.color.water;
-        } else if (mContext.getString(R.string.grass).equals(type)) {
-            return R.color.grass;
-        } else if (mContext.getString(R.string.flying).equals(type)) {
-            return R.color.flying;
-        } else if (mContext.getString(R.string.poison).equals(type)) {
-            return R.color.poison;
-        } else if (mContext.getString(R.string.electric).equals(type)) {
-            return R.color.electric;
-        } else if (mContext.getString(R.string.ground).equals(type)) {
-            return R.color.ground;
-        } else if (mContext.getString(R.string.rock).equals(type)) {
-            return R.color.rock;
-        } else if (mContext.getString(R.string.steel).equals(type)) {
-            return R.color.steel;
-        } else if (mContext.getString(R.string.fighting).equals(type)) {
-            return R.color.fighting;
-        } else if (mContext.getString(R.string.psychic).equals(type)) {
-            return R.color.psychic;
-        } else if (mContext.getString(R.string.dark).equals(type)) {
-            return R.color.dark;
-        } else if (mContext.getString(R.string.bug).equals(type)) {
-            return R.color.bug;
-        } else if (mContext.getString(R.string.ghost).equals(type)) {
-            return R.color.ghost;
-        } else if (mContext.getString(R.string.dragon).equals(type)) {
-            return R.color.dragon;
-        } else if (mContext.getString(R.string.ice).equals(type)) {
-            return R.color.ice;
-        } else if (mContext.getString(R.string.fairy).equals(type)) {
-            return R.color.fairy;
-        }else {
-            return R.color.normal;
-        }
     }
 
     public String capitalizeName(String name) {
@@ -196,5 +197,10 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.PokemonA
             return "0" + id;
         else
             return String.valueOf(id);
+    }
+
+    public void remove(int position) {
+        mPokemonList.remove(position);
+        notifyItemRemoved(getItemCount());
     }
 }

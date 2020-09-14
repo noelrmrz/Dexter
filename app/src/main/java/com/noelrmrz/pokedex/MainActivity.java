@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.speech.RecognizerIntent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -31,12 +32,20 @@ import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.noelrmrz.pokedex.POJO.Pokemon;
+import com.noelrmrz.pokedex.POJO.PokemonSpecies;
+import com.noelrmrz.pokedex.settings.SettingsActivity;
+import com.noelrmrz.pokedex.ui.detail.DetailFragmentDirections;
 import com.noelrmrz.pokedex.ui.main.MainFragment;
 import com.noelrmrz.pokedex.ui.main.MainFragmentDirections;
 import com.noelrmrz.pokedex.ui.recyclerview.PokemonAdapter;
 import com.noelrmrz.pokedex.utilities.GsonClient;
 import com.noelrmrz.pokedex.utilities.RetrofitClient;
+import com.noelrmrz.pokedex.widget.PokedexWidgetService;
+
+import java.util.List;
+import java.util.Random;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -50,11 +59,19 @@ public class MainActivity extends AppCompatActivity implements
     private MainFragment mainFragment = MainFragment.newInstance();
     private AppBarConfiguration appBarConfiguration;
     private InterstitialAd mInterstitialAd;
+    private final String mSharedPrefFile = "com.noelrmrz.pokedex";
+    private FirebaseAnalytics mFirebaseAnalytics;
+    private static final int SPEECH_REQUEST_CODE = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setupAdMob();
+        updateWidgetService();
+        setupSharedPreferences();
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         if (savedInstanceState == null) {
             // Set up the backstack navigation of the Fragment notifying MainFragment as the host
@@ -69,18 +86,11 @@ public class MainActivity extends AppCompatActivity implements
             Timber.plant(new Timber.DebugTree());
         }
 
-        setupSharedPreferences();
-        setupAdMob();
-
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.nav_host_fragment_container);
         NavController navController = navHostFragment.getNavController();
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-
-        // Intent handler for search queries or widget calls
-        //handleIntent(getIntent());
-
     }
 
     private void setupAdMob() {
@@ -106,17 +116,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onClick(Pokemon pokemon, int position, View view) {
-        //TODO: find out how to transition fragments.  from fragment or activity?
-        // Create a new step fragment
-        // Get access to each fragment
         // DetailFragment detailFragment = DetailFragment.newInstance(GsonClient.getGsonClient().toJson(pokemon));
-
-        // If the ad is loaded then display it before transitioning to the detail fragment
-        if (mInterstitialAd.isLoaded()) {
-            mInterstitialAd.show();
-        } else {
-            Timber.d("The interstitial wasn't loaded yet.");
-        }
 
         navigateToDetailFragment(pokemon);
         //NavDirections action = MainFragmentDirections.actionMainFragmentToDetailFragment(GsonClient.getGsonClient().toJson(pokemon));
@@ -176,13 +176,26 @@ public class MainActivity extends AppCompatActivity implements
         editText.setBackgroundResource(R.drawable.searchview);
         editText.setTextColor(getResources().getColor((android.R.color.black)));
         editText.setAlpha((float) 0.60);
-        // TODO: change the opacity to 0.87 for user inputs
         editText.setHintTextColor(getResources().getColor((android.R.color.black)));
         searchView.setQueryHint(getResources().getString(R.string.search_hint));
         searchView.setIconifiedByDefault(false);
         searchView.setFocusable(true);
 
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Start Settings Activity if the id matches
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                Intent startSettingsActivity = new Intent
+                        (this, SettingsActivity.class);
+                startActivity(startSettingsActivity);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -196,63 +209,88 @@ public class MainActivity extends AppCompatActivity implements
             handleSearchIntent(intent);
         } else if (intent.hasExtra(Intent.EXTRA_TEXT)) {
             handleWidgetIntent(intent);
-        } else {}
+        } else {
+        }
     }
 
     private void handleSearchIntent(Intent intent) {
         String query = intent.getStringExtra(SearchManager.QUERY);
-        //use the query to search your data somehow
 
+        // Google Analytics to measure what users search for
+        Bundle params = new Bundle();
+        params.putString(FirebaseAnalytics.Param.SEARCH_TERM, query);
+        // or use this
+        mFirebaseAnalytics.logEvent( FirebaseAnalytics.Event.SEARCH, params);
+
+        //use the query to search your data somehow
         RetrofitClient.getPokemonInformation(new Callback<Pokemon>() {
             @Override
             public void onResponse(Call<Pokemon> call, Response<Pokemon> response) {
                 if (response.isSuccessful()) {
                     Pokemon pokemon = response.body();
-                    pokemon.setProfileUrl(convertIdToString(response.body().getId()) + ".png");
-                    navigateToDetailFragment(pokemon);
+                    RetrofitClient.getSpeciesInformation(new Callback<PokemonSpecies>() {
+                        @Override
+                        public void onResponse(Call<PokemonSpecies> call, Response<PokemonSpecies> response) {
+                            pokemon.setPokemonSpecies(response.body());
+                            navigateToDetailFragment(pokemon);
+                        }
+
+                        @Override
+                        public void onFailure(Call<PokemonSpecies> call, Throwable t) {
+                            Timber.d(t);
+                        }
+                    }, query);
                 }
             }
 
             @Override
             public void onFailure(Call<Pokemon> call, Throwable t) {
-
+                Timber.d(t);
             }
         }, query);
     }
 
     private void handleWidgetIntent(Intent intent) {
-        // Check for extras in the Intent
-               Pokemon savedPokemon = GsonClient.getGsonClient().fromJson(
-                        intent.getStringExtra(Intent.EXTRA_TEXT),
-                        Pokemon.class);
-               navigateToDetailFragment(savedPokemon);
-    }
-
-    public String convertIdToString(int id) {
-        if ((id / 10) < 1) {
-            return "00" + id;
+        // If the ad is loaded then display it before transitioning to the detail fragment
+        if (mInterstitialAd.isLoaded()) {
+            mInterstitialAd.show();
+        } else {
+            Timber.d("The interstitial wasn't loaded yet.");
         }
-        else if ((id/ 10) < 10)
-            return "0" + id;
-        else
-            return String.valueOf(id);
-    }
 
+        // Check for extras in the Intent
+        Pokemon savedPokemon = GsonClient.getGsonClient().fromJson(
+                intent.getStringExtra(Intent.EXTRA_TEXT),
+                Pokemon.class);
+        navigateToDetailFragment(savedPokemon);
+    }
 
     @Override
     public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_container);
+        NavController navController = Navigation.findNavController(this,
+                R.id.nav_host_fragment_container);
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
     }
 
     private void navigateToDetailFragment(Pokemon pokemon) {
         // Navigate to DetailFragment
+        NavController navController = Navigation.findNavController(this,
+                R.id.nav_host_fragment_container);
         NavDirections action = MainFragmentDirections
                 .actionMainFragmentToDetailFragment(GsonClient.getGsonClient().toJson(pokemon));
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.nav_host_fragment_container);
-        navHostFragment.getNavController().navigate(action);
+
+        try {
+            navHostFragment.getNavController().navigate(action);
+        } catch (IllegalArgumentException e) {
+            Timber.d(e);
+            // User case when navigating from the DetailFragment to itself
+            action = DetailFragmentDirections
+                    .actionDetailFragmentSelf(GsonClient.getGsonClient().toJson(pokemon));
+            navHostFragment.getNavController().navigate(action);
+        }
     }
 
     private void setupSharedPreferences() {
@@ -264,7 +302,11 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key.equals(getString(R.string.pref_sort_key))) {
-            //loadMovieData(sharedPreferences.getString(key, getString(R.string.favorites_value)));
+            // change and reload the views
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.nav_host_fragment_container, MainFragment.newInstance())
+                    .commitAllowingStateLoss(); // should not do this
         }
     }
 
@@ -273,6 +315,70 @@ public class MainActivity extends AppCompatActivity implements
         super.onDestroy();
         PreferenceManager.getDefaultSharedPreferences(this).
                 unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    public void updateWidgetService() {
+        SharedPreferences.Editor editor = getSharedPreferences(mSharedPrefFile,
+                Context.MODE_PRIVATE).edit();
+
+        RetrofitClient.getPokemonInformation(new Callback<Pokemon>() {
+            @Override
+            public void onResponse(Call<Pokemon> call, Response<Pokemon> response) {
+                if (response.isSuccessful()) {
+                    Pokemon pokemon = response.body();
+
+                    RetrofitClient.getSpeciesInformation(new Callback<PokemonSpecies>() {
+                        @Override
+                        public void onResponse(Call<PokemonSpecies> call, Response<PokemonSpecies> response) {
+                            if (response.isSuccessful()) {
+                                pokemon.setPokemonSpecies(response.body());
+                                editor.putString("pokemon_json_string", GsonClient.getGsonClient().toJson(pokemon));
+                                editor.apply();
+
+                                PokedexWidgetService.startActionOpenPokemon(getApplicationContext());
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<PokemonSpecies> call, Throwable t) {
+                            Timber.d(t);
+                        }
+                    }, pokemon.getName());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Pokemon> call, Throwable t) {
+                Timber.d(t);
+            }
+        }, String.valueOf(getRandomPokemonId()));
+    }
+
+    private int getRandomPokemonId() {
+        return new Random().nextInt(720) + 1;
+    }
+
+    // Create an intent that can start the Speech Recognizer activity
+    private void displaySpeechRecognizer() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+// Start the activity, the intent will be populated with the speech text
+        startActivityForResult(intent, SPEECH_REQUEST_CODE);
+    }
+
+    // This callback is invoked when the Speech Recognizer returns.
+// This is where you process the intent and extract the speech text from the intent.
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode,
+                                    Intent data) {
+        if (requestCode == SPEECH_REQUEST_CODE && resultCode == RESULT_OK) {
+            List<String> results = data.getStringArrayListExtra(
+                    RecognizerIntent.EXTRA_RESULTS);
+            String spokenText = results.get(0);
+            Timber.d(spokenText);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
 

@@ -1,7 +1,6 @@
 package com.noelrmrz.pokedex.utilities;
 
 import android.app.Activity;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
@@ -12,47 +11,60 @@ import androidx.fragment.app.Fragment;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import timber.log.Timber;
+
 import static androidx.core.app.ActivityCompat.startPostponedEnterTransition;
 
 public class PicassoClient {
 
-    private static final String TAG = PicassoClient.class.getSimpleName();
+    private static final String ERROR = "Could not download the requested image";
+    private static final String BASE_SPRITE_URL =
+            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/";
+    private static final String BASE_PROFILE_URL =
+            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/";
+    //private static final String BASE_URL = "https://assets.pokemon.com//assets/cms2/img/pokedex/detail/";
 
-    // TODO change URL
-    private static final String BASE_URL = "https://assets.pokemon.com//assets/cms2/img/pokedex/detail/";
-
-    public static void downloadImage(String url, ImageView imageView) {
-        if(url != null && url.length()>0)
+    public static void downloadSpriteImage(String id, ImageView imageView) {
+        if(id != null && id.length() > 0)
         {
-            String completeUrl = BASE_URL.concat(url);
+            String completeUrl = BASE_SPRITE_URL.concat(id + ".png");
             Picasso.get().load(completeUrl).into(imageView);
         }
         else {
-            // TODO change hardcoded string
-            Log.v(TAG, "imageView.getContext().getString(R.string.picassoErrorMessage)");
+            Timber.d(ERROR);
         }
     }
 
-    public static void whosThatPokemon(RemoteViews remoteViews, int viewId, int[] appWidgetIds, String url) {
-        if(url != null && url.length()>0)
+    public static void downloadProfileImage(String id, ImageView imageView) {
+        if(id != null && id.length() > 0)
         {
-            String completeUrl = BASE_URL.concat(url);
+            String completeUrl = BASE_PROFILE_URL.concat(id + ".png");
+            Picasso.get().load(completeUrl).into(imageView);
+        }
+        else {
+            Timber.d(ERROR);
+        }
+    }
+
+    public static void whosThatPokemon(RemoteViews remoteViews, int viewId, int[] appWidgetIds,
+                                       String id) {
+        if (id != null && id.length() > 0)
+        {
+            String completeUrl = BASE_PROFILE_URL.concat(id + ".png");
             Picasso.get().load(completeUrl).into(remoteViews, viewId, appWidgetIds);
         }
         else {
-            // TODO change hardcoded string
-            Log.v(TAG, "imageView.getContext().getString(R.string.picassoErrorMessage)");
+            Timber.d(ERROR);
         }
     }
 
     public static void postponedDownloadImage(String url, ImageView imageView, Activity activity) {
         if(url != null && url.length()>0)
         {
-            String completeUrl = BASE_URL.concat(url);
+            String completeUrl = BASE_PROFILE_URL.concat(url);
             Picasso.get().load(completeUrl).into(imageView, new Callback() {
                 @Override
                 public void onSuccess() {
-                    Log.v("ppicaasso", "success");
                     startPostponedEnterTransition(activity);
                 }
 
@@ -63,13 +75,13 @@ public class PicassoClient {
             });
         }
         else {
-            // TODO change hardcoded string
-            Log.v(TAG, "imageView.getContext().getString(R.string.picassoErrorMessage)");
+            Timber.d(ERROR);
         }
     }
 
     // Temporarily prevent the shared element transition until the resource has loaded
-    private static void scheduleStartPostponedTransition(final View sharedElement, Fragment fragment) {
+    private static void scheduleStartPostponedTransition(final View sharedElement,
+                                                         Fragment fragment) {
         sharedElement.getViewTreeObserver().addOnPreDrawListener(
                 new ViewTreeObserver.OnPreDrawListener() {
                     @Override

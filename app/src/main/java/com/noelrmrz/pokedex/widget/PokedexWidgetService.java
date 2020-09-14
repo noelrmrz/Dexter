@@ -32,8 +32,10 @@ public class PokedexWidgetService extends JobIntentService {
         String pokemonJsonString = sharedPreferences.getString("pokemon_json_string", "");
 
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
-        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, PokedexWidgetProvider.class));
-        PokedexWidgetProvider.updateWidgetPokemon(this, appWidgetManager, appWidgetIds, pokemonJsonString);
+        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this,
+                PokedexWidgetProvider.class));
+        PokedexWidgetProvider.updateWidgetPokemon(this, appWidgetManager, appWidgetIds,
+                pokemonJsonString);
     }
 
     public static void startActionOpenPokemon(Context context) {

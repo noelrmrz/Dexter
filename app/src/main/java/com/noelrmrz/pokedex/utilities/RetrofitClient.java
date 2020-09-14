@@ -1,12 +1,12 @@
 package com.noelrmrz.pokedex.utilities;
 
-import android.graphics.Bitmap;
-
 import com.noelrmrz.pokedex.POJO.Ability;
+import com.noelrmrz.pokedex.POJO.EvolutionChainLink;
 import com.noelrmrz.pokedex.POJO.Move;
 import com.noelrmrz.pokedex.POJO.Pokemon;
 import com.noelrmrz.pokedex.POJO.PokemonJsonList;
 import com.noelrmrz.pokedex.POJO.PokemonSpecies;
+import com.noelrmrz.pokedex.POJO.Type;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,18 +29,14 @@ public class RetrofitClient {
         moveList.enqueue(callback);
     }
 
-    public static void getBitmap(Callback<Bitmap> callback, String url) {
-        Call<Bitmap> bitmapCall = service.getBitmap(url);
-        bitmapCall.enqueue(callback);
-    }
-
     public static void getAbilityList(Callback<Ability> callback, String nameOrId) {
         Call<Ability> abilityList = service.getAbilityInformation(nameOrId);
         abilityList.enqueue(callback);
     }
 
-    public static void getTypeList() {
-
+    public static void getTypeInformation(Callback<Type> callback, String nameOrId) {
+        Call<Type> typeCall = service.getTypeInformation(nameOrId);
+        typeCall.enqueue(callback);
     }
 
     public static void getPokemonInformation(Callback<Pokemon> callback, String nameOrId) {
@@ -48,9 +44,10 @@ public class RetrofitClient {
         pokemonCall.enqueue(callback);
     }
 
-/*    public static void getPokemonInformation(int id) {
-
-    }*/
+    public static void getPokemonEvolutionChain(Callback<EvolutionChainLink> callback, String id) {
+        Call<EvolutionChainLink> evolutionChainCall = service.getPokemonEvolutionChain(id);
+        evolutionChainCall.enqueue(callback);
+    }
 
     public static void getSpeciesInformation(Callback<PokemonSpecies> callback, String nameOrId) {
         Call<PokemonSpecies> pokemonSpeciesCall = service.getSpeciesInformationByNameOrId(nameOrId);

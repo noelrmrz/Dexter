@@ -2,17 +2,16 @@ package com.noelrmrz.pokedex.POJO;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Type {
+public class VersionGroup {
     @SerializedName("name")
     private String name;
+
     @SerializedName("url")
     private String url;
-    @SerializedName("damage_relations")
-    private DamageRelations damageRelations;
 
-    public Type(String name, String url) {
-        name = name;
-        url = url;
+    public VersionGroup(String name, String url) {
+        this.name = name;
+        this.url = url;
     }
 
     public String getName() {
@@ -29,13 +28,5 @@ public class Type {
 
     public void setUrl(String url) {
         this.url = url;
-    }
-
-    public DamageRelations getDamageRelations() {
-        return damageRelations;
-    }
-
-    public void setDamageRelations(DamageRelations damageRelations) {
-        this.damageRelations = damageRelations;
     }
 }

@@ -17,32 +17,39 @@ import com.noelrmrz.pokedex.utilities.PicassoClient;
 
 public class PokedexWidgetProvider extends AppWidgetProvider {
 
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds, String pokemonJsonString) {
-        // Construct the RemoteViews object
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.whos_that_pokemon_widget);
+    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
+                                int[] appWidgetIds, String pokemonJsonString) {
+        for (int widgetId : appWidgetIds) {
+            // Construct the RemoteViews object
+            RemoteViews views = new RemoteViews(context.getPackageName(),
+                    R.layout.whos_that_pokemon_widget);
 
-        // Handle
-        Handler uiHandler = new Handler(Looper.getMainLooper());
-        uiHandler.post(() -> {
+            // Handle
+            Handler uiHandler = new Handler(Looper.getMainLooper());
+            uiHandler.post(() -> {
 
-            // Use Picasso to load the image into the ImageView
-            PicassoClient.whosThatPokemon(views, R.id.iv_whos_that_pokemon, appWidgetIds,
-                    GsonClient.getGsonClient().fromJson(pokemonJsonString, Pokemon.class).getProfileUrl());
+                // Use Picasso to load the image into the ImageView
+                PicassoClient.whosThatPokemon(views, R.id.iv_whos_that_pokemon,
+                        appWidgetIds, String.valueOf(GsonClient.getGsonClient()
+                                .fromJson(pokemonJsonString, Pokemon.class).getId()));
 
-            // Set the black outline ontop of the pokemon imagea
-            views.setInt(R.id.iv_whos_that_pokemon,"setColorFilter",
-                    context.getResources().getColor(android.R.color.black));
-        });
+                // Set the black outline ontop of the pokemon imagea
+                views.setInt(R.id.iv_whos_that_pokemon, "setColorFilter",
+                        context.getResources().getColor(android.R.color.black));
+            });
 
-        // Create an intent to open the app when the user clicks on the ImageView
-        Intent intent = new Intent(context, MainActivity.class);
-        intent.putExtra(Intent.EXTRA_TEXT, pokemonJsonString);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+            // Create an intent to open the app when the user clicks on the ImageView
+            // PengindIntent.FLAG_UPDATE_CURRENT to update the extra text parameter
+            Intent intent = new Intent(context, MainActivity.class);
+            intent.putExtra(Intent.EXTRA_TEXT, pokemonJsonString);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
+                    intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        views.setOnClickPendingIntent(R.id.iv_whos_that_pokemon, pendingIntent);
+            views.setOnClickPendingIntent(R.id.iv_whos_that_pokemon, pendingIntent);
 
-        // Instruct the widget manager to update the widget
-        appWidgetManager.updateAppWidget(appWidgetIds, views);
+            // Instruct the widget manager to update the widget
+            appWidgetManager.updateAppWidget(widgetId, views);
+        }
     }
 
     @Override
@@ -51,7 +58,8 @@ public class PokedexWidgetProvider extends AppWidgetProvider {
     }
 
     public static void updateWidgetPokemon(Context context,
-                                          AppWidgetManager appWidgetManager, int[] appWidgetIds, String pokemonJsonString) {
+                                          AppWidgetManager appWidgetManager, int[] appWidgetIds,
+                                           String pokemonJsonString) {
             updateAppWidget(context, appWidgetManager, appWidgetIds, pokemonJsonString);
     }
 }

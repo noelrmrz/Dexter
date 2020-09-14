@@ -1,6 +1,9 @@
 package com.noelrmrz.pokedex;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.noelrmrz.pokedex.POJO.FlavorTextEntry;
 import com.noelrmrz.pokedex.POJO.Move;
+import com.noelrmrz.pokedex.utilities.HelperTools;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +24,10 @@ public class AttackListAdapter extends RecyclerView.Adapter<AttackListAdapter.At
 
     private Context mContext;
     private List<Move> mMoveList = new ArrayList<>();
+    private final String PHYSICAL = "physical";
+    private final String SPECIAL = "special";
+    private final String LANGUAGE = "EN";
+    private final String VERSION_NAME = "ultra-sun-ultra-moon";
 
     public AttackListAdapter.AttackListAdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         // Get the Context and ID of our layout for the list items in RecyclerView
@@ -44,8 +52,31 @@ public class AttackListAdapter extends RecyclerView.Adapter<AttackListAdapter.At
         viewHolder.attackPP.setText(String.valueOf(mMoveList.get(position).getPp()));
         viewHolder.attackDamage.setText(String.valueOf(mMoveList.get(position).getPower()));
         viewHolder.attackAccuracy.setText(String.valueOf(mMoveList.get(position).getAccuracy()));
-        viewHolder.attackDescription.setText(getLanguage("EN", mMoveList.get(position).getFlavorTextEntries()));
-        //viewHolder.attackFlavor.setImageResource();
+        viewHolder.attackDescription.setText(getLanguage(LANGUAGE,
+                mMoveList.get(position).getFlavorTextEntries()));
+
+        // Change the background color depending on the primary type
+        Drawable drawable = viewHolder.attackType.getBackground().mutate();
+        PorterDuffColorFilter filter = new PorterDuffColorFilter(mContext.getResources()
+                .getColor(HelperTools.getColor(mContext, mMoveList.get(position).getType().getName())),
+                PorterDuff.Mode.SRC_ATOP);
+        drawable.setColorFilter(filter);
+        drawable.invalidateSelf();
+
+
+        switch (mMoveList.get(position).getMoveDamageClass().getName()) {
+            case PHYSICAL:
+                viewHolder.attackFlavor.setImageDrawable(mContext
+                        .getResources().getDrawable(R.drawable.physical));
+                break;
+            case SPECIAL:
+                viewHolder.attackFlavor.setImageDrawable(mContext
+                        .getResources().getDrawable(R.drawable.special));
+                break;
+            default:
+                viewHolder.attackFlavor.setImageDrawable(mContext
+                        .getResources().getDrawable(R.drawable.status));
+        }
     }
 
     @Override
@@ -88,8 +119,13 @@ public class AttackListAdapter extends RecyclerView.Adapter<AttackListAdapter.At
 
     private String getLanguage(String language, FlavorTextEntry[] flavorTextEntries) {
         for (FlavorTextEntry flavorTextEntry: flavorTextEntries) {
-            if (flavorTextEntry.getLanguage().getLanguage().equalsIgnoreCase(language))
-                return flavorTextEntry.getFlavorText();
+            if (flavorTextEntry.getLanguage().getLanguage().equalsIgnoreCase(language)
+                    && flavorTextEntry.getVersionGroup()
+                    .getName()
+                    .equalsIgnoreCase(VERSION_NAME)) {
+                // Remove 'newline' entries in text
+                return flavorTextEntry.getFlavorText().replaceAll("(\n)", " ");
+            }
         }
         return language;
     }

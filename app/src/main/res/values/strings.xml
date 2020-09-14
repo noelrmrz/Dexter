@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Pokedex</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="fab_favorite">add/remove from favorites</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="pokemon_sprite_content_description">pokemon image</string>
@@ -46,4 +45,24 @@
     <string name="favorites">Favorites</string>
     <string name="favorites_value">favorites</string>
     <string name="pref_sort_key">sort</string>
+    <string name="default_key">Default</string>
+    <string name="default_value">default</string>
+    <string name="hp_label">HP  </string>
+    <string name="hp">hp</string>
+    <string name="atk_label">ATK  </string>
+    <string name="atk">attack</string>
+    <string name="spatk_label">SpATK  </string>
+    <string name="spatk">special-attack</string>
+    <string name="def_label">DEF  </string>
+    <string name="def">defense</string>
+    <string name="spdef_label">SpDEF  </string>
+    <string name="spdef">special-defense</string>
+    <string name="spd_label">SPD  </string>
+    <string name="spd">speed</string>
+    <string name="immune">0x</string>
+    <string name="four_x">4x</string>
+    <string name="two_x">2x</string>
+    <string name="one_x">1x</string>
+    <string name="half_x">1/2x</string>
+    <string name="quarter_x">1/4x</string>
 </resources>

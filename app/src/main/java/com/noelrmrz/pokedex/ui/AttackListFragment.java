@@ -31,14 +31,10 @@ import retrofit2.Response;
  */
 public class AttackListFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
-    private String mParam2;
     private Pokemon savedPokemon;
     private AttackListAdapter attackListAdapter;
     private static List<Move> mMoveList = new ArrayList<>();
@@ -55,12 +51,10 @@ public class AttackListFragment extends Fragment {
      *
      * @return A new instance of fragment AttackListFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static AttackListFragment newInstance(String param1) {
         AttackListFragment fragment = new AttackListFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
-        //args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -73,7 +67,6 @@ public class AttackListFragment extends Fragment {
 
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
-            //mParam2 = getArguments().getString(ARG_PARAM2);
             savedPokemon = GsonClient.getGsonClient().fromJson(mParam1, Pokemon.class);
 
             // Get detailed information for each move
@@ -100,6 +93,8 @@ public class AttackListFragment extends Fragment {
         // Setup the RecyclerView
         RecyclerView mRecyclerView = view.findViewById(R.id.rv_attack_list);
         mRecyclerView.setAdapter(attackListAdapter);
+        /*        mRecyclerView.addItemDecoration(new DividerItemDecoration(requireContext()
+                .getDrawable(R.drawable.divider_item_decoration)));*/
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
 /*        mRecyclerView.addItemDecoration(new DividerItemDecoration(requireContext()
                 .getDrawable(R.drawable.divider_item_decoration)));*/

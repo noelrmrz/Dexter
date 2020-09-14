@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,13 +11,81 @@
         android:id="@+id/tv_label_base_stats"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="@string/tv_label_base_stats"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:text="@string/tv_label_base_stats" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_label_hp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/hp_label"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@+id/tv_label_atk"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_label_base_stats" />
+
+    <TextView
+        android:id="@+id/tv_label_atk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/atk_label"
+        app:layout_constraintEnd_toStartOf="@+id/tv_label_spatk"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tv_label_hp"
+        app:layout_constraintTop_toTopOf="@+id/tv_label_hp" />
+
+    <TextView
+        android:id="@+id/tv_label_spatk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/spatk_label"
+        app:layout_constraintEnd_toStartOf="@+id/tv_label_def"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tv_label_atk"
+        app:layout_constraintTop_toTopOf="@+id/tv_label_atk" />
+
+    <TextView
+        android:id="@+id/tv_label_def"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/def_label"
+        app:layout_constraintEnd_toStartOf="@+id/tv_label_spdef"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tv_label_spatk"
+        app:layout_constraintTop_toTopOf="@+id/tv_label_spatk" />
+
+    <TextView
+        android:id="@+id/tv_label_spdef"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/spdef_label"
+        app:layout_constraintEnd_toStartOf="@+id/tv_label_spd"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tv_label_def"
+        app:layout_constraintTop_toTopOf="@+id/tv_label_def" />
+
+    <TextView
+        android:id="@+id/tv_label_spd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/spd_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tv_label_spdef"
+        app:layout_constraintTop_toTopOf="@+id/tv_label_spdef" />
 
     <com.github.mikephil.charting.charts.RadarChart
         android:id="@+id/radar_chart"
         android:layout_width="match_parent"
-        android:layout_height="400dp" />
+        android:layout_height="400dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_label_base_stats" />
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

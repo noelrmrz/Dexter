@@ -4,6 +4,7 @@
         <ListPreference
             android:title="Filter"
             android:key="@string/pref_sort_key"
+            android:defaultValue="@string/default_value"
             android:entries="@array/listArray"
             android:entryValues="@array/listValues" />
     </PreferenceCategory>

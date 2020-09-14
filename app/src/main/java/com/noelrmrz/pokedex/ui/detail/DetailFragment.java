@@ -1,12 +1,12 @@
 package com.noelrmrz.pokedex.ui.detail;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
@@ -16,7 +16,6 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.noelrmrz.pokedex.POJO.Pokemon;
@@ -25,8 +24,8 @@ import com.noelrmrz.pokedex.ui.TabsAdapter;
 import com.noelrmrz.pokedex.ui.main.PokemonDatabase;
 import com.noelrmrz.pokedex.utilities.AppExecutors;
 import com.noelrmrz.pokedex.utilities.GsonClient;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
+import com.noelrmrz.pokedex.utilities.PicassoClient;
+import com.noelrmrz.pokedex.utilities.ViewAnimation;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,19 +35,15 @@ import com.squareup.picasso.Picasso;
 public class DetailFragment extends Fragment {
 
     Pokemon savedPokemon;
-    private static final String BASE_URL = "https://assets.pokemon.com//assets/cms2/img/pokedex/detail/";
 
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     private TabsAdapter mTabsAdapter;
     private ViewPager2 viewPager;
     private PokemonDatabase pokemonDatabase;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
     private AppBarConfiguration appBarConfiguration;
+    private Boolean isRotate = false;
 
     public DetailFragment() {
         // Required empty public constructor
@@ -61,7 +56,6 @@ public class DetailFragment extends Fragment {
      * @param param1 Parameter 1.
      * @return A new instance of fragment DetailFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static DetailFragment newInstance(String param1) {
         DetailFragment fragment = new DetailFragment();
         Bundle args = new Bundle();
@@ -70,7 +64,6 @@ public class DetailFragment extends Fragment {
         return fragment;
     }
 
-
     /*
     Called when the fragment is being created or recreated
     Use onCreate for any standard setup that does not require the activity to be fully created
@@ -78,6 +71,7 @@ public class DetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        pokemonDatabase = pokemonDatabase.getInstance(getContext());
 
         if (getArguments() != null) {
             // Get the arguments
@@ -110,15 +104,20 @@ public class DetailFragment extends Fragment {
     */
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+
+
+/*        Toolbar toolbar = (Toolbar) view.findViewById(R.id.detail_toolbar);
+        toolbar.setTitle("");
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) view.findViewById(R.id.collapsing_toolbar);
+        collapsingToolbar.setTitle("TITLE");*/
+
         NavHostFragment navHostFragment = (NavHostFragment) getActivity().getSupportFragmentManager()
                 .findFragmentById(R.id.nav_host_fragment_container);
         NavController navController = navHostFragment.getNavController();
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController((AppCompatActivity) getActivity(), navController, appBarConfiguration);
-
-//        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-//        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
 
 /*        NavController navController = Navigation.findNavController(view);
         AppBarConfiguration appBarConfiguration =
@@ -137,9 +136,8 @@ public class DetailFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: add/remove from database
-                Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
+                isRotate = ViewAnimation.rotateFab(view, !isRotate);
 
                 AppExecutors.getInstance().diskIO().execute(new Runnable() {
                     @Override
@@ -147,13 +145,13 @@ public class DetailFragment extends Fragment {
                         // Negate whatever favorite is currently set to
                         Boolean removeOrAdd = !savedPokemon.getFavorite();
                         savedPokemon.setFavorite(removeOrAdd);
-                        if(removeOrAdd) {
+                        savedPokemon.setJsonString(GsonClient.getGsonClient()
+                                .toJson(savedPokemon, Pokemon.class));
+                        if (removeOrAdd) {
                             pokemonDatabase.pokemonDAO().insertFavoritePokemon(savedPokemon);
                         } else {
                             pokemonDatabase.pokemonDAO().deleteFavoritePokemon(savedPokemon);
                         }
-                        //mMovie.setMFavorite(true);
-                        //movieDatabase.movieDAO().insertFavoriteMovie(mMovie);
                     }
                 });
             }
@@ -166,23 +164,26 @@ public class DetailFragment extends Fragment {
         }*/
         //PicassoClient.postponedDownloadImage(savedPokemon.getProfileUrl(), imageView, this.getActivity());
 
-        String completeUrl = BASE_URL.concat(savedPokemon.getProfileUrl());
-        Picasso.get().load(completeUrl).into(imageView, new Callback() {
-            @Override
-            public void onSuccess() {
-                Log.v("ppicaasso", "success");
-                //startPostponedEnterTransition();
-            }
-
-            @Override
-            public void onError(Exception e) {
-
-            }
-        });
+        PicassoClient.downloadProfileImage(String.valueOf(savedPokemon.getId()), imageView);
 
         // Setup the TabLayout
         TabLayout tabLayout = view.findViewById(R.id.tab_layout);
         new TabLayoutMediator(tabLayout, viewPager,
-                (tab, position) -> tab.setText("Tab " + (position + 1))).attach();
+                new TabLayoutMediator.TabConfigurationStrategy() {
+                    @Override
+                    public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
+                        switch (position) {
+                            case 0:
+                                tab.setText("Data");
+                                break;
+                            case 1:
+                                tab.setText("Moves");
+                                break;
+                            default:
+                                tab.setText("Stats");
+                                break;
+                        }
+                    }
+                }).attach();
     }
 }

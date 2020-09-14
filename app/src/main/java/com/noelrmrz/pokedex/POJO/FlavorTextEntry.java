@@ -9,9 +9,13 @@ public class FlavorTextEntry {
     @SerializedName("language")
     private Language language;
 
-    public FlavorTextEntry(String flavorText, Language language) {
+    @SerializedName(value = "version_group", alternate = "version")
+    private VersionGroup versionGroup;
+
+    public FlavorTextEntry(String flavorText, Language language, VersionGroup versionGroup) {
         this.flavorText = flavorText;
         this.language = language;
+        this.versionGroup = versionGroup;
     }
 
     public String getFlavorText() {
@@ -28,5 +32,13 @@ public class FlavorTextEntry {
 
     public void setLanguage(Language language) {
         this.language = language;
+    }
+
+    public VersionGroup getVersionGroup() {
+        return versionGroup;
+    }
+
+    public void setVersionGroup(VersionGroup versionGroup) {
+        this.versionGroup = versionGroup;
     }
 }

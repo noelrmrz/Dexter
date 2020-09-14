@@ -8,6 +8,9 @@ import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity(tableName="favorite_pokemon")
 public class Pokemon {
 
@@ -49,19 +52,33 @@ public class Pokemon {
     @Ignore
     private PokemonSpecies pokemonSpecies;
 
-    @SerializedName("image_url")
-    @ColumnInfo(name="image_url")
-    private String mImageUrl;
-
     @SerializedName("url")
     @ColumnInfo(name="url")
     private String mUrl;
 
-    @Ignore
-    private String profileUrl;
-
     @ColumnInfo(name="favorite")
     private Boolean favorite = false;
+
+    @ColumnInfo(name="json_string")
+    private String jsonString;
+
+    @Ignore
+    private List<String> superEffective = new ArrayList<>(0);
+
+    @Ignore
+    private List<String> effective = new ArrayList<>(0);
+
+    @Ignore
+    private List<String> normal = new ArrayList<>(0);
+
+    @Ignore
+    private List<String> notEffective = new ArrayList<>(0);
+
+    @Ignore
+    private List<String> notVeryEffective = new ArrayList<>(0);
+
+    @Ignore
+    private List<String> immune = new ArrayList<>(0);
 
     public Pokemon(){
 
@@ -78,7 +95,6 @@ public class Pokemon {
         this.mStatList = mStatList;
         this.mTypeList = mTypeList;
         this.mAbilityList = mAbilityLinkList;
-        this.mImageUrl = mImageUrl;
         this.mUrl = mUrl;
     }
 
@@ -96,14 +112,6 @@ public class Pokemon {
 
     public void setName(String mName) {
         this.mName = mName;
-    }
-
-    public String getImageUrl() {
-        return mImageUrl;
-    }
-
-    public void setImageUrl(String mImageUrl) {
-        this.mImageUrl = mImageUrl;
     }
 
     public int getHeight() {
@@ -136,14 +144,6 @@ public class Pokemon {
 
     public void setTypeList(TypeLink[] typeList) {
         mTypeList = typeList;
-    }
-
-    public void setProfileUrl(String profileUrl) {
-        this.profileUrl = profileUrl;
-    }
-
-    public String getProfileUrl() {
-        return profileUrl;
     }
 
     public AbilityLink[] getAbilityList() {
@@ -184,6 +184,62 @@ public class Pokemon {
 
     public void setFavorite(Boolean favorite) {
         this.favorite = favorite;
+    }
+
+    public String getJsonString() {
+        return jsonString;
+    }
+
+    public void setJsonString(String jsonString) {
+        this.jsonString = jsonString;
+    }
+
+    public List<String> getSuperEffective() {
+        return superEffective;
+    }
+
+    public void setSuperEffective(List<String> superEffective) {
+        this.superEffective = superEffective;
+    }
+
+    public List<String> getEffective() {
+        return effective;
+    }
+
+    public void setEffective(List<String> effective) {
+        this.effective = effective;
+    }
+
+    public List<String> getNormal() {
+        return normal;
+    }
+
+    public void setNormal(List<String> normal) {
+        this.normal = normal;
+    }
+
+    public List<String> getNotEffective() {
+        return notEffective;
+    }
+
+    public void setNotEffective(List<String> notEffective) {
+        this.notEffective = notEffective;
+    }
+
+    public List<String> getNotVeryEffective() {
+        return notVeryEffective;
+    }
+
+    public void setNotVeryEffective(List<String> notVeryEffective) {
+        this.notVeryEffective = notVeryEffective;
+    }
+
+    public List<String> getImmune() {
+        return immune;
+    }
+
+    public void setImmune(List<String> immune) {
+        this.immune = immune;
     }
 }
 
