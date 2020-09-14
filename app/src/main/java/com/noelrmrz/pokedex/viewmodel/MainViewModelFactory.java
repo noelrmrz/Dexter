@@ -1,4 +1,4 @@
-package com.noelrmrz.pokedex.ui.main;
+package com.noelrmrz.pokedex.viewmodel;
 
 import android.app.Application;
 
@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-class MainViewModelFactory extends ViewModelProvider.NewInstanceFactory {
+public class MainViewModelFactory extends ViewModelProvider.NewInstanceFactory {
 
     private Application mApplication;
 

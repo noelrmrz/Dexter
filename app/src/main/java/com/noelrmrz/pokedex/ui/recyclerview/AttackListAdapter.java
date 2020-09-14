@@ -1,4 +1,4 @@
-package com.noelrmrz.pokedex;
+package com.noelrmrz.pokedex.ui.recyclerview;
 
 import android.content.Context;
 import android.graphics.PorterDuff;
@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.noelrmrz.pokedex.POJO.FlavorTextEntry;
 import com.noelrmrz.pokedex.POJO.Move;
+import com.noelrmrz.pokedex.R;
 import com.noelrmrz.pokedex.utilities.HelperTools;
 
 import java.util.ArrayList;

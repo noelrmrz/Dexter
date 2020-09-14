@@ -1,4 +1,4 @@
-package com.noelrmrz.pokedex.ui.main;
+package com.noelrmrz.pokedex.viewmodel;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;

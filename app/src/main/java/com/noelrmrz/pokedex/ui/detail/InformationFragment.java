@@ -1,4 +1,4 @@
-package com.noelrmrz.pokedex.ui;
+package com.noelrmrz.pokedex.ui.detail;
 
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;

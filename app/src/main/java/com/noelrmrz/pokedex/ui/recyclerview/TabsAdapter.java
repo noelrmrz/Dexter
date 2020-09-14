@@ -1,10 +1,12 @@
-package com.noelrmrz.pokedex.ui;
+package com.noelrmrz.pokedex.ui.recyclerview;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.noelrmrz.pokedex.ui.recyclerview.StatsFragment;
+import com.noelrmrz.pokedex.ui.detail.AttackListFragment;
+import com.noelrmrz.pokedex.ui.detail.InformationFragment;
+import com.noelrmrz.pokedex.ui.detail.StatsFragment;
 
 public class TabsAdapter extends FragmentStateAdapter {
     private String pokemonJSON;

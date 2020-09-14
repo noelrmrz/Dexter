@@ -1,4 +1,4 @@
-package com.noelrmrz.pokedex.ui;
+package com.noelrmrz.pokedex.utilities;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;

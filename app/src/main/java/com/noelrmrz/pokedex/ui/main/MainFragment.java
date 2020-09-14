@@ -25,6 +25,8 @@ import com.noelrmrz.pokedex.R;
 import com.noelrmrz.pokedex.ui.recyclerview.PokemonAdapter;
 import com.noelrmrz.pokedex.utilities.GsonClient;
 import com.noelrmrz.pokedex.utilities.RetrofitClient;
+import com.noelrmrz.pokedex.viewmodel.MainViewModel;
+import com.noelrmrz.pokedex.viewmodel.MainViewModelFactory;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.noelrmrz.pokedex.ui.recyclerview;
+package com.noelrmrz.pokedex.ui.detail;
 
 import android.graphics.Color;
 import android.os.Bundle;
