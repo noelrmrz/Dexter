@@ -93,11 +93,9 @@ public class AttackListFragment extends Fragment {
         // Setup the RecyclerView
         RecyclerView mRecyclerView = view.findViewById(R.id.rv_attack_list);
         mRecyclerView.setAdapter(attackListAdapter);
-        /*        mRecyclerView.addItemDecoration(new DividerItemDecoration(requireContext()
-                .getDrawable(R.drawable.divider_item_decoration)));*/
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-/*        mRecyclerView.addItemDecoration(new DividerItemDecoration(requireContext()
-                .getDrawable(R.drawable.divider_item_decoration)));*/
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(requireContext()
+                .getResources().getDrawable(R.drawable.divider_item_decoration)));
         mRecyclerView.setLayoutManager(layoutManager);
     }
 
