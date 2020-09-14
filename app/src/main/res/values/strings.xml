@@ -65,4 +65,6 @@
     <string name="one_x">1x</string>
     <string name="half_x">1/2x</string>
     <string name="quarter_x">1/4x</string>
+    <string name="application_id">ca-app-pub-5822195395526639~3561426822</string>
+    <string name="ad_unit_id">ca-app-pub-3940256099942544/1033173712</string>
 </resources>

@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements
 
         // Set the AdUnitId for Google's test ad.  Replace with own AppId when publishing.
         mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        mInterstitialAd.setAdUnitId(getString(R.string.ad_unit_id));
         // Load the ad
         mInterstitialAd.loadAd(new AdRequest.Builder().build());
         mInterstitialAd.setAdListener(new AdListener() {
