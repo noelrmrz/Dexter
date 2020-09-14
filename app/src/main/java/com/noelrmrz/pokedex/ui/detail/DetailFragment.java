@@ -41,6 +41,9 @@ public class DetailFragment extends Fragment {
     private TabsAdapter mTabsAdapter;
     private ViewPager2 viewPager;
     private PokemonDatabase pokemonDatabase;
+    private final String DATA = "Data";
+    private final String MOVES = "Moves";
+    private final String STATS = "Stats";
 
     private AppBarConfiguration appBarConfiguration;
     private Boolean isRotate = false;
@@ -79,11 +82,6 @@ public class DetailFragment extends Fragment {
             savedPokemon = GsonClient.getGsonClient().fromJson(args, Pokemon.class);
             mTabsAdapter = new TabsAdapter(this, args);
         }
-
-/*        postponeEnterTransition();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            setSharedElementEnterTransition(TransitionInflater.from(getContext()).inflateTransition(android.R.transition.move));
-        }*/
     }
 
     /*
@@ -105,27 +103,11 @@ public class DetailFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
-
-/*        Toolbar toolbar = (Toolbar) view.findViewById(R.id.detail_toolbar);
-        toolbar.setTitle("");
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) view.findViewById(R.id.collapsing_toolbar);
-        collapsingToolbar.setTitle("TITLE");*/
-
         NavHostFragment navHostFragment = (NavHostFragment) getActivity().getSupportFragmentManager()
                 .findFragmentById(R.id.nav_host_fragment_container);
         NavController navController = navHostFragment.getNavController();
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController((AppCompatActivity) getActivity(), navController, appBarConfiguration);
-
-/*        NavController navController = Navigation.findNavController(view);
-        AppBarConfiguration appBarConfiguration =
-                new AppBarConfiguration.Builder(navController.getGraph()).build();
-        Toolbar toolbar = view.findViewById(R.id.detail_toolbar);
-        CollapsingToolbarLayout layout = view.findViewById(R.id.collapsing_toolbar);
-
-        NavigationUI.setupWithNavController(layout, toolbar, navController, appBarConfiguration);*/
 
         // Setup the ViewPager
         viewPager = view.findViewById(R.id.tab_pager);
@@ -159,10 +141,6 @@ public class DetailFragment extends Fragment {
 
         // Setup the views
         ImageView imageView = view.findViewById(R.id.iv_fragment_detail);
-/*        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            imageView.setTransitionName("Charmander");
-        }*/
-        //PicassoClient.postponedDownloadImage(savedPokemon.getProfileUrl(), imageView, this.getActivity());
 
         PicassoClient.downloadProfileImage(String.valueOf(savedPokemon.getId()), imageView);
 
@@ -174,13 +152,13 @@ public class DetailFragment extends Fragment {
                     public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
                         switch (position) {
                             case 0:
-                                tab.setText("Data");
+                                tab.setText(DATA);
                                 break;
                             case 1:
-                                tab.setText("Moves");
+                                tab.setText(MOVES);
                                 break;
                             default:
-                                tab.setText("Stats");
+                                tab.setText(STATS);
                                 break;
                         }
                     }

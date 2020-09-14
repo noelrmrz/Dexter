@@ -25,7 +25,6 @@ import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.transition.TransitionInflater;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -117,39 +116,10 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onClick(Pokemon pokemon, int position, View view) {
-        // DetailFragment detailFragment = DetailFragment.newInstance(GsonClient.getGsonClient().toJson(pokemon));
-
         navigateToDetailFragment(pokemon);
-        //NavDirections action = MainFragmentDirections.actionMainFragmentToDetailFragment(GsonClient.getGsonClient().toJson(pokemon));
-        //Navigation.findNavController(view).navigate(action);
-        // Check that the device is running lollipop
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            // Inflate transitions to apply
-/*            Transition changeTransform = TransitionInflater.from(this)
-                    .inflateTransition(R.transition.image_shared_element_transition);*/
 
-            // Setup exit transition on first fragment
-            mainFragment.setSharedElementReturnTransition(TransitionInflater.from(this).inflateTransition(R.transition.image_shared_element_transition));
-            mainFragment.setExitTransition(TransitionInflater.from(this).inflateTransition(android.R.transition.no_transition));
-
-            // Setup exit transition on second fragment
-            //detailFragment.setSharedElementEnterTransition((TransitionInflater.from(this).inflateTransition(R.transition.image_shared_element_transition)));
-            //detailFragment.setEnterTransition((TransitionInflater.from(this).inflateTransition(android.R.transition.no_transition)));
-
-            // Find the shared element in the first fragment
-            ImageView ivProfile = view.findViewById(R.id.iv_pokemon_sprite);
-
-/*            getSupportFragmentManager()
-                    .beginTransaction()
-                    .setReorderingAllowed(true)
-                    .addSharedElement(ivProfile, ViewCompat.getTransitionName(ivProfile))
-                    .replace(R.id.container, detailFragment, detailFragment.getClass().getSimpleName())
-                    .addToBackStack(null)
-                    .commit();*/
-        }
-        else {
-
-        }
+        // Find the shared element in the first fragment
+        ImageView ivProfile = view.findViewById(R.id.iv_pokemon_sprite);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)

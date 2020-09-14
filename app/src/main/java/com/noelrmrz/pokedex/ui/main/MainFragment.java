@@ -115,20 +115,6 @@ public class MainFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPokemonAdapter = new PokemonAdapter((PokemonAdapter.PokemonAdapterOnClickHandler) getActivity());
-        /*setExitSharedElementCallback(new SharedElementCallback() {
-            @Override
-            public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
-                super.onMapSharedElements(names, sharedElements);
-                RecyclerView.ViewHolder selectedViewHolder = mRecyclerView.findViewHolderForAdapterPosition();
-                if (selectedViewHolder == null || selectedViewHolder.itemView == null) {
-                    return;
-                }
-
-                // Map the shared element name to the ImageView
-                sharedElements.put(names.get(0),
-                        selectedViewHolder.itemView.findViewById(R.id.iv_fragment_detail);
-            }
-        });*/
     }
 
     private void loadPokemonData(String preference, boolean scrollEnd) {
@@ -172,7 +158,6 @@ public class MainFragment extends Fragment {
                                                         // Update the offset
                                                         offset = offset + LIMIT;
                                                     }
-                                                    //mPokemonAdapter.addToPokemonList(pokemon);
                                                 }
                                             }
 
