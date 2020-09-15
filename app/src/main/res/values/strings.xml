@@ -2,7 +2,7 @@
     <string name="app_name">Pokedex</string>
     <string name="fab_favorite">add/remove from favorites</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="pokemon_sprite_content_description">pokemon image</string>
+    <string name="pokemon_sprite_content_description">Pokemon profile image</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="transition_name">profile</string>
@@ -67,4 +67,5 @@
     <string name="quarter_x">1/4x</string>
     <string name="application_id">ca-app-pub-5822195395526639~3561426822</string>
     <string name="ad_unit_id">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="cd_attack_flavor">Image representing if the attack is physical, special, or status based</string>
 </resources>

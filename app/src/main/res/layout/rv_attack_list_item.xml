@@ -11,6 +11,7 @@
         android:id="@+id/iv_attack_flavor"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:contentDescription="@string/cd_attack_flavor"
         android:src="@android:color/holo_blue_dark"
         app:layout_constraintEnd_toStartOf="@+id/tv_attack_damage"
         app:layout_constraintHorizontal_bias="0.0"
