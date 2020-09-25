@@ -23,6 +23,7 @@ import com.noelrmrz.pokedex.utilities.HelperTools;
 import com.noelrmrz.pokedex.utilities.PicassoClient;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class PokemonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -175,12 +176,12 @@ public class PokemonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public void setPokemonList(List<Pokemon> pokemonList) {
+        Collections.sort(pokemonList);
         mPokemonList.addAll(pokemonList);
         notifyDataSetChanged();
     }
 
     public void addToPokemonList(Pokemon pokemon) {
-        // TODO: sort list
         mPokemonList.add(pokemon);
         notifyDataSetChanged();
     }

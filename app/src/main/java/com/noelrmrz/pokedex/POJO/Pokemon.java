@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity(tableName="favorite_pokemon")
-public class Pokemon {
+public class Pokemon implements Comparable<Pokemon> {
 
     @SerializedName("id")
     @PrimaryKey
@@ -240,6 +240,16 @@ public class Pokemon {
 
     public void setImmune(List<String> immune) {
         this.immune = immune;
+    }
+
+    @Override
+    public int compareTo(Pokemon pokemon) {
+        if(this.mId == pokemon.getId())
+            return 0;
+        else if(this.mId > pokemon.getId())
+            return 1;
+        else
+            return -1;
     }
 }
 
