@@ -21,7 +21,7 @@ import com.noelrmrz.pokedex.utilities.HelperTools;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AttackListAdapter extends RecyclerView.Adapter<AttackListAdapter.AttackListAdapterViewHolder> {
+public class AttackListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
     private List<Move> mMoveList = new ArrayList<>();
@@ -29,25 +29,49 @@ public class AttackListAdapter extends RecyclerView.Adapter<AttackListAdapter.At
     private final String SPECIAL = "special";
     private final String LANGUAGE = "EN";
     private final String VERSION_NAME = "ultra-sun-ultra-moon";
+    private final int VIEW_TYPE_ITEM = 0;
 
-    public AttackListAdapter.AttackListAdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         // Get the Context and ID of our layout for the list items in RecyclerView
         mContext = viewGroup.getContext();
-        int layoutIdForListItem = R.layout.rv_attack_list_item;
+        int layoutIdForListItem;
 
         // Get the LayoutInflater
         LayoutInflater inflater = LayoutInflater.from(mContext);
         boolean shouldAttachToParentImmediately = false;
 
         // Inflate our layout into the view
-        View view = inflater.inflate(layoutIdForListItem, viewGroup,
-                shouldAttachToParentImmediately);
-        return new AttackListAdapterViewHolder(view);
+        View view;
+
+        if (viewType == VIEW_TYPE_ITEM) {
+            layoutIdForListItem = R.layout.rv_attack_list_item;
+            view = inflater.inflate(layoutIdForListItem, viewGroup,
+                    shouldAttachToParentImmediately);
+            return new AttackListAdapterViewHolder(view);
+        } else {
+            layoutIdForListItem = R.layout.rv_list_loading;
+            view = inflater.inflate(layoutIdForListItem, viewGroup,
+                    shouldAttachToParentImmediately);
+            return new LoadingViewHolder(view);
+        }
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AttackListAdapterViewHolder viewHolder,
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder,
                                  int position) {
+
+        if (viewHolder instanceof AttackListAdapterViewHolder) {
+            populateItemView((AttackListAdapterViewHolder) viewHolder, position);
+        } else if (viewHolder instanceof LoadingViewHolder) {
+            showLoadingView((LoadingViewHolder) viewHolder, position);
+        }
+    }
+
+    private void showLoadingView(LoadingViewHolder viewHolder, int position) {
+        // Progress bar displays
+    }
+
+    private void populateItemView(AttackListAdapterViewHolder viewHolder, int position) {
         viewHolder.attackName.setText(mMoveList.get(position).getName());
         viewHolder.attackType.setText(mMoveList.get(position).getType().getName());
         viewHolder.attackPP.setText(String.valueOf(mMoveList.get(position).getPp()));
@@ -63,7 +87,6 @@ public class AttackListAdapter extends RecyclerView.Adapter<AttackListAdapter.At
                 PorterDuff.Mode.SRC_ATOP);
         drawable.setColorFilter(filter);
         drawable.invalidateSelf();
-
 
         switch (mMoveList.get(position).getMoveDamageClass().getName()) {
             case PHYSICAL:
@@ -90,6 +113,15 @@ public class AttackListAdapter extends RecyclerView.Adapter<AttackListAdapter.At
         }
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        if (mMoveList.get(position) == null) {
+            return LoadingViewHolder.VIEW_TYPE_LOADING;
+        } else {
+            return VIEW_TYPE_ITEM;
+        }
+    }
+
     public class AttackListAdapterViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView attackFlavor;
@@ -111,6 +143,16 @@ public class AttackListAdapter extends RecyclerView.Adapter<AttackListAdapter.At
             attackDamage = view.findViewById(R.id.tv_attack_damage);
             attackType = view.findViewById(R.id.tv_attack_type);
         }
+    }
+
+    public void addToMoveList(Move move) {
+        mMoveList.add(move);
+        notifyDataSetChanged();
+    }
+
+    public void remove(int position) {
+        mMoveList.remove(position);
+        notifyItemRemoved(getItemCount());
     }
 
     public void setMoveList(List<Move> moveList) {

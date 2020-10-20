@@ -70,6 +70,9 @@ public class AttackListFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             savedPokemon = GsonClient.getGsonClient().fromJson(mParam1, Pokemon.class);
 
+            attackListAdapter.addToMoveList(null);
+            attackListAdapter.notifyItemInserted(attackListAdapter.getItemCount() - 1);
+
             // Get detailed information for each move
             for (MoveLink pokemonMove: savedPokemon.getMoveList()) {
                 asyncCallback(pokemonMove.getMove().getName());
@@ -108,6 +111,9 @@ public class AttackListFragment extends Fragment {
 
                 // Once all the moved have been retrieved proceed to add the collection to the adapter
                 if (mMoveList.size() == savedPokemon.getMoveList().length) {
+                    // Remove null entry item
+                    attackListAdapter.remove(attackListAdapter.getItemCount() - 1);
+                    // Add all moves to the adapters list
                     attackListAdapter.setMoveList(mMoveList);
                 }
             }

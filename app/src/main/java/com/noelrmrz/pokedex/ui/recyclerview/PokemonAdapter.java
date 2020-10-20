@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -32,7 +31,6 @@ public class PokemonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private List<Pokemon> mPokemonList = new ArrayList<>();
     private final PokemonAdapterOnClickHandler mClickHandler;
     private final int VIEW_TYPE_ITEM = 0;
-    private final int VIEW_TYPE_LOADING = 1;
 
     public PokemonAdapter(PokemonAdapterOnClickHandler clickHandler) {
         mClickHandler = clickHandler;
@@ -59,7 +57,7 @@ public class PokemonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     shouldAttachToParentImmediately);
             return new PokemonAdapterViewHolder(view);
         } else {
-            layoutIdForListItem = R.layout.rv_pokemon_list_loading;
+            layoutIdForListItem = R.layout.rv_list_loading;
             view = inflater.inflate(layoutIdForListItem, viewGroup,
                     shouldAttachToParentImmediately);
             return new LoadingViewHolder(view);
@@ -127,7 +125,7 @@ public class PokemonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public int getItemViewType(int position) {
         if (mPokemonList.get(position) == null) {
-            return VIEW_TYPE_LOADING;
+            return LoadingViewHolder.VIEW_TYPE_LOADING;
         } else {
             return VIEW_TYPE_ITEM;
         }
@@ -135,15 +133,6 @@ public class PokemonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     public interface PokemonAdapterOnClickHandler {
         void onClick(Pokemon pokemon, int position, View view);
-    }
-
-    public class LoadingViewHolder extends RecyclerView.ViewHolder {
-        ProgressBar progressBar;
-
-        public LoadingViewHolder(View view) {
-            super(view);
-            progressBar = view.findViewById(R.id.indeterminate_bar);
-        }
     }
 
     public class PokemonAdapterViewHolder extends RecyclerView.ViewHolder
