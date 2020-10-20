@@ -62,8 +62,7 @@
         android:id="@+id/favorite_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_margin="16dp"
         android:contentDescription="@string/fab_favorite"
         android:src="@drawable/ic_add"
         android:tooltipText="@string/fab_favorite"
@@ -71,9 +70,7 @@
         app:fabSize="auto"
         app:layout_anchor="@+id/tab_pager"
         app:layout_anchorGravity="bottom|right|end"
-        app:rippleColor="@color/white"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp" />
+        app:rippleColor="@color/white" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/tab_pager"
