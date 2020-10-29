@@ -268,11 +268,12 @@ public class InformationFragment extends Fragment {
             @Override
             public void onResponse(Call<Type> call, Response<Type> response) {
                 Type primary = response.body();
+
                 if ( typeLength == 1) {
                     savedPokemon = typeEffectiveness.setTypeEffectiveness(primary, null, savedPokemon);
                     addTypeEffectiveness(xTwoFlexLayout, savedPokemon.getEffective());
                     addTypeEffectiveness(xHalfFlexLayout, savedPokemon.getNotEffective());
-                    addTypeEffectiveness(xZeroFlexLayout, savedPokemon.getImmune());
+                    /*addTypeEffectiveness(xZeroFlexLayout, savedPokemon.getImmune());*/
                     addTypeEffectiveness(xOneFlexLayout, savedPokemon.getNormal());
 
                     xFour.setVisibility(View.GONE);
@@ -329,13 +330,6 @@ public class InformationFragment extends Fragment {
                                 addTypeEffectiveness(xQuarterFlexLayout, savedPokemon.getNotVeryEffective());
                             }
 
-                            if (savedPokemon.getImmune().size() == 0) {
-                                xZero.setVisibility(View.GONE);
-                                xZeroFlexLayout.setVisibility(View.GONE);
-                                xZeroLinearLayout.setVisibility(View.GONE);
-                            } else {
-                                addTypeEffectiveness(xZeroFlexLayout, savedPokemon.getImmune());
-                            }
                         }
 
                         @Override
@@ -343,6 +337,14 @@ public class InformationFragment extends Fragment {
                             Timber.d(t);
                         }
                     }, savedPokemon.getTypeList()[1].getType().getName());
+                }
+
+                if (savedPokemon.getImmune().size() == 0) {
+                    xZero.setVisibility(View.GONE);
+                    xZeroFlexLayout.setVisibility(View.GONE);
+                    xZeroLinearLayout.setVisibility(View.GONE);
+                } else {
+                    addTypeEffectiveness(xZeroFlexLayout, savedPokemon.getImmune());
                 }
             }
             @Override
