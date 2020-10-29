@@ -18,7 +18,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-import com.noelrmrz.pokedex.POJO.Pokemon;
+import com.noelrmrz.pokedex.pojo.Pokemon;
 import com.noelrmrz.pokedex.R;
 import com.noelrmrz.pokedex.ui.recyclerview.TabsAdapter;
 import com.noelrmrz.pokedex.viewmodel.PokemonDatabase;

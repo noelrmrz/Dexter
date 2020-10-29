@@ -4,22 +4,18 @@ import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.noelrmrz.pokedex.POJO.Pokemon;
 import com.noelrmrz.pokedex.R;
+import com.noelrmrz.pokedex.databinding.RvPokemonListItemBinding;
+import com.noelrmrz.pokedex.pojo.Pokemon;
 import com.noelrmrz.pokedex.utilities.HelperTools;
-import com.noelrmrz.pokedex.utilities.PicassoClient;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,13 +48,12 @@ public class PokemonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         View view;
 
         if (viewType == VIEW_TYPE_ITEM) {
-            layoutIdForListItem = R.layout.rv_pokemon_list_item;
-            view = inflater.inflate(layoutIdForListItem, viewGroup,
-                    shouldAttachToParentImmediately);
-            return new PokemonAdapterViewHolder(view);
+            RvPokemonListItemBinding itemBinding = RvPokemonListItemBinding.inflate(inflater,
+                    viewGroup, shouldAttachToParentImmediately);
+            return new PokemonAdapterViewHolder(itemBinding);
         } else {
             layoutIdForListItem = R.layout.rv_list_loading;
-            view = inflater.inflate(layoutIdForListItem, viewGroup,
+           view = inflater.inflate(layoutIdForListItem, viewGroup,
                     shouldAttachToParentImmediately);
             return new LoadingViewHolder(view);
         }
@@ -78,10 +73,8 @@ public class PokemonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     private void populateItemView(PokemonAdapterViewHolder viewHolder, int position) {
-        String name = capitalizeName(mPokemonList.get(position).getName());
-        viewHolder.pokemonName.setText(name);
-        viewHolder.pokemonId.setText(String.valueOf(convertIdToString(mPokemonList.get(position).getId())));
-        viewHolder.pokemonPrimaryType.setText(mPokemonList.get(position).getTypeList()[0].getType().getName());
+        Pokemon pokemon = mPokemonList.get(position);
+        viewHolder.bind(pokemon);
 
         // Change the background color depending on the primary type
         Drawable drawable = viewHolder.constraintLayout.getBackground().mutate();
@@ -90,26 +83,6 @@ public class PokemonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         .getType().getName())), PorterDuff.Mode.SRC_ATOP);
         drawable.setColorFilter(filter);
         drawable.invalidateSelf();
-
-        // Check for a secondary type
-        // Make the view invisible if there is no secondary type
-        if (mPokemonList.get(position).getTypeList().length > 1) {
-            viewHolder.pokemonSecondaryType.setText(mPokemonList.get(position).getTypeList()[1].getType().getName());
-        } else {
-            viewHolder.pokemonSecondaryType.setVisibility(View.INVISIBLE);
-        }
-
-        if ((mPokemonList.get(position).getId() != -1)) {
-            PicassoClient.downloadProfileImage(String.valueOf(mPokemonList.get(position).getId()),
-                    viewHolder.pokemonImage);
-        }
-        else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                viewHolder.pokemonImage.setImageDrawable(mContext.getDrawable(R.drawable.ic_launcher_foreground));
-            }
-        }
-
-        ViewCompat.setTransitionName(viewHolder.pokemonImage, name);
     }
 
     @Override
@@ -138,22 +111,15 @@ public class PokemonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public class PokemonAdapterViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener {
 
-        private TextView pokemonName;
-        private TextView pokemonId;
-        private TextView pokemonPrimaryType;
-        private TextView pokemonSecondaryType;
-        private ImageView pokemonImage;
         private ConstraintLayout constraintLayout;
 
-        public PokemonAdapterViewHolder(View view) {
-            super(view);
-            pokemonName = view.findViewById(R.id.tv_pokemon_name);
-            pokemonId = view.findViewById(R.id.tv_pokemon_id);
-            pokemonImage = view.findViewById(R.id.iv_pokemon_sprite);
-            pokemonPrimaryType = view.findViewById(R.id.tv_pokemon_primary_type);
-            pokemonSecondaryType = view.findViewById(R.id.tv_pokemon_secondary_type);
-            constraintLayout = view.findViewById(R.id.inner_layout);
-            view.setOnClickListener(this);
+        private RvPokemonListItemBinding bind;
+
+        public PokemonAdapterViewHolder(RvPokemonListItemBinding bind) {
+            super(bind.getRoot());
+            this.bind = bind;
+            constraintLayout = bind.getRoot().findViewById(R.id.inner_layout);
+            bind.getRoot().setOnClickListener(this);
         }
 
         @Override
@@ -161,6 +127,15 @@ public class PokemonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             int adapterPosition = getAdapterPosition();
             Pokemon pokemon = mPokemonList.get(adapterPosition);
             mClickHandler.onClick(pokemon, adapterPosition, view);
+        }
+
+        /**
+         * We will use this function to bind instance of Pokemon to the row
+         */
+        public void bind(Pokemon pokemon) {
+            bind.setPokemon(pokemon);
+            //bind.setHandlers(new Handlers());
+            bind.executePendingBindings();
         }
     }
 
@@ -173,20 +148,6 @@ public class PokemonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void addToPokemonList(Pokemon pokemon) {
         mPokemonList.add(pokemon);
         notifyDataSetChanged();
-    }
-
-    public String capitalizeName(String name) {
-        return name.substring(0,1).toUpperCase() + name.substring(1);
-    }
-
-    public String convertIdToString(int id) {
-        if ((id / 10) < 1) {
-            return "00" + id;
-        }
-        else if ((id/ 10) < 10)
-            return "0" + id;
-        else
-            return String.valueOf(id);
     }
 
     public void remove(int position) {

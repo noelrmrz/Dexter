@@ -1,15 +1,15 @@
-package com.noelrmrz.pokedex.POJO;
+package com.noelrmrz.pokedex.pojo;
 
 import com.google.gson.annotations.SerializedName;
 
-public class VersionGroup {
+public class PokemonSpeciesLink {
     @SerializedName("name")
     private String name;
 
     @SerializedName("url")
     private String url;
 
-    public VersionGroup(String name, String url) {
+    public PokemonSpeciesLink(String name, String url) {
         this.name = name;
         this.url = url;
     }

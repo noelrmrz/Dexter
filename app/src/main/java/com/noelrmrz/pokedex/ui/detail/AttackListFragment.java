@@ -10,9 +10,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.noelrmrz.pokedex.ui.recyclerview.AttackListAdapter;
-import com.noelrmrz.pokedex.POJO.Move;
-import com.noelrmrz.pokedex.POJO.MoveLink;
-import com.noelrmrz.pokedex.POJO.Pokemon;
+import com.noelrmrz.pokedex.pojo.Move;
+import com.noelrmrz.pokedex.pojo.MoveLink;
+import com.noelrmrz.pokedex.pojo.Pokemon;
 import com.noelrmrz.pokedex.R;
 import com.noelrmrz.pokedex.utilities.DividerItemDecoration;
 import com.noelrmrz.pokedex.utilities.GsonClient;

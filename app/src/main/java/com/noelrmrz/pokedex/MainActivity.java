@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.speech.RecognizerIntent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,17 +13,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.SearchView;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -33,8 +33,9 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.noelrmrz.pokedex.POJO.Pokemon;
-import com.noelrmrz.pokedex.POJO.PokemonSpecies;
+import com.noelrmrz.pokedex.databinding.ActivityMainBinding;
+import com.noelrmrz.pokedex.pojo.Pokemon;
+import com.noelrmrz.pokedex.pojo.PokemonSpecies;
 import com.noelrmrz.pokedex.settings.SettingsActivity;
 import com.noelrmrz.pokedex.ui.detail.DetailFragmentDirections;
 import com.noelrmrz.pokedex.ui.main.MainFragment;
@@ -62,11 +63,13 @@ public class MainActivity extends AppCompatActivity implements
     private final String mSharedPrefFile = "com.noelrmrz.pokedex";
     private FirebaseAnalytics mFirebaseAnalytics;
     private static final int SPEECH_REQUEST_CODE = 0;
+    private ActivityMainBinding binding;
+    private NavController navController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         setupAdMob();
         updateWidgetService();
         setupSharedPreferences();
@@ -88,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements
 
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.nav_host_fragment_container);
-        NavController navController = navHostFragment.getNavController();
+        navController = navHostFragment.getNavController();
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
     }
@@ -119,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements
         navigateToDetailFragment(pokemon);
 
         // Find the shared element in the first fragment
-        ImageView ivProfile = view.findViewById(R.id.iv_pokemon_sprite);
+        // ImageView ivProfile = view.findViewById(R.id.iv_pokemon_sprite);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -245,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements
                 || super.onSupportNavigateUp();
     }
 
-    private void navigateToDetailFragment(Pokemon pokemon) {
+    public void navigateToDetailFragment(Pokemon pokemon) {
         // Navigate to DetailFragment
         NavController navController = Navigation.findNavController(this,
                 R.id.nav_host_fragment_container);

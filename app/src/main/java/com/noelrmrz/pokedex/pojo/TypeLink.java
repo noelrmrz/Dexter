@@ -1,4 +1,4 @@
-package com.noelrmrz.pokedex.POJO;
+package com.noelrmrz.pokedex.pojo;
 
 import com.google.gson.annotations.SerializedName;
 

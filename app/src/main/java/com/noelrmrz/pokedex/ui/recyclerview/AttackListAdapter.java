@@ -13,8 +13,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.noelrmrz.pokedex.POJO.FlavorTextEntry;
-import com.noelrmrz.pokedex.POJO.Move;
+import com.noelrmrz.pokedex.pojo.FlavorTextEntry;
+import com.noelrmrz.pokedex.pojo.Move;
 import com.noelrmrz.pokedex.R;
 import com.noelrmrz.pokedex.utilities.HelperTools;
 

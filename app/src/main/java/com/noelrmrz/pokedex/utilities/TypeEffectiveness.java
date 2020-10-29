@@ -1,7 +1,7 @@
 package com.noelrmrz.pokedex.utilities;
 
-import com.noelrmrz.pokedex.POJO.Pokemon;
-import com.noelrmrz.pokedex.POJO.Type;
+import com.noelrmrz.pokedex.pojo.Pokemon;
+import com.noelrmrz.pokedex.pojo.Type;
 
 import java.util.ArrayList;
 import java.util.Arrays;

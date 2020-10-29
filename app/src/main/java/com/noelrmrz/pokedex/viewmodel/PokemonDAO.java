@@ -8,7 +8,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.noelrmrz.pokedex.POJO.Pokemon;
+import com.noelrmrz.pokedex.pojo.Pokemon;
 
 import java.util.List;
 

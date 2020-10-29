@@ -1,12 +1,12 @@
 package com.noelrmrz.pokedex.utilities;
 
-import com.noelrmrz.pokedex.POJO.Ability;
-import com.noelrmrz.pokedex.POJO.EvolutionChainLink;
-import com.noelrmrz.pokedex.POJO.Move;
-import com.noelrmrz.pokedex.POJO.Pokemon;
-import com.noelrmrz.pokedex.POJO.PokemonJsonList;
-import com.noelrmrz.pokedex.POJO.PokemonSpecies;
-import com.noelrmrz.pokedex.POJO.Type;
+import com.noelrmrz.pokedex.pojo.Ability;
+import com.noelrmrz.pokedex.pojo.EvolutionChainLink;
+import com.noelrmrz.pokedex.pojo.Move;
+import com.noelrmrz.pokedex.pojo.Pokemon;
+import com.noelrmrz.pokedex.pojo.PokemonJsonList;
+import com.noelrmrz.pokedex.pojo.PokemonSpecies;
+import com.noelrmrz.pokedex.pojo.Type;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

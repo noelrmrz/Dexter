@@ -12,13 +12,13 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.flexbox.FlexboxLayout;
-import com.noelrmrz.pokedex.POJO.AbilityLink;
-import com.noelrmrz.pokedex.POJO.EvolutionChain;
-import com.noelrmrz.pokedex.POJO.EvolutionChainLink;
-import com.noelrmrz.pokedex.POJO.FlavorTextEntry;
-import com.noelrmrz.pokedex.POJO.Genera;
-import com.noelrmrz.pokedex.POJO.Pokemon;
-import com.noelrmrz.pokedex.POJO.Type;
+import com.noelrmrz.pokedex.pojo.AbilityLink;
+import com.noelrmrz.pokedex.pojo.EvolutionChain;
+import com.noelrmrz.pokedex.pojo.EvolutionChainLink;
+import com.noelrmrz.pokedex.pojo.FlavorTextEntry;
+import com.noelrmrz.pokedex.pojo.Genera;
+import com.noelrmrz.pokedex.pojo.Pokemon;
+import com.noelrmrz.pokedex.pojo.Type;
 import com.noelrmrz.pokedex.R;
 import com.noelrmrz.pokedex.utilities.GsonClient;
 import com.noelrmrz.pokedex.utilities.HelperTools;
@@ -214,7 +214,7 @@ public class InformationFragment extends Fragment {
     private void addTypeEffectiveness(FlexboxLayout layout, List<String> list) {
         for (int y = 0; y < list.size(); y++) {
             // create a new textview
-            TextView rowTextView = new TextView(getContext());
+            TextView rowTextView = new TextView(getActivity());
 
             // set the background
             rowTextView.setBackgroundResource(R.drawable.rectangle);

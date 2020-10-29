@@ -10,7 +10,7 @@ import android.os.Looper;
 import android.widget.RemoteViews;
 
 import com.noelrmrz.pokedex.MainActivity;
-import com.noelrmrz.pokedex.POJO.Pokemon;
+import com.noelrmrz.pokedex.pojo.Pokemon;
 import com.noelrmrz.pokedex.R;
 import com.noelrmrz.pokedex.utilities.GsonClient;
 import com.noelrmrz.pokedex.utilities.PicassoClient;

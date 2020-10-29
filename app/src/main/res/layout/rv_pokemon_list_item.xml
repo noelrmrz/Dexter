@@ -1,91 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.cardview.widget.CardView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
-    android:layout_marginLeft="4dp"
-    android:layout_marginRight="4dp"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_marginEnd="4dp"
-    android:layout_marginStart="4dp">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/outer_layout"
+    <data>
+        <variable name="handlers" type="com.noelrmrz.pokedex.utilities.Handlers"/>
+        <variable name="pokemon" type="com.noelrmrz.pokedex.pojo.Pokemon"/>
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="16dp"
-        android:paddingTop="8dp"
-        android:paddingRight="16dp"
-        android:paddingBottom="8dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp">
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginStart="4dp" >
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/inner_layout"
+            android:id="@+id/outer_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:background="@drawable/rectangle"
-            android:padding="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:paddingLeft="16dp"
+            android:paddingTop="8dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="8dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
 
-            <TextView
-                android:id="@+id/tv_pokemon_id"
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/inner_layout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif"
-                android:textAllCaps="false"
-                android:textSize="14sp"
+                android:layout_marginTop="32dp"
+                android:background="@drawable/rectangle"
+                android:padding="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="001" />
+                app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:id="@+id/tv_pokemon_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-medium"
-                android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="@+id/tv_pokemon_id"
-                app:layout_constraintTop_toBottomOf="@+id/tv_pokemon_id"
-                tools:text="Bulbasaur" />
+                <TextView
+                    android:id="@+id/tv_pokemon_id"
+                    android:text="@{Integer.toString(pokemon.id)}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:textAllCaps="false"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="001" />
 
-            <TextView
-                android:id="@+id/tv_pokemon_primary_type"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                app:layout_constraintStart_toStartOf="@+id/tv_pokemon_name"
-                app:layout_constraintTop_toBottomOf="@+id/tv_pokemon_name"
-                tools:text="Primary" />
+                <TextView
+                    android:id="@+id/tv_pokemon_name"
+                    android:text="@{pokemon.name.substring(0,1).toUpperCase() + pokemon.name.substring(1)}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="@+id/tv_pokemon_id"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_pokemon_id"
+                    tools:text="Bulbasaur" />
 
-            <TextView
-                android:id="@+id/tv_pokemon_secondary_type"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                app:layout_constraintStart_toEndOf="@+id/tv_pokemon_primary_type"
-                app:layout_constraintTop_toTopOf="@+id/tv_pokemon_primary_type"
-                tools:text="Secondary" />
+                <TextView
+                    android:id="@+id/tv_pokemon_primary_type"
+                    android:text="@{pokemon.typeList[0].type.name}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintStart_toStartOf="@+id/tv_pokemon_name"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_pokemon_name"
+                    tools:text="Primary" />
+
+                <TextView
+                    android:id="@+id/tv_pokemon_secondary_type"
+                    android:text="@{(pokemon.typeList.length &gt; 1 ) ? pokemon.typeList[1].type.name : &quot;&quot; }"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    app:hideIfZero="@{pokemon.typeList.length}"
+                    app:layout_constraintStart_toEndOf="@+id/tv_pokemon_primary_type"
+                    app:layout_constraintTop_toTopOf="@+id/tv_pokemon_primary_type"
+                    tools:text="Secondary" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <ImageView
+                app:setImageUrl="@{Integer.toString(pokemon.id)}"
+                android:id="@+id/iv_pokemon_sprite"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginStart="200dp"
+                android:scaleType="centerCrop"
+                android:contentDescription="@string/pokemon_sprite_content_description"
+                app:layout_constraintBottom_toBottomOf="@+id/inner_layout"
+                app:layout_constraintStart_toStartOf="@+id/inner_layout" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <ImageView
-            android:id="@+id/iv_pokemon_sprite"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginStart="200dp"
-            android:scaleType="centerCrop"
-            android:contentDescription="@string/pokemon_sprite_content_description"
-            android:src="@drawable/ic_launcher_foreground"
-            app:layout_constraintBottom_toBottomOf="@+id/inner_layout"
-            app:layout_constraintStart_toStartOf="@+id/inner_layout" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</androidx.cardview.widget.CardView>
+    </androidx.cardview.widget.CardView>
+</layout>

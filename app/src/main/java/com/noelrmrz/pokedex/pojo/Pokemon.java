@@ -1,4 +1,4 @@
-package com.noelrmrz.pokedex.POJO;
+package com.noelrmrz.pokedex.pojo;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;

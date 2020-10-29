@@ -17,11 +17,12 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.noelrmrz.pokedex.POJO.Pokemon;
-import com.noelrmrz.pokedex.POJO.PokemonJsonList;
-import com.noelrmrz.pokedex.POJO.PokemonLink;
-import com.noelrmrz.pokedex.POJO.PokemonSpecies;
+import com.noelrmrz.pokedex.pojo.Pokemon;
+import com.noelrmrz.pokedex.pojo.PokemonJsonList;
+import com.noelrmrz.pokedex.pojo.PokemonLink;
+import com.noelrmrz.pokedex.pojo.PokemonSpecies;
 import com.noelrmrz.pokedex.R;
+import com.noelrmrz.pokedex.databinding.FragmentMainBinding;
 import com.noelrmrz.pokedex.ui.recyclerview.PokemonAdapter;
 import com.noelrmrz.pokedex.utilities.GsonClient;
 import com.noelrmrz.pokedex.utilities.RetrofitClient;
@@ -43,6 +44,7 @@ public class MainFragment extends Fragment {
     private boolean isLoading = false;
     private final int LIMIT = 20;
     private int offset = 0;
+    private FragmentMainBinding binding;
 
     public static MainFragment newInstance() {
         return new MainFragment();
@@ -55,8 +57,9 @@ public class MainFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_main, container, false);
-
+        binding = FragmentMainBinding.inflate(
+                inflater, container, false);
+        return binding.getRoot();
     }
 
     /*
@@ -70,7 +73,7 @@ public class MainFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // Setup the RecyclerView
-        RecyclerView mRecyclerView = view.findViewById(R.id.rv_pokemon_list);
+        RecyclerView mRecyclerView = binding.rvPokemonList;
         mRecyclerView.setAdapter(mPokemonAdapter);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override

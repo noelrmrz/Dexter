@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.noelrmrz.pokedex.POJO.Pokemon;
+import com.noelrmrz.pokedex.pojo.Pokemon;
 
 import java.util.List;
 
