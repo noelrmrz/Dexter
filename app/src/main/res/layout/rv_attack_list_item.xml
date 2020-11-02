@@ -1,109 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="16dp" >
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <ImageView
-        android:id="@+id/iv_attack_flavor"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:contentDescription="@string/cd_attack_flavor"
-        android:src="@android:color/holo_blue_dark"
-        app:layout_constraintEnd_toStartOf="@+id/tv_attack_damage"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <data>
+        <variable name="handlers" type="com.noelrmrz.pokedex.utilities.Handlers"/>
+        <variable name="move" type="com.noelrmrz.pokedex.pojo.Move"/>
+    </data>
 
-    <TextView
-        android:id="@+id/tv_attack_name"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/tv_attack_type"
-        app:layout_constraintTop_toTopOf="@+id/iv_attack_flavor"
-        tools:text="attackName" />
+        android:padding="16dp">
 
-    <TextView
-        android:id="@+id/tv_attack_type"
-        android:layout_width="49dp"
-        android:layout_height="20dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/rectangle"
-        android:textAlignment="center"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_attack_flavor"
-        tools:text="attackType" />
+        <ImageView
+            android:id="@+id/iv_attack_flavor"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:contentDescription="@string/cd_attack_flavor"
+            app:setStaticImageUrl="@{move.moveDamageClass.name}"
+            app:layout_constraintEnd_toStartOf="@+id/tv_attack_damage"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tv_label_attack_damage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/tv_label_attack_damage"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_attack_flavor"
-        app:layout_constraintStart_toStartOf="@+id/tv_attack_name"
-        app:layout_constraintTop_toBottomOf="@+id/tv_attack_name" />
+        <TextView
+            android:id="@+id/tv_attack_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:text="@{move.name}"
+            app:layout_constraintStart_toEndOf="@+id/tv_attack_type"
+            app:layout_constraintTop_toTopOf="@+id/iv_attack_flavor"
+            tools:text="attackName" />
 
-    <TextView
-        android:id="@+id/tv_attack_damage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_label_attack_damage"
-        app:layout_constraintStart_toEndOf="@+id/tv_label_attack_damage"
-        tools:text="120" />
+        <TextView
+            android:id="@+id/tv_attack_type"
+            android:layout_width="49dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/rectangle"
+            android:textAlignment="center"
+            android:text="@{move.type.name}"
+            app:setBackgroundColor="@{move.type.name}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_attack_flavor"
+            tools:text="attackType" />
 
-    <TextView
-        android:id="@+id/tv_label_attack_pp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:text="@string/tv_label_attack_pp"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_attack_damage"
-        app:layout_constraintStart_toEndOf="@+id/tv_attack_damage" />
+        <TextView
+            android:id="@+id/tv_label_attack_damage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/tv_label_attack_damage"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_attack_flavor"
+            app:layout_constraintStart_toStartOf="@+id/tv_attack_name"
+            app:layout_constraintTop_toBottomOf="@+id/tv_attack_name" />
 
-    <TextView
-        android:id="@+id/tv_attack_pp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_label_attack_pp"
-        app:layout_constraintStart_toEndOf="@+id/tv_label_attack_pp"
-        tools:text="10" />
+        <TextView
+            android:id="@+id/tv_attack_damage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@{Integer.toString(move.power)}"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_label_attack_damage"
+            app:layout_constraintStart_toEndOf="@+id/tv_label_attack_damage"
+            tools:text="120" />
 
-    <TextView
-        android:id="@+id/tv_label_attack_accuracy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:text="@string/tv_label_attack_accuracy"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_attack_pp"
-        app:layout_constraintStart_toEndOf="@+id/tv_attack_pp" />
+        <TextView
+            android:id="@+id/tv_label_attack_pp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@string/tv_label_attack_pp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_attack_damage"
+            app:layout_constraintStart_toEndOf="@+id/tv_attack_damage" />
 
-    <TextView
-        android:id="@+id/tv_attack_accuracy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_label_attack_accuracy"
-        app:layout_constraintStart_toEndOf="@+id/tv_label_attack_accuracy"
-        tools:text="100" />
+        <TextView
+            android:id="@+id/tv_attack_pp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@{Integer.toString(move.pp)}"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_label_attack_pp"
+            app:layout_constraintStart_toEndOf="@+id/tv_label_attack_pp"
+            tools:text="10" />
 
-    <TextView
-        android:id="@+id/tv_attack_description"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="@+id/tv_label_attack_damage"
-        app:layout_constraintTop_toBottomOf="@+id/tv_attack_damage"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:text="attackDescription" />
+        <TextView
+            android:id="@+id/tv_label_attack_accuracy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@string/tv_label_attack_accuracy"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_attack_pp"
+            app:layout_constraintStart_toEndOf="@+id/tv_attack_pp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/tv_attack_accuracy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@{Integer.toString(move.accuracy)}"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_label_attack_accuracy"
+            app:layout_constraintStart_toEndOf="@+id/tv_label_attack_accuracy"
+            tools:text="100" />
+
+        <TextView
+            android:id="@+id/tv_attack_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:setMoveDescription="@{move.flavorTextEntries}"
+            app:layout_constraintStart_toStartOf="@+id/tv_label_attack_damage"
+            app:layout_constraintTop_toBottomOf="@+id/tv_attack_damage"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="attackDescription" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

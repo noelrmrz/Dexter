@@ -1,21 +1,16 @@
 package com.noelrmrz.pokedex.ui.recyclerview;
 
 import android.content.Context;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.noelrmrz.pokedex.R;
 import com.noelrmrz.pokedex.databinding.RvPokemonListItemBinding;
 import com.noelrmrz.pokedex.pojo.Pokemon;
-import com.noelrmrz.pokedex.utilities.HelperTools;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -75,14 +70,6 @@ public class PokemonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private void populateItemView(PokemonAdapterViewHolder viewHolder, int position) {
         Pokemon pokemon = mPokemonList.get(position);
         viewHolder.bind(pokemon);
-
-        // Change the background color depending on the primary type
-        Drawable drawable = viewHolder.constraintLayout.getBackground().mutate();
-        PorterDuffColorFilter filter = new PorterDuffColorFilter(mContext.getResources()
-                .getColor(HelperTools.getColor(mContext, mPokemonList.get(position).getTypeList()[0]
-                        .getType().getName())), PorterDuff.Mode.SRC_ATOP);
-        drawable.setColorFilter(filter);
-        drawable.invalidateSelf();
     }
 
     @Override
@@ -111,14 +98,11 @@ public class PokemonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public class PokemonAdapterViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener {
 
-        private ConstraintLayout constraintLayout;
-
         private RvPokemonListItemBinding bind;
 
         public PokemonAdapterViewHolder(RvPokemonListItemBinding bind) {
             super(bind.getRoot());
             this.bind = bind;
-            constraintLayout = bind.getRoot().findViewById(R.id.inner_layout);
             bind.getRoot().setOnClickListener(this);
         }
 

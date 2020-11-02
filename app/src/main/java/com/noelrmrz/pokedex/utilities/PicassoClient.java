@@ -8,6 +8,7 @@ import android.widget.RemoteViews;
 
 import androidx.fragment.app.Fragment;
 
+import com.noelrmrz.pokedex.R;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -17,6 +18,8 @@ import static androidx.core.app.ActivityCompat.startPostponedEnterTransition;
 
 public class PicassoClient {
 
+    private static final String PHYSICAL = "physical";
+    private static final String SPECIAL = "special";
     private static final String ERROR = "Could not download the requested image";
     private static final String BASE_SPRITE_URL =
             "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/";
@@ -32,6 +35,7 @@ public class PicassoClient {
         }
         else {
             Timber.d(ERROR);
+            imageView.setImageDrawable(null);
         }
     }
 
@@ -43,6 +47,19 @@ public class PicassoClient {
         }
         else {
             Timber.d(ERROR);
+        }
+    }
+
+    public static void loadStatusDamageClassIcon(ImageView imageView, String moveDamageClass) {
+        switch (moveDamageClass) {
+            case PHYSICAL:
+                Picasso.get().load(R.drawable.physical).into(imageView);
+                break;
+            case SPECIAL:
+                Picasso.get().load(R.drawable.special).into(imageView);
+                break;
+            default:
+                Picasso.get().load(R.drawable.status).into(imageView);
         }
     }
 

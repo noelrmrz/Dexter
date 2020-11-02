@@ -120,9 +120,6 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onClick(Pokemon pokemon, int position, View view) {
         navigateToDetailFragment(pokemon);
-
-        // Find the shared element in the first fragment
-        // ImageView ivProfile = view.findViewById(R.id.iv_pokemon_sprite);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)

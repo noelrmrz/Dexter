@@ -37,6 +37,7 @@
                 android:layout_marginTop="32dp"
                 android:background="@drawable/rectangle"
                 android:padding="8dp"
+                app:setBackgroundColor="@{pokemon.typeList[0].type.name}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -96,7 +97,7 @@
                 android:scaleType="centerCrop"
                 android:contentDescription="@string/pokemon_sprite_content_description"
                 app:layout_constraintBottom_toBottomOf="@+id/inner_layout"
-                app:layout_constraintStart_toStartOf="@+id/inner_layout" />
+                app:layout_constraintStart_toStartOf="@+id/inner_layout"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
