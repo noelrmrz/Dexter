@@ -1,22 +1,16 @@
 package com.noelrmrz.pokedex.ui.recyclerview;
 
 import android.content.Context;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.noelrmrz.pokedex.pojo.FlavorTextEntry;
-import com.noelrmrz.pokedex.pojo.Move;
 import com.noelrmrz.pokedex.R;
-import com.noelrmrz.pokedex.utilities.HelperTools;
+import com.noelrmrz.pokedex.databinding.RvAttackListItemBinding;
+import com.noelrmrz.pokedex.pojo.Move;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +19,6 @@ public class AttackListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private Context mContext;
     private List<Move> mMoveList = new ArrayList<>();
-    private final String PHYSICAL = "physical";
-    private final String SPECIAL = "special";
-    private final String LANGUAGE = "EN";
-    private final String VERSION_NAME = "ultra-sun-ultra-moon";
     private final int VIEW_TYPE_ITEM = 0;
 
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
@@ -44,10 +34,9 @@ public class AttackListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         View view;
 
         if (viewType == VIEW_TYPE_ITEM) {
-            layoutIdForListItem = R.layout.rv_attack_list_item;
-            view = inflater.inflate(layoutIdForListItem, viewGroup,
-                    shouldAttachToParentImmediately);
-            return new AttackListAdapterViewHolder(view);
+            RvAttackListItemBinding itemBinding = RvAttackListItemBinding.inflate(inflater,
+                    viewGroup, shouldAttachToParentImmediately);
+            return new AttackListAdapterViewHolder(itemBinding);
         } else {
             layoutIdForListItem = R.layout.rv_list_loading;
             view = inflater.inflate(layoutIdForListItem, viewGroup,
@@ -59,7 +48,6 @@ public class AttackListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder,
                                  int position) {
-
         if (viewHolder instanceof AttackListAdapterViewHolder) {
             populateItemView((AttackListAdapterViewHolder) viewHolder, position);
         } else if (viewHolder instanceof LoadingViewHolder) {
@@ -72,35 +60,8 @@ public class AttackListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     private void populateItemView(AttackListAdapterViewHolder viewHolder, int position) {
-        viewHolder.attackName.setText(mMoveList.get(position).getName());
-        viewHolder.attackType.setText(mMoveList.get(position).getType().getName());
-        viewHolder.attackPP.setText(String.valueOf(mMoveList.get(position).getPp()));
-        viewHolder.attackDamage.setText(String.valueOf(mMoveList.get(position).getPower()));
-        viewHolder.attackAccuracy.setText(String.valueOf(mMoveList.get(position).getAccuracy()));
-        viewHolder.attackDescription.setText(getLanguage(LANGUAGE,
-                mMoveList.get(position).getFlavorTextEntries()));
-
-        // Change the background color depending on the primary type
-        Drawable drawable = viewHolder.attackType.getBackground().mutate();
-        PorterDuffColorFilter filter = new PorterDuffColorFilter(mContext.getResources()
-                .getColor(HelperTools.getColor(mContext, mMoveList.get(position).getType().getName())),
-                PorterDuff.Mode.SRC_ATOP);
-        drawable.setColorFilter(filter);
-        drawable.invalidateSelf();
-
-        switch (mMoveList.get(position).getMoveDamageClass().getName()) {
-            case PHYSICAL:
-                viewHolder.attackFlavor.setImageDrawable(mContext
-                        .getResources().getDrawable(R.drawable.physical));
-                break;
-            case SPECIAL:
-                viewHolder.attackFlavor.setImageDrawable(mContext
-                        .getResources().getDrawable(R.drawable.special));
-                break;
-            default:
-                viewHolder.attackFlavor.setImageDrawable(mContext
-                        .getResources().getDrawable(R.drawable.status));
-        }
+        Move move = mMoveList.get(position);
+        viewHolder.bind(move);
     }
 
     @Override
@@ -124,24 +85,19 @@ public class AttackListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     public class AttackListAdapterViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView attackFlavor;
-        private TextView attackName;
-        private TextView attackPP;
-        private TextView attackDescription;
-        private TextView attackAccuracy;
-        private TextView attackDamage;
-        private TextView attackType;
+        private RvAttackListItemBinding bind;
 
-        public AttackListAdapterViewHolder(@NonNull View view) {
-            super(view);
+        public AttackListAdapterViewHolder(RvAttackListItemBinding bind) {
+            super(bind.getRoot());
+            this.bind = bind;
+        }
 
-            attackFlavor = view.findViewById(R.id.iv_attack_flavor);
-            attackName = view.findViewById(R.id.tv_attack_name);
-            attackPP = view.findViewById(R.id.tv_attack_pp);
-            attackDescription = view.findViewById(R.id.tv_attack_description);
-            attackAccuracy = view.findViewById(R.id.tv_attack_accuracy);
-            attackDamage = view.findViewById(R.id.tv_attack_damage);
-            attackType = view.findViewById(R.id.tv_attack_type);
+        /**
+         * We will use this function to bind instance of Move to the row
+         */
+        public void bind(Move move) {
+            bind.setMove(move);
+            bind.executePendingBindings();
         }
     }
 
@@ -158,18 +114,5 @@ public class AttackListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void setMoveList(List<Move> moveList) {
         mMoveList.addAll(moveList);
         notifyDataSetChanged();
-    }
-
-    private String getLanguage(String language, FlavorTextEntry[] flavorTextEntries) {
-        for (FlavorTextEntry flavorTextEntry: flavorTextEntries) {
-            if (flavorTextEntry.getLanguage().getLanguage().equalsIgnoreCase(language)
-                    && flavorTextEntry.getVersionGroup()
-                    .getName()
-                    .equalsIgnoreCase(VERSION_NAME)) {
-                // Remove 'newline' entries in text
-                return flavorTextEntry.getFlavorText().replaceAll("(\n)", " ");
-            }
-        }
-        return language;
     }
 }

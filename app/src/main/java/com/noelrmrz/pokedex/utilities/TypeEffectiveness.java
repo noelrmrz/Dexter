@@ -51,8 +51,6 @@ public class TypeEffectiveness {
             List<String> superEffective = getTypeNames(primaryType.getDamageRelations().getDoubleDamageFrom());
             superEffective.retainAll(getTypeNames(secondaryType.getDamageRelations().getDoubleDamageFrom()));
 
-            //Timber.d(getTypeNames(secondaryType.getDamageRelations().getDoubleDamageFrom()).toString());
-            //Timber.d(getTypeNames(primaryType.getDamageRelations().getDoubleDamageFrom()).toString());
             // 2x damage;
             effective.addAll(getTypeNames(secondaryType.getDamageRelations().getDoubleDamageFrom()));
 
