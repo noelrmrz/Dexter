@@ -1,458 +1,458 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp">
+    <data>
+        <variable name="pokemon" type="com.noelrmrz.pokedex.pojo.Pokemon"/>
+    </data>
 
-    <TextView
-        android:id="@+id/tv_description"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="The flame that burns at the tip of its tail is an indication of its emotions.  The flame waivers when Charmander is enjoying itself.  If the pokemon becomes enraged, the flame burns fiercely." />
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tv_label_pokemon_data"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="@string/tv_label_pokemon_data"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/tv_description"
-        app:layout_constraintTop_toBottomOf="@+id/tv_description" />
+        <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp">
 
-    <TextView
-        android:id="@+id/tv_label_species"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/tv_label_species"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/tv_label_pokemon_data"
-        app:layout_constraintTop_toBottomOf="@+id/tv_label_pokemon_data" />
+            <TextView
+                android:id="@+id/tv_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:setPokemonDescription="@{pokemon.pokemonSpecies.flavorTextEntries}"
+                tools:text="The flame that burns at the tip of its tail is an indication of its emotions.  The flame waivers when Charmander is enjoying itself.  If the pokemon becomes enraged, the flame burns fiercely." />
 
-    <TextView
-        android:id="@+id/tv_species"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/tv_label_pokemon_data"
-        app:layout_constraintTop_toTopOf="@+id/tv_label_species"
-        tools:text="Lizard Pokemon" />
+            <TextView
+                android:id="@+id/tv_label_pokemon_data"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/tv_label_pokemon_data"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/tv_description"
+                app:layout_constraintTop_toBottomOf="@+id/tv_description" />
 
-    <TextView
-        android:id="@+id/tv_label_height"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/tv_label_height"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/tv_label_species"
-        app:layout_constraintTop_toBottomOf="@+id/tv_label_species" />
+            <TextView
+                android:id="@+id/tv_label_species"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/tv_label_species"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/tv_label_pokemon_data"
+                app:layout_constraintTop_toBottomOf="@+id/tv_label_pokemon_data" />
 
-    <TextView
-        android:id="@+id/tv_height"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@+id/tv_species"
-        app:layout_constraintTop_toTopOf="@+id/tv_label_height"
-        tools:text="0.6m" />
+            <TextView
+                android:id="@+id/tv_species"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:setPokemonGenus="@{pokemon.pokemonSpecies.genera}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/tv_label_pokemon_data"
+                app:layout_constraintTop_toTopOf="@+id/tv_label_species"
+                tools:text="Lizard Pokemon" />
 
-    <TextView
-        android:id="@+id/tv_label_weight"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/tv_label_weight"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/tv_label_height"
-        app:layout_constraintTop_toBottomOf="@+id/tv_label_height" />
+            <TextView
+                android:id="@+id/tv_label_height"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/tv_label_height"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/tv_label_species"
+                app:layout_constraintTop_toBottomOf="@+id/tv_label_species" />
 
-    <TextView
-        android:id="@+id/tv_weight"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@+id/tv_height"
-        app:layout_constraintTop_toTopOf="@+id/tv_label_weight"
-        tools:text="8.5kg" />
+            <TextView
+                android:id="@+id/tv_height"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{String.valueOf(pokemon.height)}"
+                app:layout_constraintStart_toStartOf="@+id/tv_species"
+                app:layout_constraintTop_toTopOf="@+id/tv_label_height"
+                tools:text="0.6m" />
 
-    <TextView
-        android:id="@+id/tv_label_Abilities"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="@string/tv_label_abilities"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/tv_label_weight"
-        app:layout_constraintTop_toBottomOf="@+id/tv_label_weight" />
+            <TextView
+                android:id="@+id/tv_label_weight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/tv_label_weight"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/tv_label_height"
+                app:layout_constraintTop_toBottomOf="@+id/tv_label_height" />
 
-    <TextView
-        android:id="@+id/tv_ability_primary_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/tv_ability_secondary_name"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_label_Abilities"
-        tools:text="Solar Power" />
+            <TextView
+                android:id="@+id/tv_weight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{String.valueOf(pokemon.weight)}"
+                app:layout_constraintStart_toStartOf="@+id/tv_height"
+                app:layout_constraintTop_toTopOf="@+id/tv_label_weight"
+                tools:text="8.5kg" />
 
-    <TextView
-        android:id="@+id/tv_ability_primary_type"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/tv_label_primary_ability"
-        android:textStyle="italic"
-        app:layout_constraintStart_toStartOf="@+id/tv_ability_primary_name"
-        app:layout_constraintTop_toBottomOf="@+id/tv_ability_primary_name" />
+            <TextView
+                android:id="@+id/tv_label_Abilities"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/tv_label_abilities"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/tv_label_weight"
+                app:layout_constraintTop_toBottomOf="@+id/tv_label_weight" />
 
-    <TextView
-        android:id="@+id/tv_ability_secondary_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:visibility="gone"
-        app:layout_constraintEnd_toStartOf="@+id/tv_ability_hidden_name"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintStart_toEndOf="@+id/tv_ability_primary_name"
-        app:layout_constraintTop_toTopOf="@+id/tv_ability_primary_name"
-        tools:text="Solar Power" />
+            <TextView
+                android:id="@+id/tv_ability_primary_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="4dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:textStyle="bold"
+                app:setAbilities="@{pokemon.abilityList[0]}"
+                app:layout_constraintHorizontal_weight="1"
+                android:background="@drawable/rectangle"
+                android:backgroundTint="@color/dragon"
+                android:elevation="2dp"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toStartOf="@+id/tv_ability_secondary_name"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_label_Abilities"
+                tools:text="Solar Power" />
 
-    <TextView
-        android:id="@+id/tv_ability_secondary_type"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/tv_label_secondary_ability"
-        android:textStyle="italic"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="@+id/tv_ability_secondary_name"
-        app:layout_constraintTop_toBottomOf="@+id/tv_ability_secondary_name" />
+            <TextView
+                android:id="@+id/tv_ability_secondary_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:visibility="gone"
+                android:layout_marginRight="4dp"
+                android:layout_marginLeft="4dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                app:setAbilities="@{pokemon.abilityList.length > 1 ? pokemon.abilityList[1] : null}"
+                app:layout_constraintEnd_toStartOf="@+id/tv_ability_hidden_name"
+                app:layout_constraintHorizontal_weight="1"
+                android:background="@drawable/rectangle"
+                android:textAlignment="center"
+                android:backgroundTint="@color/dragon"
+                android:elevation="2dp"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toEndOf="@+id/tv_ability_primary_name"
+                app:layout_constraintTop_toTopOf="@+id/tv_ability_primary_name"
+                tools:text="Solar Power" />
 
-    <TextView
-        android:id="@+id/tv_ability_hidden_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintStart_toEndOf="@+id/tv_ability_secondary_name"
-        app:layout_constraintTop_toTopOf="@+id/tv_ability_secondary_name"
-        tools:text="Solar Power" />
+            <TextView
+                android:id="@+id/tv_ability_hidden_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:visibility="gone"
+                android:layout_marginStart="4dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                app:setAbilities="@{pokemon.abilityList.length > 2 ? pokemon.abilityList[2] : null}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="1"
+                android:background="@drawable/rectangle"
+                android:elevation="2dp"
+                android:textAlignment="center"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toEndOf="@+id/tv_ability_secondary_name"
+                app:layout_constraintTop_toTopOf="@+id/tv_ability_secondary_name"
+                tools:text="Solar Power" />
 
-    <TextView
-        android:id="@+id/tv_ability_hidden_type"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/tv_label_hidden_ability"
-        android:textStyle="italic"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="@+id/tv_ability_hidden_name"
-        app:layout_constraintTop_toBottomOf="@+id/tv_ability_hidden_name" />
+            <TextView
+                android:id="@+id/tv_label_evolutions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/tv_label_evolutions"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/tv_label_weight"
+                app:layout_constraintTop_toBottomOf="@+id/tv_ability_primary_name" />
 
-    <TextView
-        android:id="@+id/tv_label_evolutions"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="@string/tv_label_evolutions"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/tv_label_weight"
-        app:layout_constraintTop_toBottomOf="@+id/tv_ability_primary_type" />
+            <ImageView
+                android:id="@+id/iv_first_stage"
+                android:layout_width="88dp"
+                android:layout_height="88dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/circle"
+                app:layout_constraintEnd_toStartOf="@+id/iv_second_stage"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_label_evolutions"
+                tools:srcCompat="@tools:sample/avatars" />
 
-    <ImageView
-        android:id="@+id/iv_first_stage"
-        android:layout_width="88dp"
-        android:layout_height="88dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/circle"
-        app:layout_constraintEnd_toStartOf="@+id/iv_second_stage"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_label_evolutions"
-        tools:srcCompat="@tools:sample/avatars" />
+            <ImageView
+                android:id="@+id/iv_second_stage"
+                android:layout_width="88dp"
+                android:layout_height="88dp"
+                android:background="@drawable/circle"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@+id/iv_third_stage"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/iv_first_stage"
+                app:layout_constraintTop_toTopOf="@+id/iv_first_stage"
+                tools:srcCompat="@tools:sample/avatars" />
 
-    <ImageView
-        android:id="@+id/iv_second_stage"
-        android:layout_width="88dp"
-        android:layout_height="88dp"
-        android:background="@drawable/circle"
-        android:visibility="gone"
-        app:layout_constraintEnd_toStartOf="@+id/iv_third_stage"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/iv_first_stage"
-        app:layout_constraintTop_toTopOf="@+id/iv_first_stage"
-        tools:srcCompat="@tools:sample/avatars" />
+            <ImageView
+                android:id="@+id/iv_third_stage"
+                android:layout_width="88dp"
+                android:layout_height="88dp"
+                android:background="@drawable/circle"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/iv_second_stage"
+                app:layout_constraintTop_toTopOf="@+id/iv_second_stage"
+                tools:srcCompat="@tools:sample/avatars" />
 
-    <ImageView
-        android:id="@+id/iv_third_stage"
-        android:layout_width="88dp"
-        android:layout_height="88dp"
-        android:background="@drawable/circle"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/iv_second_stage"
-        app:layout_constraintTop_toTopOf="@+id/iv_second_stage"
-        tools:srcCompat="@tools:sample/avatars" />
+            <TextView
+                android:id="@+id/tv_label_training_data"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/tv_label_training_data"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/tv_label_evolutions"
+                app:layout_constraintTop_toBottomOf="@+id/iv_first_stage" />
 
-    <TextView
-        android:id="@+id/tv_label_training_data"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="@string/tv_label_training_data"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/tv_label_evolutions"
-        app:layout_constraintTop_toBottomOf="@+id/iv_first_stage" />
+            <LinearLayout
+                android:id="@+id/xFour_layout"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_label_training_data">
 
-    <LinearLayout
-        android:id="@+id/xFour_layout"
-        android:layout_width="match_parent"
-        android:layout_height="?android:attr/listPreferredItemHeight"
-        android:layout_marginTop="8dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_label_training_data">
+                <TextView
+                    android:id="@+id/tv_xFour"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/circle"
+                    android:gravity="center"
+                    android:text="@string/four_x"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp"
+                    tools:text="x4" />
 
-        <TextView
-            android:id="@+id/tv_xFour"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_gravity="center_vertical"
-            android:background="@drawable/circle"
-            android:gravity="center"
-            android:text="@string/four_x"
-            android:textColor="@android:color/black"
-            android:textSize="14sp"
-            tools:text="x4" />
+                <com.google.android.flexbox.FlexboxLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/xFour_flexLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    app:flexWrap="wrap">
 
-        <com.google.android.flexbox.FlexboxLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/xFour_flexLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            app:flexWrap="wrap">
+                </com.google.android.flexbox.FlexboxLayout>
 
-        </com.google.android.flexbox.FlexboxLayout>
+            </LinearLayout>
 
-    </LinearLayout>
+            <LinearLayout
+                android:id="@+id/xTwo_layout"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/xFour_layout">
 
-    <LinearLayout
-        android:id="@+id/xTwo_layout"
-        android:layout_width="match_parent"
-        android:layout_height="?android:attr/listPreferredItemHeight"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/xFour_layout">
+                <TextView
+                    android:id="@+id/tv_xTwo"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/circle"
+                    android:gravity="center"
+                    android:text="@string/two_x"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp"
+                    tools:text="x2" />
 
-        <TextView
-            android:id="@+id/tv_xTwo"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_gravity="center_vertical"
-            android:background="@drawable/circle"
-            android:gravity="center"
-            android:text="@string/two_x"
-            android:textColor="@android:color/black"
-            android:textSize="14sp"
-            tools:text="x2" />
+                <com.google.android.flexbox.FlexboxLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/xTwo_flexLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    app:flexWrap="wrap">
 
-        <com.google.android.flexbox.FlexboxLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/xTwo_flexLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            app:flexWrap="wrap">
+                </com.google.android.flexbox.FlexboxLayout>
 
-        </com.google.android.flexbox.FlexboxLayout>
+            </LinearLayout>
 
-    </LinearLayout>
+            <LinearLayout
+                android:id="@+id/xOne_layout"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeightLarge"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/xTwo_layout">
 
-    <LinearLayout
-        android:id="@+id/xOne_layout"
-        android:layout_width="match_parent"
-        android:layout_height="?android:attr/listPreferredItemHeightLarge"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/xTwo_layout" >
+                <TextView
+                    android:id="@+id/tv_xOne"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/circle"
+                    android:gravity="center"
+                    android:text="@string/one_x"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp"
+                    tools:text="x1" />
 
-        <TextView
-            android:id="@+id/tv_xOne"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_gravity="center_vertical"
-            android:background="@drawable/circle"
-            android:gravity="center"
-            android:text="@string/one_x"
-            android:textColor="@android:color/black"
-            android:textSize="14sp"
-            tools:text="x1" />
+                <com.google.android.flexbox.FlexboxLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/xOne_flexLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    app:flexWrap="wrap">
 
-        <com.google.android.flexbox.FlexboxLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/xOne_flexLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            app:flexWrap="wrap">
+                </com.google.android.flexbox.FlexboxLayout>
 
-        </com.google.android.flexbox.FlexboxLayout>
+            </LinearLayout>
 
-    </LinearLayout>
+            <LinearLayout
+                android:id="@+id/xHalf_layout"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/xOne_layout">
 
-    <LinearLayout
-        android:id="@+id/xHalf_layout"
-        android:layout_width="match_parent"
-        android:layout_height="?android:attr/listPreferredItemHeight"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/xOne_layout" >
+                <TextView
+                    android:id="@+id/tv_xHalf"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/circle"
+                    android:gravity="center"
+                    android:text="@string/half_x"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp"
+                    tools:text="x1/2" />
 
-        <TextView
-            android:id="@+id/tv_xHalf"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_gravity="center_vertical"
-            android:background="@drawable/circle"
-            android:gravity="center"
-            android:text="@string/half_x"
-            android:textColor="@android:color/black"
-            android:textSize="14sp"
-            tools:text="x1/2" />
+                <com.google.android.flexbox.FlexboxLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/xHalf_flexLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    app:flexWrap="wrap">
 
-        <com.google.android.flexbox.FlexboxLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/xHalf_flexLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            app:flexWrap="wrap">
+                </com.google.android.flexbox.FlexboxLayout>
 
-        </com.google.android.flexbox.FlexboxLayout>
+            </LinearLayout>
 
-    </LinearLayout>
+            <LinearLayout
+                android:id="@+id/xQuarter_layout"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/xHalf_layout">
 
-    <LinearLayout
-        android:id="@+id/xQuarter_layout"
-        android:layout_width="match_parent"
-        android:layout_height="?android:attr/listPreferredItemHeight"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/xHalf_layout" >
+                <TextView
+                    android:id="@+id/tv_xQuarter"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/circle"
+                    android:gravity="center"
+                    android:text="@string/quarter_x"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp"
+                    tools:text="x1/4" />
 
-        <TextView
-            android:id="@+id/tv_xQuarter"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_gravity="center_vertical"
-            android:background="@drawable/circle"
-            android:gravity="center"
-            android:text="@string/quarter_x"
-            android:textColor="@android:color/black"
-            android:textSize="14sp"
-            tools:text="x1/4" />
+                <com.google.android.flexbox.FlexboxLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/xQuarter_flexLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    app:flexWrap="wrap">
 
-        <com.google.android.flexbox.FlexboxLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/xQuarter_flexLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            app:flexWrap="wrap">
+                </com.google.android.flexbox.FlexboxLayout>
 
-        </com.google.android.flexbox.FlexboxLayout>
+            </LinearLayout>
 
-    </LinearLayout>
+            <LinearLayout
+                android:id="@+id/xZero_layout"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/xQuarter_layout">
 
-    <LinearLayout
-        android:id="@+id/xZero_layout"
-        android:layout_width="match_parent"
-        android:layout_height="?android:attr/listPreferredItemHeight"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/xQuarter_layout" >
+                <TextView
+                    android:id="@+id/tv_xZero"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/circle"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp"
+                    android:text="@string/immune" />
 
-        <TextView
-            android:id="@+id/tv_xZero"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_gravity="center_vertical"
-            android:background="@drawable/circle"
-            android:gravity="center"
-            android:textColor="@android:color/black"
-            android:textSize="14sp"
-            android:text="@string/immune" />
+                <com.google.android.flexbox.FlexboxLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/xZero_flexLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    app:flexWrap="wrap">
 
-        <com.google.android.flexbox.FlexboxLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/xZero_flexLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            app:flexWrap="wrap">
+                </com.google.android.flexbox.FlexboxLayout>
 
-        </com.google.android.flexbox.FlexboxLayout>
+            </LinearLayout>
 
-    </LinearLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.core.widget.NestedScrollView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</layout>

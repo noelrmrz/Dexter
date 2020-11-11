@@ -9,12 +9,14 @@ import android.widget.TextView;
 
 import androidx.databinding.BindingAdapter;
 
+import com.noelrmrz.pokedex.pojo.AbilityLink;
 import com.noelrmrz.pokedex.pojo.FlavorTextEntry;
+import com.noelrmrz.pokedex.pojo.Genera;
 
 public class BindingAdapters {
 
     private static final String LANGUAGE = "EN";
-    private static final String VERSION_NAME = "ultra-sun-ultra-moon";
+    private static final String VERSION_NAME = "omega-ruby";  //"ultra-sun-ultra-moon";
 
     public BindingAdapters() {}
 
@@ -60,4 +62,35 @@ public class BindingAdapters {
         drawable.invalidateSelf();
     }
 
+    @BindingAdapter("setPokemonDescription")
+    public static void setPokemonDescription(TextView textView, FlavorTextEntry[] textEntries) {
+        for (FlavorTextEntry entry : textEntries) {
+            if (entry.getVersionGroup().getName().equalsIgnoreCase(VERSION_NAME)
+                    && entry.getLanguage().getLanguage().equalsIgnoreCase(LANGUAGE)) {
+                textView.setText(entry.getFlavorText().replaceAll("(\n)", " "));
+                return;
+            }
+        }
+    }
+
+    @BindingAdapter("setPokemonGenus")
+    public static void setPokemonGenus(TextView textView, Genera[] generaList) {
+        for (Genera genera : generaList) {
+            if (genera.getLanguage().getLanguage().equalsIgnoreCase(LANGUAGE)) {
+                textView.setText(genera.getGenus());
+                return;
+            }
+        }
+    }
+
+    @BindingAdapter("setAbilities")
+    public static void setAbilities(TextView textview, AbilityLink abilityLink) {
+        if (abilityLink == null) {
+            return;
+        }
+        else {
+            textview.setVisibility(View.VISIBLE);
+            textview.setText(abilityLink.getAbility().getName());
+        }
+    }
 }

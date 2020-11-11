@@ -5,21 +5,19 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.flexbox.FlexboxLayout;
-import com.noelrmrz.pokedex.pojo.AbilityLink;
+import com.noelrmrz.pokedex.R;
+import com.noelrmrz.pokedex.databinding.FragmentInformationBinding;
 import com.noelrmrz.pokedex.pojo.EvolutionChain;
 import com.noelrmrz.pokedex.pojo.EvolutionChainLink;
-import com.noelrmrz.pokedex.pojo.FlavorTextEntry;
-import com.noelrmrz.pokedex.pojo.Genera;
 import com.noelrmrz.pokedex.pojo.Pokemon;
 import com.noelrmrz.pokedex.pojo.Type;
-import com.noelrmrz.pokedex.R;
 import com.noelrmrz.pokedex.utilities.GsonClient;
 import com.noelrmrz.pokedex.utilities.HelperTools;
 import com.noelrmrz.pokedex.utilities.PicassoClient;
@@ -38,11 +36,9 @@ import static android.view.Gravity.CENTER;
 public class InformationFragment extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
-    private String mParam1;
     static Pokemon savedPokemon;
-    private final String LANGUAGE = "EN";
-    private final String VERSION_NAME = "omega-ruby";
     private TypeEffectiveness typeEffectiveness = TypeEffectiveness.getInstance();
+    private FragmentInformationBinding bind;
 
     public InformationFragment() {
     }
@@ -63,7 +59,7 @@ public class InformationFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            String mParam1 = getArguments().getString(ARG_PARAM1);
             savedPokemon = GsonClient.getGsonClient().fromJson(mParam1, Pokemon.class);
         }
 
@@ -73,10 +69,13 @@ public class InformationFragment extends Fragment {
     Called when the fragment should create its view object heirarchy
     */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_information, container, false);
+        bind = FragmentInformationBinding.inflate(inflater, container, false);
+        bind.setPokemon(savedPokemon);
+        bind.executePendingBindings();
+        return bind.getRoot();
     }
 
     /*
@@ -85,78 +84,15 @@ public class InformationFragment extends Fragment {
     View setup should occur here
     */
     @Override
-    public void onViewCreated(View view, Bundle savedInstance) {
-        TextView description = view.findViewById(R.id.tv_description);
-        TextView weight = view.findViewById(R.id.tv_weight);
-        TextView height = view.findViewById(R.id.tv_height);
+    public void onViewCreated(@NonNull View view, Bundle savedInstance) {
 
-        TextView primaryAbility = view.findViewById(R.id.tv_ability_primary_name);
-        TextView secondaryAbility = view.findViewById(R.id.tv_ability_secondary_name);
-        TextView hiddenAbility = view.findViewById(R.id.tv_ability_hidden_name);
-        TextView primaryAbilityType = view.findViewById(R.id.tv_ability_primary_type);
-        TextView secondaryAbilityType = view.findViewById(R.id.tv_ability_secondary_type);
-        TextView hiddenAbilityType = view.findViewById(R.id.tv_ability_hidden_type);
+        setTypeMultipliers(savedPokemon.getTypeList().length, bind.tvXFour, bind.xFourFlexLayout, bind.xFourLayout,
+                bind.tvXTwo, bind.xTwoFlexLayout, bind.xTwoLayout,
+                bind.tvXOne, bind.xOneFlexLayout, bind.xOneLayout,
+                bind.tvXHalf, bind.xHalfFlexLayout, bind.xHalfLayout,
+                bind.tvXQuarter, bind.xQuarterFlexLayout,bind.xQuarterLayout,
+                bind.tvXZero, bind.xZeroFlexLayout, bind.xZeroLayout);
 
-        ImageView base = view.findViewById(R.id.iv_first_stage);
-        ImageView intermediate = view.findViewById(R.id.iv_second_stage);
-        ImageView final_evolution = view.findViewById(R.id.iv_third_stage);
-
-        TextView xFour = (TextView) view.findViewById(R.id.tv_xFour);
-        FlexboxLayout xFourFlexLayout = (FlexboxLayout) view.findViewById(R.id.xFour_flexLayout);
-        LinearLayout xFourLinearLayout = view.findViewById(R.id.xFour_layout);
-
-        TextView xTwo = (TextView) view.findViewById(R.id.tv_xTwo);
-        FlexboxLayout xTwoFlexLayout = (FlexboxLayout) view.findViewById(R.id.xTwo_flexLayout);
-        LinearLayout xTwoLinearLayout = view.findViewById(R.id.xTwo_layout);
-
-        TextView xOne = (TextView) view.findViewById(R.id.tv_xOne);
-        FlexboxLayout xOneFlexLayout = (FlexboxLayout) view.findViewById(R.id.xOne_flexLayout);
-        LinearLayout xOneLinearLayout = view.findViewById(R.id.xOne_layout);
-
-        TextView xHalf = (TextView) view.findViewById(R.id.tv_xHalf);
-        FlexboxLayout xHalfFlexLayout = (FlexboxLayout) view.findViewById(R.id.xHalf_flexLayout);
-        LinearLayout xHalfLinearLayout = view.findViewById(R.id.xHalf_layout);
-
-        TextView xQuarter = (TextView) view.findViewById(R.id.tv_xQuarter);
-        FlexboxLayout xQuarterFlexLayout = (FlexboxLayout) view.findViewById(R.id.xQuarter_flexLayout);
-        LinearLayout xQuarterLinearLayout = view.findViewById(R.id.xQuarter_layout);
-
-        TextView xZero = (TextView) view.findViewById(R.id.tv_xZero);
-        FlexboxLayout xZeroFlexLayout = (FlexboxLayout) view.findViewById(R.id.xZero_flexLayout);
-        LinearLayout xZeroLinearLayout = view.findViewById(R.id.xZero_layout);
-
-        setTypeMultipliers(savedPokemon.getTypeList().length, xFour, xFourFlexLayout, xFourLinearLayout,
-                xTwo, xTwoFlexLayout, xTwoLinearLayout,
-                xOne, xOneFlexLayout, xOneLinearLayout,
-                xHalf, xHalfFlexLayout, xHalfLinearLayout,
-                xQuarter, xQuarterFlexLayout,xQuarterLinearLayout,
-                xZero, xZeroFlexLayout, xZeroLinearLayout);
-
-        for (AbilityLink ability: savedPokemon.getAbilityList()) {
-            switch (ability.getSlot()) {
-                case 1:
-                    primaryAbility.setText(ability.getAbility().getName());
-                    break;
-                case 2:
-                    secondaryAbility.setVisibility(View.VISIBLE);
-                    secondaryAbilityType.setVisibility(View.VISIBLE);
-                    secondaryAbility.setText(ability.getAbility().getName());
-                    break;
-                case 3:
-                    hiddenAbility.setVisibility(View.VISIBLE);
-                    hiddenAbilityType.setVisibility(View.VISIBLE);
-                    hiddenAbility.setText(ability.getAbility().getName());
-                    break;
-            }
-        }
-
-        TextView species = view.findViewById(R.id.tv_species);
-
-        species.setText(getLanguage(LANGUAGE, savedPokemon.getPokemonSpecies().getGenera()));
-        description.setText(getSpeciesTextEntry(LANGUAGE,
-                savedPokemon.getPokemonSpecies().getFlavorTextEntries()));
-        weight.setText(String.valueOf(savedPokemon.getWeight()) + "lbs");
-        height.setText((String.valueOf(savedPokemon.getHeight())));
         String evolutionLink = savedPokemon.getPokemonSpecies().getEvolutionChainLink().getUrl().substring(41);
         String evolutionChainId = evolutionLink.replace("/", "").trim();
 
@@ -167,21 +103,21 @@ public class InformationFragment extends Fragment {
                 // Set the image for the first evolution stage
                 EvolutionChain firstStage = response.body().getChain();
                 String idOne = firstStage.getSpecies().getUrl().substring(42).replace("/", "").trim();
-                PicassoClient.downloadSpriteImage(idOne, base);
+                PicassoClient.downloadSpriteImage(idOne, bind.ivFirstStage);
 
                 // Check and set the second evolution stage
                 if (firstStage.getNextEvolutions().length > 0) {
                     EvolutionChain secondStage = firstStage.getNextEvolutions()[0];
                     String idTwo = secondStage.getSpecies().getUrl().substring(42).replace("/", "").trim();
-                    intermediate.setVisibility(View.VISIBLE);
-                    PicassoClient.downloadSpriteImage(idTwo, intermediate);
+                    bind.ivSecondStage.setVisibility(View.VISIBLE);
+                    PicassoClient.downloadSpriteImage(idTwo, bind.ivSecondStage);
 
                     // Check and set for the third evolution stage
                     if (secondStage.getNextEvolutions().length > 0) {
                         EvolutionChain thirdStage = secondStage.getNextEvolutions()[0];
                         String idThree = thirdStage.getSpecies().getUrl().substring(42).replace("/", "").trim();
-                        final_evolution.setVisibility(View.VISIBLE);
-                        PicassoClient.downloadSpriteImage(idThree, final_evolution);
+                        bind.ivThirdStage.setVisibility(View.VISIBLE);
+                        PicassoClient.downloadSpriteImage(idThree, bind.ivThirdStage);
                     }
                 }
             }
@@ -191,24 +127,6 @@ public class InformationFragment extends Fragment {
                 Timber.d(t);
             }
         }, evolutionChainId);
-    }
-
-    private String getLanguage(String language, Genera[] generaList) {
-        for (Genera genera : generaList) {
-            if (genera.getLanguage().getLanguage().equalsIgnoreCase(language))
-                return genera.getGenus();
-        }
-        return language;
-    }
-
-    private String getSpeciesTextEntry(String language, FlavorTextEntry[] textEntries) {
-        for (FlavorTextEntry entry : textEntries) {
-            if (entry.getVersionGroup().getName().equalsIgnoreCase(VERSION_NAME)
-                    && entry.getLanguage().getLanguage().equalsIgnoreCase(language)) {
-                return entry.getFlavorText().replaceAll("(\n)", " ");
-            }
-        }
-        return language;
     }
 
     private void addTypeEffectiveness(FlexboxLayout layout, List<String> list) {
