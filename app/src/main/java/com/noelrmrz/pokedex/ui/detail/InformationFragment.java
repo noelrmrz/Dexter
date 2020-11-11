@@ -18,9 +18,9 @@ import com.noelrmrz.pokedex.pojo.EvolutionChain;
 import com.noelrmrz.pokedex.pojo.EvolutionChainLink;
 import com.noelrmrz.pokedex.pojo.Pokemon;
 import com.noelrmrz.pokedex.pojo.Type;
+import com.noelrmrz.pokedex.utilities.GlideClient;
 import com.noelrmrz.pokedex.utilities.GsonClient;
 import com.noelrmrz.pokedex.utilities.HelperTools;
-import com.noelrmrz.pokedex.utilities.PicassoClient;
 import com.noelrmrz.pokedex.utilities.RetrofitClient;
 import com.noelrmrz.pokedex.utilities.TypeEffectiveness;
 
@@ -103,21 +103,21 @@ public class InformationFragment extends Fragment {
                 // Set the image for the first evolution stage
                 EvolutionChain firstStage = response.body().getChain();
                 String idOne = firstStage.getSpecies().getUrl().substring(42).replace("/", "").trim();
-                PicassoClient.downloadSpriteImage(idOne, bind.ivFirstStage);
+                GlideClient.downloadSpriteImage(idOne, bind.ivFirstStage);
 
                 // Check and set the second evolution stage
                 if (firstStage.getNextEvolutions().length > 0) {
                     EvolutionChain secondStage = firstStage.getNextEvolutions()[0];
                     String idTwo = secondStage.getSpecies().getUrl().substring(42).replace("/", "").trim();
                     bind.ivSecondStage.setVisibility(View.VISIBLE);
-                    PicassoClient.downloadSpriteImage(idTwo, bind.ivSecondStage);
+                    GlideClient.downloadSpriteImage(idTwo, bind.ivSecondStage);
 
                     // Check and set for the third evolution stage
                     if (secondStage.getNextEvolutions().length > 0) {
                         EvolutionChain thirdStage = secondStage.getNextEvolutions()[0];
                         String idThree = thirdStage.getSpecies().getUrl().substring(42).replace("/", "").trim();
                         bind.ivThirdStage.setVisibility(View.VISIBLE);
-                        PicassoClient.downloadSpriteImage(idThree, bind.ivThirdStage);
+                        GlideClient.downloadSpriteImage(idThree, bind.ivThirdStage);
                     }
                 }
             }

@@ -13,19 +13,22 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.transition.Transition;
+import androidx.transition.TransitionInflater;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-import com.noelrmrz.pokedex.pojo.Pokemon;
 import com.noelrmrz.pokedex.R;
+import com.noelrmrz.pokedex.databinding.FragmentDetailBinding;
+import com.noelrmrz.pokedex.pojo.Pokemon;
 import com.noelrmrz.pokedex.ui.recyclerview.TabsAdapter;
-import com.noelrmrz.pokedex.viewmodel.PokemonDatabase;
 import com.noelrmrz.pokedex.utilities.AppExecutors;
+import com.noelrmrz.pokedex.utilities.GlideClient;
 import com.noelrmrz.pokedex.utilities.GsonClient;
-import com.noelrmrz.pokedex.utilities.PicassoClient;
 import com.noelrmrz.pokedex.utilities.ViewAnimation;
+import com.noelrmrz.pokedex.viewmodel.PokemonDatabase;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -39,13 +42,12 @@ public class DetailFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private TabsAdapter mTabsAdapter;
-    private ViewPager2 viewPager;
     private PokemonDatabase pokemonDatabase;
+    private FragmentDetailBinding bind;
     private final String DATA = "Data";
     private final String MOVES = "Moves";
     private final String STATS = "Stats";
 
-    private AppBarConfiguration appBarConfiguration;
     private Boolean isRotate = false;
 
     public DetailFragment() {
@@ -82,6 +84,10 @@ public class DetailFragment extends Fragment {
             savedPokemon = GsonClient.getGsonClient().fromJson(args, Pokemon.class);
             mTabsAdapter = new TabsAdapter(this, args);
         }
+
+        Transition transition = TransitionInflater.from(requireContext())
+                .inflateTransition(R.transition.shared_image);
+        setSharedElementEnterTransition(transition);
     }
 
     /*
@@ -92,7 +98,9 @@ public class DetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_detail, container, false);
+        bind = FragmentDetailBinding.inflate(inflater, container, false);
+        bind.setPokemon(savedPokemon);
+        return bind.getRoot();
     }
 
     /*
@@ -106,11 +114,11 @@ public class DetailFragment extends Fragment {
         NavHostFragment navHostFragment = (NavHostFragment) getActivity().getSupportFragmentManager()
                 .findFragmentById(R.id.nav_host_fragment_container);
         NavController navController = navHostFragment.getNavController();
-        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController((AppCompatActivity) getActivity(), navController, appBarConfiguration);
 
         // Setup the ViewPager
-        viewPager = view.findViewById(R.id.tab_pager);
+        ViewPager2 viewPager = view.findViewById(R.id.tab_pager);
         viewPager.setAdapter(mTabsAdapter);
 
         // FAB
@@ -142,7 +150,7 @@ public class DetailFragment extends Fragment {
         // Setup the views
         ImageView imageView = view.findViewById(R.id.iv_fragment_detail);
 
-        PicassoClient.downloadProfileImage(String.valueOf(savedPokemon.getId()), imageView);
+        GlideClient.downloadProfileImage(String.valueOf(savedPokemon.getId()), imageView);
 
         // Setup the TabLayout
         TabLayout tabLayout = view.findViewById(R.id.tab_layout);

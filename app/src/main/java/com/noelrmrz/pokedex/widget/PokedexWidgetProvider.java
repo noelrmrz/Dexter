@@ -12,8 +12,8 @@ import android.widget.RemoteViews;
 import com.noelrmrz.pokedex.MainActivity;
 import com.noelrmrz.pokedex.pojo.Pokemon;
 import com.noelrmrz.pokedex.R;
+import com.noelrmrz.pokedex.utilities.GlideClient;
 import com.noelrmrz.pokedex.utilities.GsonClient;
-import com.noelrmrz.pokedex.utilities.PicassoClient;
 
 public class PokedexWidgetProvider extends AppWidgetProvider {
 
@@ -29,9 +29,9 @@ public class PokedexWidgetProvider extends AppWidgetProvider {
             uiHandler.post(() -> {
 
                 // Use Picasso to load the image into the ImageView
-                PicassoClient.whosThatPokemon(views, R.id.iv_whos_that_pokemon,
+                GlideClient.whosThatPokemon(views, R.id.iv_whos_that_pokemon,
                         appWidgetIds, String.valueOf(GsonClient.getGsonClient()
-                                .fromJson(pokemonJsonString, Pokemon.class).getId()));
+                                .fromJson(pokemonJsonString, Pokemon.class).getId()), context);
 
                 // Set the black outline ontop of the pokemon imagea
                 views.setInt(R.id.iv_whos_that_pokemon, "setColorFilter",

@@ -68,4 +68,5 @@
     <string name="application_id">ca-app-pub-5822195395526639~3561426822</string>
     <string name="ad_unit_id">ca-app-pub-3940256099942544/1033173712</string>
     <string name="cd_attack_flavor">Image representing if the attack is physical, special, or status based</string>
+    <string name="profileImage">profile %s</string>
 </resources>

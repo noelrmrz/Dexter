@@ -30,12 +30,12 @@ public class BindingAdapters {
 
     @BindingAdapter("setImageUrl")
     public static void setImageUrl(ImageView imageView, String url) {
-        PicassoClient.downloadProfileImage(url, imageView);
+        GlideClient.downloadProfileImage(url, imageView);
     }
 
     @BindingAdapter("setStaticImageUrl")
     public static void setStaticImageUrl(ImageView imageView, String moveDamageClass){
-        PicassoClient.loadStatusDamageClassIcon(imageView, moveDamageClass);
+        GlideClient.loadStatusDamageClassIcon(imageView, moveDamageClass);
     }
 
     @BindingAdapter("setMoveDescription")

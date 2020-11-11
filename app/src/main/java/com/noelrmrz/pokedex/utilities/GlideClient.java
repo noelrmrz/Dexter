@@ -1,6 +1,6 @@
 package com.noelrmrz.pokedex.utilities;
 
-import android.app.Activity;
+import android.content.Context;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
@@ -8,15 +8,15 @@ import android.widget.RemoteViews;
 
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.AppWidgetTarget;
 import com.noelrmrz.pokedex.R;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
 
 import timber.log.Timber;
 
 import static androidx.core.app.ActivityCompat.startPostponedEnterTransition;
 
-public class PicassoClient {
+public class GlideClient {
 
     private static final String PHYSICAL = "physical";
     private static final String SPECIAL = "special";
@@ -31,7 +31,8 @@ public class PicassoClient {
         if(id != null && id.length() > 0)
         {
             String completeUrl = BASE_SPRITE_URL.concat(id + ".png");
-            Picasso.get().load(completeUrl).into(imageView);
+            Glide.with(imageView.getContext()).load(completeUrl).into(imageView);
+            //Picasso.get().load(completeUrl).into(imageView);
         }
         else {
             Timber.d(ERROR);
@@ -43,7 +44,7 @@ public class PicassoClient {
         if(id != null && id.length() > 0)
         {
             String completeUrl = BASE_PROFILE_URL.concat(id + ".png");
-            Picasso.get().load(completeUrl).into(imageView);
+            Glide.with(imageView.getContext()).load(completeUrl).into(imageView);
         }
         else {
             Timber.d(ERROR);
@@ -53,43 +54,29 @@ public class PicassoClient {
     public static void loadStatusDamageClassIcon(ImageView imageView, String moveDamageClass) {
         switch (moveDamageClass) {
             case PHYSICAL:
-                Picasso.get().load(R.drawable.physical).into(imageView);
+                Glide.with(imageView.getContext()).load(R.drawable.physical).into(imageView);
                 break;
             case SPECIAL:
-                Picasso.get().load(R.drawable.special).into(imageView);
+                Glide.with(imageView.getContext()).load(R.drawable.special).into(imageView);
                 break;
             default:
-                Picasso.get().load(R.drawable.status).into(imageView);
+                Glide.with(imageView.getContext()).load(R.drawable.status).into(imageView);
         }
     }
 
     public static void whosThatPokemon(RemoteViews remoteViews, int viewId, int[] appWidgetIds,
-                                       String id) {
+                                       String id, Context context) {
+        AppWidgetTarget appWidgetTarget = new AppWidgetTarget(context, viewId,
+                remoteViews, appWidgetIds);
+
         if (id != null && id.length() > 0)
         {
             String completeUrl = BASE_PROFILE_URL.concat(id + ".png");
-            Picasso.get().load(completeUrl).into(remoteViews, viewId, appWidgetIds);
-        }
-        else {
-            Timber.d(ERROR);
-        }
-    }
-
-    public static void postponedDownloadImage(String url, ImageView imageView, Activity activity) {
-        if(url != null && url.length()>0)
-        {
-            String completeUrl = BASE_PROFILE_URL.concat(url);
-            Picasso.get().load(completeUrl).into(imageView, new Callback() {
-                @Override
-                public void onSuccess() {
-                    startPostponedEnterTransition(activity);
-                }
-
-                @Override
-                public void onError(Exception e) {
-
-                }
-            });
+            Glide
+                    .with(context.getApplicationContext())
+                    .asBitmap()
+                    .load(completeUrl)
+                    .into(appWidgetTarget);
         }
         else {
             Timber.d(ERROR);
