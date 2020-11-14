@@ -96,7 +96,7 @@
                 android:layout_marginStart="200dp"
                 android:scaleType="centerCrop"
                 android:contentDescription="@string/pokemon_sprite_content_description"
-                android:transitionName="@{pokemon.name}"
+                android:transitionName="@{String.valueOf(pokemon.id)}"
                 app:layout_constraintBottom_toBottomOf="@+id/inner_layout"
                 app:layout_constraintStart_toStartOf="@+id/inner_layout"/>
 

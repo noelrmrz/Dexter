@@ -57,6 +57,7 @@ public class MainFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        //postponeEnterTransition();
         binding = FragmentMainBinding.inflate(
                 inflater, container, false);
         return binding.getRoot();
@@ -107,7 +108,6 @@ public class MainFragment extends Fragment {
         loadPokemonData(PreferenceManager.getDefaultSharedPreferences(getContext()).
                 getString(getString(R.string.pref_sort_key),
                         getString(R.string.default_value)), isLoading);
-
     }
 
     /*

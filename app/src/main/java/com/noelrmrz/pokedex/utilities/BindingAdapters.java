@@ -44,7 +44,7 @@ public class BindingAdapters {
             if (flavorTextEntry.getLanguage().getLanguage().equalsIgnoreCase(LANGUAGE)
                     && flavorTextEntry.getVersionGroup()
                     .getName()
-                    .equalsIgnoreCase(VERSION_NAME)) {
+                    .equalsIgnoreCase("ultra-sun-ultra-moon")) {
                 // Remove 'newline' entries in text
                 textView.setText(flavorTextEntry.getFlavorText().replaceAll("(\n)", " "));
             }

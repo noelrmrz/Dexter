@@ -1,20 +1,21 @@
 package com.noelrmrz.pokedex.utilities;
 
 import android.content.Context;
-import android.view.View;
-import android.view.ViewTreeObserver;
+import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 import android.widget.RemoteViews;
 
-import androidx.fragment.app.Fragment;
+import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.AppWidgetTarget;
+import com.bumptech.glide.request.target.Target;
 import com.noelrmrz.pokedex.R;
 
 import timber.log.Timber;
-
-import static androidx.core.app.ActivityCompat.startPostponedEnterTransition;
 
 public class GlideClient {
 
@@ -32,7 +33,6 @@ public class GlideClient {
         {
             String completeUrl = BASE_SPRITE_URL.concat(id + ".png");
             Glide.with(imageView.getContext()).load(completeUrl).into(imageView);
-            //Picasso.get().load(completeUrl).into(imageView);
         }
         else {
             Timber.d(ERROR);
@@ -44,7 +44,25 @@ public class GlideClient {
         if(id != null && id.length() > 0)
         {
             String completeUrl = BASE_PROFILE_URL.concat(id + ".png");
-            Glide.with(imageView.getContext()).load(completeUrl).into(imageView);
+            //Glide.with(imageView.getContext()).load(completeUrl).into(imageView);
+            Glide.with(imageView.getContext().getApplicationContext())
+                    .load(completeUrl)
+                    .listener(new RequestListener<Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model,
+                                                    Target<Drawable> target, boolean isFirstResource) {
+                            //FragmentManager.findFragment(imageView).getParentFragment().startPostponedEnterTransition();
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model,
+                                                       Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                            //FragmentManager.findFragment(imageView).getParentFragment().startPostponedEnterTransition();
+                            return false;
+                        }
+                    })
+                    .into(imageView);
         }
         else {
             Timber.d(ERROR);
@@ -84,16 +102,15 @@ public class GlideClient {
     }
 
     // Temporarily prevent the shared element transition until the resource has loaded
-    private static void scheduleStartPostponedTransition(final View sharedElement,
-                                                         Fragment fragment) {
+/*    private static void scheduleStartPostponedTransition(final View sharedElement) {
         sharedElement.getViewTreeObserver().addOnPreDrawListener(
                 new ViewTreeObserver.OnPreDrawListener() {
                     @Override
                     public boolean onPreDraw() {
                         sharedElement.getViewTreeObserver().removeOnPreDrawListener(this);
-                        startPostponedEnterTransition(fragment.getActivity());
+                        startPostponedEnterTransition();
                         return true;
                     }
                 });
-    }
+    }*/
 }
