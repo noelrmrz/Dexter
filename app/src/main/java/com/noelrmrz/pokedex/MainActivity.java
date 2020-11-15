@@ -65,7 +65,6 @@ public class MainActivity extends AppCompatActivity implements
     private FirebaseAnalytics mFirebaseAnalytics;
     private static final int SPEECH_REQUEST_CODE = 0;
     private ActivityMainBinding binding;
-    private NavController navController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements
 
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.nav_host_fragment_container);
-        navController = navHostFragment.getNavController();
+        NavController navController = navHostFragment.getNavController();
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
     }
@@ -261,29 +260,8 @@ public class MainActivity extends AppCompatActivity implements
                 R.id.nav_host_fragment_container);
         NavDirections action = MainFragmentDirections
                 .actionMainFragmentToDetailFragment(GsonClient.getGsonClient().toJson(pokemon));
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.nav_host_fragment_container);
-
         try {
-            navHostFragment.getNavController().navigate(action);
-        } catch (IllegalArgumentException e) {
-            Timber.d(e);
-            // User case when navigating from the DetailFragment to itself
-            action = DetailFragmentDirections
-                    .actionDetailFragmentSelf(GsonClient.getGsonClient().toJson(pokemon));
-            navHostFragment.getNavController().navigate(action);
-        }
-    }
-
-    public void navigateToDetailFragment(Pokemon pokemon, View view) {
-        // Navigate to DetailFragment
-        NavController navController = Navigation.findNavController(this,
-                R.id.nav_host_fragment_container);
-        NavDirections action = MainFragmentDirections
-                .actionMainFragmentToDetailFragment(GsonClient.getGsonClient().toJson(pokemon));
-
-        try {
-            navController.navigate(action, new FragmentNavigator.Extras.Builder().addSharedElement(view.findViewById(R.id.iv_pokemon_sprite), pokemon.getName()).build());
+            navController.navigate(action);
         } catch (IllegalArgumentException e) {
             Timber.d(e);
             // User case when navigating from the DetailFragment to itself
