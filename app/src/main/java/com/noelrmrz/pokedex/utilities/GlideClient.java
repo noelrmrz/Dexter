@@ -1,18 +1,11 @@
 package com.noelrmrz.pokedex.utilities;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 import android.widget.RemoteViews;
 
-import androidx.annotation.Nullable;
-
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.AppWidgetTarget;
-import com.bumptech.glide.request.target.Target;
 import com.noelrmrz.pokedex.R;
 
 import timber.log.Timber;
@@ -44,8 +37,8 @@ public class GlideClient {
         if(id != null && id.length() > 0)
         {
             String completeUrl = BASE_PROFILE_URL.concat(id + ".png");
-            //Glide.with(imageView.getContext()).load(completeUrl).into(imageView);
-            Glide.with(imageView.getContext().getApplicationContext())
+            Glide.with(imageView.getContext()).load(completeUrl).into(imageView);
+/*            Glide.with(imageView.getContext().getApplicationContext())
                     .load(completeUrl)
                     .listener(new RequestListener<Drawable>() {
                         @Override
@@ -62,7 +55,7 @@ public class GlideClient {
                             return false;
                         }
                     })
-                    .into(imageView);
+                    .into(imageView);*/
         }
         else {
             Timber.d(ERROR);

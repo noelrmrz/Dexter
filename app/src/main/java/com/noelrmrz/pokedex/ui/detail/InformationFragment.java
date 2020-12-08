@@ -18,11 +18,13 @@ import com.noelrmrz.pokedex.pojo.EvolutionChain;
 import com.noelrmrz.pokedex.pojo.EvolutionChainLink;
 import com.noelrmrz.pokedex.pojo.Pokemon;
 import com.noelrmrz.pokedex.pojo.Type;
+import com.noelrmrz.pokedex.utilities.BindingAdapters;
 import com.noelrmrz.pokedex.utilities.GlideClient;
 import com.noelrmrz.pokedex.utilities.GsonClient;
 import com.noelrmrz.pokedex.utilities.HelperTools;
 import com.noelrmrz.pokedex.utilities.RetrofitClient;
 import com.noelrmrz.pokedex.utilities.TypeEffectiveness;
+import com.noelrmrz.pokedex.viewmodel.MainViewModel;
 
 import java.util.List;
 
@@ -39,6 +41,7 @@ public class InformationFragment extends Fragment {
     static Pokemon savedPokemon;
     private TypeEffectiveness typeEffectiveness = TypeEffectiveness.getInstance();
     private FragmentInformationBinding bind;
+    private MainViewModel mainViewModel;
 
     public InformationFragment() {
     }
@@ -58,6 +61,7 @@ public class InformationFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             String mParam1 = getArguments().getString(ARG_PARAM1);
             savedPokemon = GsonClient.getGsonClient().fromJson(mParam1, Pokemon.class);
@@ -73,6 +77,7 @@ public class InformationFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         bind = FragmentInformationBinding.inflate(inflater, container, false);
+
         bind.setPokemon(savedPokemon);
         bind.executePendingBindings();
         return bind.getRoot();
@@ -85,6 +90,18 @@ public class InformationFragment extends Fragment {
     */
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstance) {
+
+        // data binding displays wrong data when using with view pager
+        BindingAdapters.setPokemonDescription(bind.tvDescription, savedPokemon.getPokemonSpecies().getFlavorTextEntries());
+        bind.tvWeight.setText(String.valueOf(savedPokemon.getWeight()));
+        bind.tvHeight.setText(String.valueOf(savedPokemon.getHeight()));
+        BindingAdapters.setPokemonGenus(bind.tvSpecies, savedPokemon.getPokemonSpecies().getGenera());
+
+        BindingAdapters.setAbilities(bind.tvAbilityPrimaryName, savedPokemon.getAbilityList()[0]);
+        BindingAdapters.setAbilities(bind.tvAbilitySecondaryName,
+                savedPokemon.getAbilityList().length > 1 ? savedPokemon.getAbilityList()[1] : null);
+        BindingAdapters.setAbilities(bind.tvAbilityHiddenName,
+                savedPokemon.getAbilityList().length > 2 ? savedPokemon.getAbilityList()[2] : null);
 
         setTypeMultipliers(savedPokemon.getTypeList().length, bind.tvXFour, bind.xFourFlexLayout, bind.xFourLayout,
                 bind.tvXTwo, bind.xTwoFlexLayout, bind.xTwoLayout,
@@ -189,9 +206,9 @@ public class InformationFragment extends Fragment {
 
                 if ( typeLength == 1) {
                     savedPokemon = typeEffectiveness.setTypeEffectiveness(primary, null, savedPokemon);
+                    bind.setPokemon(savedPokemon);
                     addTypeEffectiveness(xTwoFlexLayout, savedPokemon.getEffective());
                     addTypeEffectiveness(xHalfFlexLayout, savedPokemon.getNotEffective());
-                    /*addTypeEffectiveness(xZeroFlexLayout, savedPokemon.getImmune());*/
                     addTypeEffectiveness(xOneFlexLayout, savedPokemon.getNormal());
 
                     xFour.setVisibility(View.GONE);
@@ -208,6 +225,7 @@ public class InformationFragment extends Fragment {
                         public void onResponse(Call<Type> call, Response<Type> response) {
                             Type secondary = response.body();
                             savedPokemon = typeEffectiveness.setTypeEffectiveness(primary, secondary, savedPokemon);
+                            bind.setPokemon(savedPokemon);
                             if (savedPokemon.getSuperEffective().size() == 0) {
                                 xFour.setVisibility(View.GONE);
                                 xFourFlexLayout.setVisibility(View.GONE);
@@ -254,7 +272,7 @@ public class InformationFragment extends Fragment {
                         public void onFailure(Call<Type> call, Throwable t) {
                             Timber.d(t);
                         }
-                    }, savedPokemon.getTypeList()[1].getType().getName());
+                    }, bind.getPokemon().getTypeList()[1].getType().getName());//savedPokemon.getTypeList()[1].getType().getName());
                 }
 
                 if (savedPokemon.getImmune().size() == 0) {

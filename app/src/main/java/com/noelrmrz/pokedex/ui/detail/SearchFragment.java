@@ -27,13 +27,7 @@ import com.noelrmrz.pokedex.utilities.AppExecutors;
 import com.noelrmrz.pokedex.utilities.GsonClient;
 import com.noelrmrz.pokedex.utilities.ViewAnimation;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link DetailFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class DetailFragment extends Fragment {
-
+public class SearchFragment extends Fragment {
     private static final String KEY_IMAGE_RES = "com.google.samples.gridtopager.key.imageRes";
     private static final String BASE_PROFILE_URL =
             "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/";
@@ -45,8 +39,8 @@ public class DetailFragment extends Fragment {
 
     private Boolean isRotate = false;
 
-    public static DetailFragment newInstance(String param1) {
-        DetailFragment fragment = new DetailFragment();
+    public static SearchFragment newInstance(String param1) {
+        SearchFragment fragment = new SearchFragment();
         Bundle argument = new Bundle();
         argument.putString(KEY_IMAGE_RES, param1);
         fragment.setArguments(argument);
@@ -61,7 +55,7 @@ public class DetailFragment extends Fragment {
 
         // Just like we do when binding views at the grid, we set the transition name to be the string
         // value of the image res.
-        view.findViewById(R.id.iv_fragment_detail).setTransitionName(String.valueOf(savedPokemon.getId()));
+        //view.findViewById(R.id.iv_fragment_detail).setTransitionName(String.valueOf(savedPokemon.getId()));
 
         // Load the image with Glide to prevent OOM error when the image drawables are very large.
         Glide.with(this)
@@ -73,7 +67,7 @@ public class DetailFragment extends Fragment {
                         // The postponeEnterTransition is called on the parent ImagePagerFragment, so the
                         // startPostponedEnterTransition() should also be called on it to get the transition
                         // going in case of a failure.
-                        getParentFragment().startPostponedEnterTransition();
+                        //getParentFragment().startPostponedEnterTransition();
                         return false;
                     }
 
@@ -83,7 +77,7 @@ public class DetailFragment extends Fragment {
                         // The postponeEnterTransition is called on the parent ImagePagerFragment, so the
                         // startPostponedEnterTransition() should also be called on it to get the transition
                         // going when the image is ready.
-                        getParentFragment().startPostponedEnterTransition();
+                        //getParentFragment().startPostponedEnterTransition();
                         return false;
                     }
                 })

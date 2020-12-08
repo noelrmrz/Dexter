@@ -1,36 +1,30 @@
 package com.noelrmrz.pokedex.ui.main;
 
-import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
+import androidx.core.app.SharedElementCallback;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.noelrmrz.pokedex.R;
 import com.noelrmrz.pokedex.pojo.Pokemon;
 import com.noelrmrz.pokedex.pojo.PokemonJsonList;
 import com.noelrmrz.pokedex.pojo.PokemonLink;
 import com.noelrmrz.pokedex.pojo.PokemonSpecies;
-import com.noelrmrz.pokedex.R;
-import com.noelrmrz.pokedex.databinding.FragmentMainBinding;
 import com.noelrmrz.pokedex.ui.recyclerview.PokemonAdapter;
-import com.noelrmrz.pokedex.utilities.GsonClient;
 import com.noelrmrz.pokedex.utilities.RetrofitClient;
 import com.noelrmrz.pokedex.viewmodel.MainViewModel;
-import com.noelrmrz.pokedex.viewmodel.MainViewModelFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,44 +33,20 @@ import timber.log.Timber;
 
 public class MainFragment extends Fragment {
 
-    private MainViewModel mViewModel;
-    private PokemonAdapter mPokemonAdapter;
-    private boolean isLoading = false;
+    private RecyclerView recyclerView;
+    private PokemonAdapter gridAdapter;
     private final int LIMIT = 20;
     private int offset = 0;
-    private FragmentMainBinding binding;
+    private boolean isLoading = false;
 
-    public static MainFragment newInstance() {
-        return new MainFragment();
-    }
-
-    /*
-    Called when the fragment should create its view object heirarchy
-    */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        //postponeEnterTransition();
-        binding = FragmentMainBinding.inflate(
-                inflater, container, false);
-        return binding.getRoot();
-    }
-
-    /*
-    Triggered after onCreateView
-    only called if the view from onCreateView is non-null
-    View setup should occur here
-    */
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        // Setup the RecyclerView
-        RecyclerView mRecyclerView = binding.rvPokemonList;
-        mRecyclerView.setAdapter(mPokemonAdapter);
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        recyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_main, container, false);
+        gridAdapter = new PokemonAdapter(this);
+        recyclerView.setAdapter(gridAdapter);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -89,123 +59,150 @@ public class MainFragment extends Fragment {
                 LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
 
                 if (!isLoading) {
-                    if (layoutManager != null && layoutManager.findLastCompletelyVisibleItemPosition() == mPokemonAdapter.getItemCount() - 1) {
+                    if (layoutManager != null && layoutManager.findLastCompletelyVisibleItemPosition() == gridAdapter.getItemCount() - 1) {
                         // Bottom of the list
                         loadMore();
                     }
                 }
             }
         });
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(layoutManager);
 
-        // Initial load
-        loadMore();
+        loadPokemonData();
+
+        prepareTransitions();
+        postponeEnterTransition();
+
+        scrollToPosition();
+
+        return recyclerView;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+    }
+
+    /**
+     * Scrolls the recycler view to show the last viewed item in the grid. This is important when
+     * navigating back from the grid.
+     */
+    private void scrollToPosition() {
+        recyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v,
+                                       int left,
+                                       int top,
+                                       int right,
+                                       int bottom,
+                                       int oldLeft,
+                                       int oldTop,
+                                       int oldRight,
+                                       int oldBottom) {
+                recyclerView.removeOnLayoutChangeListener(this);
+                final RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+                View viewAtPosition = layoutManager.findViewByPosition(MainViewModel.position);
+                // Scroll to position if the view for the current position is null (not currently part of
+                // layout manager children), or it's not completely visible.
+                if (viewAtPosition == null || layoutManager
+                        .isViewPartiallyVisible(viewAtPosition, false, true)) {
+                    recyclerView.scrollToPosition(MainViewModel.position);
+                }
+            }
+        });
     }
 
     private void loadMore() {
         isLoading = true;
-        loadPokemonData(PreferenceManager.getDefaultSharedPreferences(getContext()).
-                getString(getString(R.string.pref_sort_key),
-                        getString(R.string.default_value)), isLoading);
+        loadPokemonData();
     }
 
-    /*
-    Called when the fragment is being created or recreated
-    Use onCreate for any standard setup that does not require the activity to be fully created
-    */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mPokemonAdapter = new PokemonAdapter((PokemonAdapter.PokemonAdapterOnClickHandler) getActivity());
+    /**
+     * Prepares the shared element transition to the pager fragment, as well as the other transitions
+     * that affect the flow.
+     */
+    private void prepareTransitions() {
+        setExitTransition(TransitionInflater.from(getContext())
+                .inflateTransition(R.transition.exit_transition));
+
+
+        // A similar mapping is set at the ImagePagerFragment with a setEnterSharedElementCallback.
+        setExitSharedElementCallback(
+                new SharedElementCallback() {
+                    @Override
+                    public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
+                        // Locate the ViewHolder for the clicked position.
+                        RecyclerView.ViewHolder selectedViewHolder = recyclerView
+                                .findViewHolderForAdapterPosition(MainViewModel.position);
+                        if (selectedViewHolder == null) {
+                            return;
+                        }
+                        // Map the first shared element name to the child ImageView.
+                        sharedElements
+                                .put(names.get(0), selectedViewHolder.itemView.findViewById(R.id.iv_pokemon_sprite));
+                    }
+                });
     }
 
-    private void loadPokemonData(String preference, boolean scrollEnd) {
+    private void loadPokemonData() {
         ArrayList<Pokemon> pokemonListToLoad = new ArrayList<>();
-        if (preference.equals(getString(R.string.favorites_value))) {
-            setupViewModel();
-        } else {
 
-            mPokemonAdapter.addToPokemonList(null);
-            mPokemonAdapter.notifyItemInserted(mPokemonAdapter.getItemCount() - 1);
+        // Retrofit callbacks
+        RetrofitClient.getPokemonList(new Callback<PokemonJsonList>() {
+            @Override
+            public void onResponse(Call<PokemonJsonList> call, Response<PokemonJsonList> response) {
+                if (response.isSuccessful()) {
+                    List<PokemonLink> results = response.body().getResults();
 
-            // Retrofit callbacks
-            RetrofitClient.getPokemonList(new Callback<PokemonJsonList>() {
-                @Override
-                public void onResponse(Call<PokemonJsonList> call, Response<PokemonJsonList> response) {
-                    if (response.isSuccessful()) {
-                        List<PokemonLink> results = response.body().getResults();
+                    for (PokemonLink pokemonLink: results) {
+                        RetrofitClient.getPokemonInformation(new Callback<Pokemon>() {
+                            @Override
+                            public void onResponse(Call<Pokemon> call, Response<Pokemon> response) {
+                                if (response.isSuccessful()) {
+                                    Pokemon pokemon = response.body();
 
-                        for (PokemonLink pokemonLink: results) {
-                            RetrofitClient.getPokemonInformation(new Callback<Pokemon>() {
-                                @Override
-                                public void onResponse(Call<Pokemon> call, Response<Pokemon> response) {
-                                    if (response.isSuccessful()) {
-                                        Pokemon pokemon = response.body();
+                                    RetrofitClient.getSpeciesInformation(new Callback<PokemonSpecies>() {
+                                        @Override
+                                        public void onResponse(Call<PokemonSpecies> call, Response<PokemonSpecies> response) {
 
-                                        RetrofitClient.getSpeciesInformation(new Callback<PokemonSpecies>() {
-                                            @Override
-                                            public void onResponse(Call<PokemonSpecies> call, Response<PokemonSpecies> response) {
+                                            if (response.isSuccessful()) {
+                                                pokemon.setPokemonSpecies(response.body());
+                                                pokemonListToLoad.add(pokemon);
 
-                                                if (response.isSuccessful()) {
-                                                    pokemon.setPokemonSpecies(response.body());
-                                                    pokemonListToLoad.add(pokemon);
-
-                                                    // All pokemon have been loaded
-                                                    if (pokemonListToLoad.size() == LIMIT) {
-                                                        isLoading = false;
-                                                        // Remove null entry item
-                                                        mPokemonAdapter.remove(mPokemonAdapter.getItemCount() - 1);
-                                                        // Add all pokemon to the adapters list
-                                                        mPokemonAdapter.setPokemonList(pokemonListToLoad);
-                                                        // Update the offset
-                                                        offset = offset + LIMIT;
-                                                    }
+                                                // All pokemon have been loaded
+                                                if (pokemonListToLoad.size() == LIMIT) {
+                                                    isLoading = false;
+                                                    // Remove null entry item
+                                                    //gridAdapter.remove(gridAdapter.getItemCount() - 1);
+                                                    // Add all pokemon to the adapters list
+                                                    gridAdapter.setPokemonList(pokemonListToLoad);
+                                                    // Update the offset
+                                                    offset = offset + LIMIT;
                                                 }
                                             }
+                                        }
 
-                                            @Override
-                                            public void onFailure(Call<PokemonSpecies> call, Throwable t) {
-                                                Timber.d(t);
-                                            }
-                                        }, pokemonLink.getName());
-                                    }
+                                        @Override
+                                        public void onFailure(Call<PokemonSpecies> call, Throwable t) {
+                                            Timber.d(t);
+                                        }
+                                    }, pokemonLink.getName());
                                 }
+                            }
 
-                                @Override
-                                public void onFailure(Call<Pokemon> call, Throwable t) {
-                                    Timber.d(t);
-                                }
-                            }, pokemonLink.getName());
-                        }
+                            @Override
+                            public void onFailure(Call<Pokemon> call, Throwable t) {
+                                Timber.d(t);
+                            }
+                        }, pokemonLink.getName());
                     }
-                }
-
-                @Override
-                public void onFailure(Call<PokemonJsonList> call, Throwable t) {
-                    Timber.d(t);
-                }
-            }, LIMIT, offset);
-        }
-    }
-
-    private void setupViewModel() {
-        mViewModel = new ViewModelProvider(this,
-                new MainViewModelFactory(this.getActivity().getApplication())).get(MainViewModel.class);
-        mViewModel.getFavoritePokemon().observe(getViewLifecycleOwner(), new Observer<List<Pokemon>>() {
-            @Override
-            public void onChanged(@Nullable List<Pokemon> pokemonList) {
-                if (pokemonList == null) {
-                    Toast.makeText(getContext(), "no favorites", Toast.LENGTH_SHORT);
-                }
-                else {
-                    for (int x = 0; x < pokemonList.size(); x++) {
-                        pokemonList.set(x, GsonClient.getGsonClient()
-                                .fromJson(pokemonList.get(x).getJsonString(), Pokemon.class));
-                    }
-                    mPokemonAdapter.setPokemonList(pokemonList);
                 }
             }
-        });
+
+            @Override
+            public void onFailure(Call<PokemonJsonList> call, Throwable t) {
+                Timber.d(t);
+            }
+        }, LIMIT, offset);
     }
 }

@@ -22,7 +22,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:setPokemonDescription="@{pokemon.pokemonSpecies.flavorTextEntries}"
                 tools:text="The flame that burns at the tip of its tail is an indication of its emotions.  The flame waivers when Charmander is enjoying itself.  If the pokemon becomes enraged, the flame burns fiercely." />
 
             <TextView
@@ -50,7 +49,6 @@
                 android:id="@+id/tv_species"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:setPokemonGenus="@{pokemon.pokemonSpecies.genera}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/tv_label_pokemon_data"
@@ -71,7 +69,6 @@
                 android:id="@+id/tv_height"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{String.valueOf(pokemon.height)}"
                 app:layout_constraintStart_toStartOf="@+id/tv_species"
                 app:layout_constraintTop_toTopOf="@+id/tv_label_height"
                 tools:text="0.6m" />
@@ -90,7 +87,6 @@
                 android:id="@+id/tv_weight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{String.valueOf(pokemon.weight)}"
                 app:layout_constraintStart_toStartOf="@+id/tv_height"
                 app:layout_constraintTop_toTopOf="@+id/tv_label_weight"
                 tools:text="8.5kg" />
@@ -137,7 +133,6 @@
                 android:layout_marginLeft="4dp"
                 android:paddingTop="16dp"
                 android:paddingBottom="16dp"
-                app:setAbilities="@{pokemon.abilityList.length > 1 ? pokemon.abilityList[1] : null}"
                 app:layout_constraintEnd_toStartOf="@+id/tv_ability_hidden_name"
                 app:layout_constraintHorizontal_weight="1"
                 android:background="@drawable/rectangle"
@@ -158,7 +153,6 @@
                 android:layout_marginStart="4dp"
                 android:paddingTop="16dp"
                 android:paddingBottom="16dp"
-                app:setAbilities="@{pokemon.abilityList.length > 2 ? pokemon.abilityList[2] : null}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_weight="1"
                 android:background="@drawable/rectangle"
