@@ -8,22 +8,27 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 
-import com.github.mikephil.charting.charts.RadarChart;
+import com.github.mikephil.charting.charts.Chart;
+import com.github.mikephil.charting.charts.HorizontalBarChart;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.RadarData;
-import com.github.mikephil.charting.data.RadarDataSet;
-import com.github.mikephil.charting.data.RadarEntry;
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.noelrmrz.pokedex.databinding.FragmentStatsBinding;
 import com.noelrmrz.pokedex.pojo.Pokemon;
 import com.noelrmrz.pokedex.pojo.Stat;
 import com.noelrmrz.pokedex.utilities.GsonClient;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import timber.log.Timber;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -78,59 +83,119 @@ public class StatsFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        //RadarChart radarChart = view.findViewById(R.id.radar_chart);
 
-        setChartData(bind.radarChart);
+        bind.horizontalChart.setDrawGridBackground(false);
+        bind.horizontalChart.setDrawBarShadow(false);
+        bind.horizontalChart.setDrawValueAboveBar(true);
+        // scaling can now only be done on x- and y-axis separately
+        bind.horizontalChart.setPinchZoom(false);
 
         // Setup the X-axis
-        XAxis xAxis = bind.radarChart.getXAxis();
-        String[] labels = new String[6];
-        for (int x = 0; x < labels.length; x++) {
-            labels[x] = statList[x].getStat().getName();
+        XAxis xAxis = bind.horizontalChart.getXAxis();
+        xAxis.setDrawGridLines(false);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawAxisLine(true);
+        xAxis.setGranularity(2f);
 
-        }
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
+        xAxis.setValueFormatter(new XAxisFormatter());
 
         // Setup the Y-axis
-        YAxis yAxis = bind.radarChart.getYAxis();
-        yAxis.setTextSize(8f);
+        YAxis yAxisLeft = bind.horizontalChart.getAxisLeft();
+        yAxisLeft.setAxisMinimum(0f); // this replaces setStartAtZero(true)
+        yAxisLeft.setDrawAxisLine(true);
+        yAxisLeft.setDrawGridLines(true);
+
+        YAxis yAxisRight = bind.horizontalChart.getAxisRight();
+        yAxisRight.setAxisMinimum(0f);
+        yAxisRight.setDrawAxisLine(true);
+        yAxisRight.setDrawGridLines(false);
+
+        yAxisRight.setValueFormatter(new YAxisFormatter());
+        yAxisLeft.setValueFormatter(new YAxisFormatter());
+
+        bind.horizontalChart.setFitBars(true);
+        bind.horizontalChart.animateY(1500);
 
         // Setup the Legend
-        Legend legend = bind.radarChart.getLegend();
+        Legend legend = bind.horizontalChart.getLegend();
         legend.setEnabled(false);
+
+        setChartData(bind.horizontalChart);
     }
 
-    public void setChartData(RadarChart radarChart) {
+    public void setChartData(HorizontalBarChart horizontalChart) {
+        float barWidth = 1f;
+
         // Setup the dataset
-        RadarDataSet radarDataset = new RadarDataSet(setChartEntries(statList, radarChart), "");
-        //radarDataset.setColors(ColorTemplate.MATERIAL_COLORS);
-        radarDataset.setValueTextColor(Color.BLACK);
-        // Do not want to display the values on top of the graph
-        radarDataset.setValueTextSize(0f);
-        radarDataset.setDrawFilled(true);
-        radarDataset.setFillColor(Color.MAGENTA);
+        BarDataSet barDataset = new BarDataSet(setChartEntries(statList, horizontalChart), "");
+        barDataset.setValueTextColor(Color.BLACK);
+        barDataset.setValueFormatter(new YAxisFormatter());
+        barDataset.setColor(Color.RED, 100);
 
         // Hookup the chart
-        RadarData radarData = new RadarData(radarDataset);
-        radarData.addDataSet(radarDataset);
+        BarData barData = new BarData(barDataset);
+        barData.addDataSet(barDataset);
+        barData.setBarWidth(barWidth);
 
-        radarChart.setData(radarData);
+        horizontalChart.setData(barData);
+        horizontalChart.fitScreen();
     }
 
-    public List<RadarEntry> setChartEntries(Stat[] stats, RadarChart radarChart) {
-        List<RadarEntry> entries = new ArrayList<>();
+    public List<BarEntry> setChartEntries(Stat[] stats, HorizontalBarChart barChart) {
+        List<BarEntry> entries = new ArrayList<>();
         int sum = 0;
+        float spaceForBar = 2f;
 
-        for (Stat stat: stats) {
-            entries.add(new RadarEntry((float) stat.getBaseStat()));
-            sum += stat.getBaseStat();
+        for (int i = 0; i < stats.length; i++) {
+            entries.add(new BarEntry(i * spaceForBar, (float) stats[i].getBaseStat()));
+            sum += stats[i].getBaseStat();
         }
 
-        Description description = new Description();
-        description.setText("Total  " + sum);
-
-        radarChart.setDescription(description);
+        setChartDescription(barChart, sum);
 
         return entries;
+    }
+
+    public static void setChartDescription(Chart chart, int sum) {
+        Description description = chart.getDescription();
+        description.setEnabled(true);
+        description.setText("Total: " + sum);
+        //TODO:  remove hardcoded positions
+        description.setPosition(225f, 1425f);
+        chart.setDescription(description);
+    }
+
+    public static class XAxisFormatter extends ValueFormatter {
+
+        String[] labels = new String[]{"HP", "Atk", "SpAtk", "Def", "SpDef", "Spd"};
+
+        DecimalFormat decimalFormat = new DecimalFormat("###");
+
+        @Override
+        public String getBarLabel(BarEntry barEntry) {
+            return decimalFormat.format(barEntry.getY());
+        }
+
+        @Override
+        public String getAxisLabel(float value, AxisBase axis) {
+            // value is in increments of 10
+            Timber.d("value " + value);
+            return labels[Math.round(value / 2)];
+        }
+    }
+
+    public static class YAxisFormatter extends ValueFormatter {
+
+        DecimalFormat decimalFormat = new DecimalFormat("###");
+
+        @Override
+        public String getBarLabel(BarEntry barEntry) {
+            return decimalFormat.format(barEntry.getY());
+        }
+
+       @Override
+        public String getAxisLabel(float value, AxisBase axis) {
+            return Integer.toString((int) value);
+        }
     }
 }

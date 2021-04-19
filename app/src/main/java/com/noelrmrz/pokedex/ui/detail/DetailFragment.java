@@ -1,5 +1,8 @@
 package com.noelrmrz.pokedex.ui.detail;
 
+import android.graphics.ColorFilter;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,6 +20,7 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -62,6 +66,15 @@ public class DetailFragment extends Fragment {
         // Just like we do when binding views at the grid, we set the transition name to be the string
         // value of the image res.
         view.findViewById(R.id.iv_fragment_detail).setTransitionName(String.valueOf(savedPokemon.getId()));
+        //TODO: get the pokemons primary type and based on that change the background color
+        CollapsingToolbarLayout imageView = view.findViewById(R.id.collapsing_toolbar);
+        ColorFilter colorFilter = new PorterDuffColorFilter(getResources().getColor(R.color.grass), PorterDuff.Mode.LIGHTEN);
+        Drawable background = getResources().getDrawable(R.drawable.rectangle);
+        background.setColorFilter(colorFilter);
+        background.setAlpha(150);
+        imageView.setBackground(background);
+        //imageView.setContentScrimColor(getResources().getColor(R.color.grass));
+        //imageView.setBackgroundColor(Color.argb(50, 102, 187, 106));
 
         // Load the image with Glide to prevent OOM error when the image drawables are very large.
         Glide.with(this)
@@ -166,5 +179,4 @@ public class DetailFragment extends Fragment {
                     }
                 }).attach();
     }
-
 }

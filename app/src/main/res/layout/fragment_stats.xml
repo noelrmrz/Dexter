@@ -20,77 +20,21 @@
             android:text="@string/tv_label_base_stats"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tv_label_hp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@{String.valueOf(stats[0].baseStat)}"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toStartOf="@+id/tv_label_atk"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_label_base_stats" />
-
-        <TextView
-            android:id="@+id/tv_label_atk"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{String.valueOf(stats[1].baseStat)}"
-            app:layout_constraintEnd_toStartOf="@+id/tv_label_spatk"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/tv_label_hp"
-            app:layout_constraintTop_toTopOf="@+id/tv_label_hp" />
-
-        <TextView
-            android:id="@+id/tv_label_spatk"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{String.valueOf(stats[2].baseStat)}"
-            app:layout_constraintEnd_toStartOf="@+id/tv_label_def"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/tv_label_atk"
-            app:layout_constraintTop_toTopOf="@+id/tv_label_atk" />
-
-        <TextView
-            android:id="@+id/tv_label_def"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{String.valueOf(stats[3].baseStat)}"
-            app:layout_constraintEnd_toStartOf="@+id/tv_label_spdef"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/tv_label_spatk"
-            app:layout_constraintTop_toTopOf="@+id/tv_label_spatk" />
-
-        <TextView
-            android:id="@+id/tv_label_spdef"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{String.valueOf(stats[4].baseStat)}"
-            app:layout_constraintEnd_toStartOf="@+id/tv_label_spd"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/tv_label_def"
-            app:layout_constraintTop_toTopOf="@+id/tv_label_def" />
-
-        <TextView
-            android:id="@+id/tv_label_spd"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{String.valueOf(stats[5].baseStat)}"
+            app:layout_constraintBottom_toTopOf="@+id/horizontal_chart"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/tv_label_spdef"
-            app:layout_constraintTop_toTopOf="@+id/tv_label_spdef" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="spread" />
 
-        <com.github.mikephil.charting.charts.RadarChart
-            android:id="@+id/radar_chart"
+        <com.github.mikephil.charting.charts.HorizontalBarChart
+            android:id="@+id/horizontal_chart"
             android:layout_width="match_parent"
-            android:layout_height="400dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_label_base_stats" />
 

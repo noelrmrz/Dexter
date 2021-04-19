@@ -35,7 +35,7 @@ public class MainFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private PokemonAdapter gridAdapter;
-    private final int LIMIT = 20;
+    private final int LIMIT = 15;
     private int offset = 0;
     private boolean isLoading = false;
 
@@ -67,7 +67,7 @@ public class MainFragment extends Fragment {
             }
         });
 
-        loadPokemonData();
+        loadMore();
 
         prepareTransitions();
         postponeEnterTransition();
@@ -80,7 +80,6 @@ public class MainFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
     }
 
     /**
@@ -147,6 +146,10 @@ public class MainFragment extends Fragment {
     private void loadPokemonData() {
         ArrayList<Pokemon> pokemonListToLoad = new ArrayList<>();
 
+        // Insert null object
+        gridAdapter.addToPokemonList(null);
+        gridAdapter.notifyItemInserted(gridAdapter.getItemCount() - 1);
+
         // Retrofit callbacks
         RetrofitClient.getPokemonList(new Callback<PokemonJsonList>() {
             @Override
@@ -173,7 +176,7 @@ public class MainFragment extends Fragment {
                                                 if (pokemonListToLoad.size() == LIMIT) {
                                                     isLoading = false;
                                                     // Remove null entry item
-                                                    //gridAdapter.remove(gridAdapter.getItemCount() - 1);
+                                                    gridAdapter.remove(gridAdapter.getItemCount() - 1);
                                                     // Add all pokemon to the adapters list
                                                     gridAdapter.setPokemonList(pokemonListToLoad);
                                                     // Update the offset

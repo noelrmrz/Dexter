@@ -33,7 +33,7 @@ public class PokedexWidgetProvider extends AppWidgetProvider {
                         appWidgetIds, String.valueOf(GsonClient.getGsonClient()
                                 .fromJson(pokemonJsonString, Pokemon.class).getId()), context);
 
-                // Set the black outline ontop of the pokemon imagea
+                // Set the black outline ontop of the pokemon image
                 views.setInt(R.id.iv_whos_that_pokemon, "setColorFilter",
                         context.getResources().getColor(android.R.color.black));
             });
