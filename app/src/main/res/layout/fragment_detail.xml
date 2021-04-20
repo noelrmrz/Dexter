@@ -78,6 +78,7 @@
             android:tooltipText="@string/fab_favorite"
             app:backgroundTint="@color/colorAccent"
             app:fabSize="auto"
+            app:layout_behavior="com.noelrmrz.pokedex.ui.FabScrollBehavior"
             app:layout_anchor="@+id/tab_pager"
             app:layout_anchorGravity="bottom|right|end"
             app:rippleColor="@color/white" />
