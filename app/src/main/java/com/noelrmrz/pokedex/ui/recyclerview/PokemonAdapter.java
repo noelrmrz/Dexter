@@ -176,7 +176,7 @@ public class PokemonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     .addSharedElement(transitioningView, transitioningView.getTransitionName())
                     .replace(R.id.fragment_container,
                             ImagePagerFragment.newInstance(), ImagePagerFragment.class
-                            .getSimpleName())
+                                    .getSimpleName())
                     .addToBackStack(null)
                     .commit();
         }

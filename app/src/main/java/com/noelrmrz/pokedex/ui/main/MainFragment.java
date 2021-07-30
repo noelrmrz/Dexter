@@ -10,34 +10,25 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.SharedElementCallback;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.noelrmrz.pokedex.R;
 import com.noelrmrz.pokedex.pojo.Pokemon;
-import com.noelrmrz.pokedex.pojo.PokemonJsonList;
-import com.noelrmrz.pokedex.pojo.PokemonLink;
-import com.noelrmrz.pokedex.pojo.PokemonSpecies;
 import com.noelrmrz.pokedex.ui.recyclerview.PokemonAdapter;
-import com.noelrmrz.pokedex.utilities.RetrofitClient;
 import com.noelrmrz.pokedex.viewmodel.MainViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import timber.log.Timber;
 
 public class MainFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private PokemonAdapter gridAdapter;
-    private final int LIMIT = 15;
-    private int offset = 0;
     private boolean isLoading = false;
+    private MainViewModel mainViewModel;
 
     @Nullable
     @Override
@@ -60,14 +51,30 @@ public class MainFragment extends Fragment {
 
                 if (!isLoading) {
                     if (layoutManager != null && layoutManager.findLastCompletelyVisibleItemPosition() == gridAdapter.getItemCount() - 1) {
-                        // Bottom of the list
-                        loadMore();
+                        // Bottom of the list, load more data
+                        loadData();
                     }
                 }
             }
         });
 
-        loadMore();
+        mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
+
+        mainViewModel.getPokemonMutableLiveData().observe(getViewLifecycleOwner(), new Observer<Pokemon>() {
+            @Override
+            public void onChanged(Pokemon pokemon) {
+                if (mainViewModel.getOffset() == mainViewModel.getAllPokemonList().size()) {
+                    isLoading = false;
+                    // Remove null entry item
+                    gridAdapter.remove(gridAdapter.getItemCount() - 1);
+                    gridAdapter.setPokemonList(
+                            mainViewModel.getSubsetPokemonList(
+                                    mainViewModel.getOffset() - mainViewModel.getLIMIT(),
+                                    mainViewModel.getAllPokemonList().size()));
+                }
+            }
+        });
+        loadData();
 
         prepareTransitions();
         postponeEnterTransition();
@@ -111,9 +118,14 @@ public class MainFragment extends Fragment {
         });
     }
 
-    private void loadMore() {
+    private void loadData() {
+        // TODO figure out how to change views depending on shared preferences
         isLoading = true;
-        loadPokemonData();
+        // Insert null object, this is the empty loading indicator
+        gridAdapter.addToPokemonList(null);
+        gridAdapter.notifyItemInserted(gridAdapter.getItemCount() - 1);
+        // Call the ViewModel to retrieve the data
+        mainViewModel.MakeAPICall();
     }
 
     /**
@@ -123,7 +135,6 @@ public class MainFragment extends Fragment {
     private void prepareTransitions() {
         setExitTransition(TransitionInflater.from(getContext())
                 .inflateTransition(R.transition.exit_transition));
-
 
         // A similar mapping is set at the ImagePagerFragment with a setEnterSharedElementCallback.
         setExitSharedElementCallback(
@@ -141,71 +152,5 @@ public class MainFragment extends Fragment {
                                 .put(names.get(0), selectedViewHolder.itemView.findViewById(R.id.iv_pokemon_sprite));
                     }
                 });
-    }
-
-    private void loadPokemonData() {
-        ArrayList<Pokemon> pokemonListToLoad = new ArrayList<>();
-
-        // Insert null object
-        gridAdapter.addToPokemonList(null);
-        gridAdapter.notifyItemInserted(gridAdapter.getItemCount() - 1);
-
-        // Retrofit callbacks
-        RetrofitClient.getPokemonList(new Callback<PokemonJsonList>() {
-            @Override
-            public void onResponse(Call<PokemonJsonList> call, Response<PokemonJsonList> response) {
-                if (response.isSuccessful()) {
-                    List<PokemonLink> results = response.body().getResults();
-
-                    for (PokemonLink pokemonLink: results) {
-                        RetrofitClient.getPokemonInformation(new Callback<Pokemon>() {
-                            @Override
-                            public void onResponse(Call<Pokemon> call, Response<Pokemon> response) {
-                                if (response.isSuccessful()) {
-                                    Pokemon pokemon = response.body();
-
-                                    RetrofitClient.getSpeciesInformation(new Callback<PokemonSpecies>() {
-                                        @Override
-                                        public void onResponse(Call<PokemonSpecies> call, Response<PokemonSpecies> response) {
-
-                                            if (response.isSuccessful()) {
-                                                pokemon.setPokemonSpecies(response.body());
-                                                pokemonListToLoad.add(pokemon);
-
-                                                // All pokemon have been loaded
-                                                if (pokemonListToLoad.size() == LIMIT) {
-                                                    isLoading = false;
-                                                    // Remove null entry item
-                                                    gridAdapter.remove(gridAdapter.getItemCount() - 1);
-                                                    // Add all pokemon to the adapters list
-                                                    gridAdapter.setPokemonList(pokemonListToLoad);
-                                                    // Update the offset
-                                                    offset = offset + LIMIT;
-                                                }
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call<PokemonSpecies> call, Throwable t) {
-                                            Timber.d(t);
-                                        }
-                                    }, pokemonLink.getName());
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<Pokemon> call, Throwable t) {
-                                Timber.d(t);
-                            }
-                        }, pokemonLink.getName());
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<PokemonJsonList> call, Throwable t) {
-                Timber.d(t);
-            }
-        }, LIMIT, offset);
     }
 }

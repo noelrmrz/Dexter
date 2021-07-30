@@ -135,11 +135,13 @@ public class MainActivity extends AppCompatActivity implements
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key.equals(getString(R.string.pref_sort_key))) {
             // change and reload the views
-            getSupportFragmentManager()
+            Timber.d("Shared preferences changed");
+            // TODO: figure out how to refresh the view
+/*            getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.nav_host_fragment_container, new MainFragment(),
                             MainFragment.class.getSimpleName())
-                    .commitAllowingStateLoss(); // should not do this
+                    .commitAllowingStateLoss(); // should not do this*/
         }
     }
 
@@ -304,6 +306,5 @@ public class MainActivity extends AppCompatActivity implements
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
-
 }
 

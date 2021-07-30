@@ -30,6 +30,7 @@ import com.noelrmrz.pokedex.ui.recyclerview.TabsAdapter;
 import com.noelrmrz.pokedex.utilities.AppExecutors;
 import com.noelrmrz.pokedex.utilities.GsonClient;
 import com.noelrmrz.pokedex.utilities.ViewAnimation;
+import com.noelrmrz.pokedex.viewmodel.PokemonDatabase;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -45,6 +46,7 @@ public class DetailFragment extends Fragment {
     private final String DATA = "Data";
     private final String MOVES = "Moves";
     private final String STATS = "Stats";
+    private PokemonDatabase pokemonDatabase;
     Pokemon savedPokemon;
 
     private Boolean isRotate = false;
@@ -111,6 +113,8 @@ public class DetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // TODO move Database functions to ViewModel possibly
+        pokemonDatabase = PokemonDatabase.getInstance(getContext());
 
         if (getArguments() != null) {
             // Get the arguments
@@ -118,7 +122,6 @@ public class DetailFragment extends Fragment {
             savedPokemon = GsonClient.getGsonClient().fromJson(args, Pokemon.class);
             mTabsAdapter = new TabsAdapter(this, args);
         }
-
     }
 
     /*
@@ -149,11 +152,11 @@ public class DetailFragment extends Fragment {
                         savedPokemon.setFavorite(removeOrAdd);
                         savedPokemon.setJsonString(GsonClient.getGsonClient()
                                 .toJson(savedPokemon, Pokemon.class));
-/*                        if (removeOrAdd) {
+                        if (removeOrAdd) {
                             pokemonDatabase.pokemonDAO().insertFavoritePokemon(savedPokemon);
                         } else {
                             pokemonDatabase.pokemonDAO().deleteFavoritePokemon(savedPokemon);
-                        }*/
+                        }
                     }
                 });
             }
