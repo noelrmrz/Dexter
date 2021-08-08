@@ -1,5 +1,7 @@
 package com.noelrmrz.pokedex.ui.detail;
 
+import static android.view.Gravity.CENTER;
+
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +12,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.flexbox.FlexboxLayout;
 import com.noelrmrz.pokedex.R;
@@ -18,28 +22,23 @@ import com.noelrmrz.pokedex.pojo.EvolutionChain;
 import com.noelrmrz.pokedex.pojo.EvolutionChainLink;
 import com.noelrmrz.pokedex.pojo.Pokemon;
 import com.noelrmrz.pokedex.pojo.Type;
+import com.noelrmrz.pokedex.pojo.TypeLink;
 import com.noelrmrz.pokedex.utilities.BindingAdapters;
 import com.noelrmrz.pokedex.utilities.GlideClient;
 import com.noelrmrz.pokedex.utilities.GsonClient;
 import com.noelrmrz.pokedex.utilities.HelperTools;
-import com.noelrmrz.pokedex.utilities.RetrofitClient;
-import com.noelrmrz.pokedex.utilities.TypeEffectiveness;
+import com.noelrmrz.pokedex.utilities.TypeHelper;
 import com.noelrmrz.pokedex.viewmodel.MainViewModel;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import timber.log.Timber;
-
-import static android.view.Gravity.CENTER;
 
 public class InformationFragment extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
     static Pokemon savedPokemon;
-    private TypeEffectiveness typeEffectiveness = TypeEffectiveness.getInstance();
+    private final HelperTools helperTools = HelperTools.getInstance();
     private FragmentInformationBinding bind;
     private MainViewModel mainViewModel;
 
@@ -62,11 +61,12 @@ public class InformationFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
+
         if (getArguments() != null) {
             String mParam1 = getArguments().getString(ARG_PARAM1);
             savedPokemon = GsonClient.getGsonClient().fromJson(mParam1, Pokemon.class);
         }
-
     }
 
     /*
@@ -103,22 +103,18 @@ public class InformationFragment extends Fragment {
         BindingAdapters.setAbilities(bind.tvAbilityHiddenName,
                 savedPokemon.getAbilityList().length > 2 ? savedPokemon.getAbilityList()[2] : null);
 
-        setTypeMultipliers(savedPokemon.getTypeList().length, bind.tvXFour, bind.xFourFlexLayout, bind.xFourLayout,
-                bind.tvXTwo, bind.xTwoFlexLayout, bind.xTwoLayout,
-                bind.tvXOne, bind.xOneFlexLayout, bind.xOneLayout,
-                bind.tvXHalf, bind.xHalfFlexLayout, bind.xHalfLayout,
-                bind.tvXQuarter, bind.xQuarterFlexLayout,bind.xQuarterLayout,
-                bind.tvXZero, bind.xZeroFlexLayout, bind.xZeroLayout);
+        createTypeEffectivenessView(bind.xOneFlexLayout, Arrays.asList(helperTools.getTypeNames()));
+
+        setTypeMultipliers();
 
         String evolutionLink = savedPokemon.getPokemonSpecies().getEvolutionChainLink().getUrl().substring(41);
         String evolutionChainId = evolutionLink.replace("/", "").trim();
 
-        RetrofitClient.getPokemonEvolutionChain(new Callback<EvolutionChainLink>() {
+        mainViewModel.getEvolutionChainLinkMutableLiveData().observe(getViewLifecycleOwner(), new Observer<EvolutionChainLink>() {
             @Override
-            public void onResponse(Call<EvolutionChainLink> call,
-                                   Response<EvolutionChainLink> response) {
+            public void onChanged(EvolutionChainLink evolutionChainLink) {
                 // Set the image for the first evolution stage
-                EvolutionChain firstStage = response.body().getChain();
+                EvolutionChain firstStage = evolutionChainLink.getChain();
                 String idOne = firstStage.getSpecies().getUrl().substring(42).replace("/", "").trim();
                 GlideClient.downloadSpriteImage(idOne, bind.ivFirstStage);
 
@@ -138,18 +134,15 @@ public class InformationFragment extends Fragment {
                     }
                 }
             }
-
-            @Override
-            public void onFailure(Call<EvolutionChainLink> call, Throwable t) {
-                Timber.d(t);
-            }
-        }, evolutionChainId);
+        });
+        mainViewModel.getPokemonEvolutionData(evolutionChainId);
     }
 
-    private void addTypeEffectiveness(FlexboxLayout layout, List<String> list) {
+    private void createTypeEffectivenessView(FlexboxLayout layout, List<String> list) {
         for (int y = 0; y < list.size(); y++) {
             // create a new textview
             TextView rowTextView = new TextView(getActivity());
+            rowTextView.setId(HelperTools.getTypeId(getContext(), list.get(y)));
 
             // set the background
             rowTextView.setBackgroundResource(R.drawable.rectangle);
@@ -160,7 +153,7 @@ public class InformationFragment extends Fragment {
                     .getColor(getContext(), list.get(y))));
 
             // set the text
-            rowTextView.setText(list.get(y));
+            rowTextView.setText(list.get(y) + " " + getString(R.string.one_x));
 
             // set the text color based on luminance
             rowTextView.setTextColor(HelperTools
@@ -192,101 +185,70 @@ public class InformationFragment extends Fragment {
         }
     }
 
-    private void setTypeMultipliers(int typeLength, TextView xFour, FlexboxLayout xFourFlexLayout, LinearLayout xFourLinearLayout,
-                                    TextView xTwo, FlexboxLayout xTwoFlexLayout, LinearLayout xTwoLinearLayout,
-                                    TextView xOne, FlexboxLayout xOneFlexLayout, LinearLayout xOneLinearLayout,
-                                    TextView xHalf, FlexboxLayout xHalfFlexLayout, LinearLayout xHalfLinearLayout,
-                                    TextView xQuarter, FlexboxLayout xQuarterFlexLayout, LinearLayout xQuarterLinearLayout,
-                                    TextView xZero, FlexboxLayout xZeroFlexLayout, LinearLayout xZeroLinearLayout) {
+    public List<TextView> removeTypeEffectivenessView(FlexboxLayout layout, Type[] list) {
+        List<TextView> textViews = new ArrayList<>();
 
-        RetrofitClient.getTypeInformation(new Callback<Type>() {
-            @Override
-            public void onResponse(Call<Type> call, Response<Type> response) {
-                Type primary = response.body();
+        for (Type type : list) {
+            if (layout.findViewById(HelperTools.getTypeId(getContext(), type.getName())) != null) {
+                // Find the TextView within the layout. Reset the text to just the type name.
+                // Add the item to the list to return.
+                TextView textView = (TextView) layout.findViewById(HelperTools.getTypeId(getContext(),
+                        type.getName()));
+                textView.setText(type.getName());
+                textViews.add(textView);
 
-                if ( typeLength == 1) {
-                    savedPokemon = typeEffectiveness.setTypeEffectiveness(primary, null, savedPokemon);
-                    bind.setPokemon(savedPokemon);
-                    addTypeEffectiveness(xTwoFlexLayout, savedPokemon.getEffective());
-                    addTypeEffectiveness(xHalfFlexLayout, savedPokemon.getNotEffective());
-                    addTypeEffectiveness(xOneFlexLayout, savedPokemon.getNormal());
-
-                    xFour.setVisibility(View.GONE);
-                    xFourFlexLayout.setVisibility(View.GONE);
-                    xFourLinearLayout.setVisibility(View.GONE);
-
-                    xQuarter.setVisibility(View.GONE);
-                    xQuarterFlexLayout.setVisibility(View.GONE);
-                    xQuarterLinearLayout.setVisibility(View.GONE);
-                } else {
-                    // Make a second call to get the information for the secondary type
-                    RetrofitClient.getTypeInformation(new Callback<Type>() {
-                        @Override
-                        public void onResponse(Call<Type> call, Response<Type> response) {
-                            Type secondary = response.body();
-                            savedPokemon = typeEffectiveness.setTypeEffectiveness(primary, secondary, savedPokemon);
-                            bind.setPokemon(savedPokemon);
-                            if (savedPokemon.getSuperEffective().size() == 0) {
-                                xFour.setVisibility(View.GONE);
-                                xFourFlexLayout.setVisibility(View.GONE);
-                                xFourLinearLayout.setVisibility(View.GONE);
-                            } else {
-                                addTypeEffectiveness(xFourFlexLayout, savedPokemon.getSuperEffective());
-                            }
-
-                            if (savedPokemon.getEffective().size() == 0) {
-                                xTwo.setVisibility(View.GONE);
-                                xTwoFlexLayout.setVisibility(View.GONE);
-                                xTwoLinearLayout.setVisibility(View.GONE);
-                            } else {
-                                addTypeEffectiveness(xTwoFlexLayout, savedPokemon.getEffective());
-                            }
-
-                            if (savedPokemon.getNormal().size() == 0) {
-                                xOne.setVisibility(View.GONE);
-                                xOneFlexLayout.setVisibility(View.GONE);
-                                xOneLinearLayout.setVisibility(View.GONE);
-                            } else {
-                                addTypeEffectiveness(xOneFlexLayout, savedPokemon.getNormal());
-                            }
-
-                            if (savedPokemon.getNotEffective().size() == 0) {
-                                xHalf.setVisibility(View.GONE);
-                                xHalfFlexLayout.setVisibility(View.GONE);
-                                xHalfLinearLayout.setVisibility(View.GONE);
-                            } else {
-                                addTypeEffectiveness(xHalfFlexLayout, savedPokemon.getNotEffective());
-                            }
-
-                            if (savedPokemon.getNotVeryEffective().size() == 0) {
-                                xQuarter.setVisibility(View.GONE);
-                                xQuarterFlexLayout.setVisibility(View.GONE);
-                                xQuarterLinearLayout.setVisibility(View.GONE);
-                            } else {
-                                addTypeEffectiveness(xQuarterFlexLayout, savedPokemon.getNotVeryEffective());
-                            }
-
-                        }
-
-                        @Override
-                        public void onFailure(Call<Type> call, Throwable t) {
-                            Timber.d(t);
-                        }
-                    }, bind.getPokemon().getTypeList()[1].getType().getName());//savedPokemon.getTypeList()[1].getType().getName());
-                }
-
-                if (savedPokemon.getImmune().size() == 0) {
-                    xZero.setVisibility(View.GONE);
-                    xZeroFlexLayout.setVisibility(View.GONE);
-                    xZeroLinearLayout.setVisibility(View.GONE);
-                } else {
-                    addTypeEffectiveness(xZeroFlexLayout, savedPokemon.getImmune());
-                }
+                layout.removeView(textView);
             }
+        }
+        return textViews;
+    }
+
+    public void addTypeEffectivenessView(FlexboxLayout layout, List<TextView> textViews, String addition) {
+        // Append the text modifications before adding the TextView to the layout
+        for (TextView textView : textViews) {
+            textView.setText(textView.getText().toString()  + " " + addition);
+            layout.addView(textView);
+        }
+    }
+
+    private void setTypeMultipliers() {
+
+        mainViewModel.getTypeMutableLiveData().observe(getViewLifecycleOwner(), new Observer<Type>() {
             @Override
-            public void onFailure(Call<Type> call, Throwable t) {
-                Timber.d(t);
+            public void onChanged(Type type) {
+
+                // Get the primary and secondary Types from the ViewModel. Having issues with the
+                // Callback method not getting executed for dual types
+                Type primary = mainViewModel.getType(mainViewModel.getAllPokemonList().get(mainViewModel.position).getTypeList()[0].getType().getName());
+                Type secondary = mainViewModel.getAllPokemonList().get(mainViewModel.position).getTypeList().length > 1 ? mainViewModel.getType(mainViewModel.getAllPokemonList().get(mainViewModel.position).getTypeList()[1].getType().getName()) : null;
+
+                TypeHelper typeHelper = new TypeHelper(primary, secondary, mainViewModel.getAllPokemonList().get(mainViewModel.position).getTypeList().length);
+                typeHelper.calculateTypeEffectivness();
+
+                // No damage
+                List<TextView> textViews = removeTypeEffectivenessView(bind.xOneFlexLayout, typeHelper.getImmune().toArray(new Type[0]));
+                addTypeEffectivenessView(bind.xHalfFlexLayout, textViews, getString(R.string.immune));
+
+                // Super-effective
+                textViews = removeTypeEffectivenessView(bind.xOneFlexLayout, typeHelper.getSuperEffective().toArray(new Type[0]));
+                addTypeEffectivenessView(bind.xTwoFlexLayout, textViews, getString(R.string.four_x));
+
+                // Effective
+                textViews = removeTypeEffectivenessView(bind.xOneFlexLayout, typeHelper.getEffective().toArray(new Type[0]));
+                addTypeEffectivenessView(bind.xTwoFlexLayout, textViews, getString(R.string.two_x));
+
+                // Not-very-effective
+                textViews = removeTypeEffectivenessView(bind.xOneFlexLayout, typeHelper.getNotVeryEffective().toArray(new Type[0]));
+                addTypeEffectivenessView(bind.xHalfFlexLayout, textViews, getString(R.string.quarter_x));
+
+                // Not-effective
+                textViews = removeTypeEffectivenessView(bind.xOneFlexLayout, typeHelper.getNotEffective().toArray(new Type[0]));
+                addTypeEffectivenessView(bind.xHalfFlexLayout, textViews, getString(R.string.half_x));
             }
-        }, savedPokemon.getTypeList()[0].getType().getName());
+        });
+
+        for (TypeLink typeLink : mainViewModel.getAllPokemonList().get(mainViewModel.position).getTypeList()) {
+            mainViewModel.getPokemonTypeData(typeLink.getType().getName());
+        }
     }
 }

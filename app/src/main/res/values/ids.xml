@@ -1,3 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <item name="water" type="id"/>
+    <item name="fire" type="id"/>
+    <item name="grass" type="id"/>
+    <item name="bug" type="id"/>
+    <item name="poison" type="id"/>
+    <item name="flying" type="id"/>
+    <item name="normal" type="id"/>
+    <item name="ground" type="id"/>
+    <item name="electric" type="id"/>
+    <item name="rock" type="id"/>
+    <item name="fighting" type="id"/>
+    <item name="psychic" type="id"/>
+    <item name="ghost" type="id"/>
+    <item name="ice" type="id"/>
+    <item name="steel" type="id"/>
+    <item name="dark" type="id"/>
+    <item name="fairy" type="id"/>
+    <item name="dragon" type="id"/>
 </resources>

@@ -51,7 +51,7 @@ public class MainFragment extends Fragment {
 
                 if (!isLoading) {
                     if (layoutManager != null && layoutManager.findLastCompletelyVisibleItemPosition() == gridAdapter.getItemCount() - 1) {
-                        // Bottom of the list, load more data
+                        // Bottom of the list, load more data.
                         loadData();
                     }
                 }
