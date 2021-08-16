@@ -72,5 +72,4 @@
     <string name="weakness_to">Weak against</string>
     <string name="normal_damage_from">Normal damage from</string>
     <string name="resistance_to">Resistant against</string>
-    <string name="no_damage_from">No damage from</string>
 </resources>

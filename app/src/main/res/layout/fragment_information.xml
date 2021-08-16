@@ -308,34 +308,6 @@
                     app:layout_constraintTop_toBottomOf="@+id/tv_xHalf" >
 
                 </com.google.android.flexbox.FlexboxLayout>
-
-            <TextView
-                android:id="@+id/tv_xZero"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:gravity="center"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:text="@string/no_damage_from"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/xHalf_flexLayout"
-                app:layout_constraintBottom_toTopOf="@id/xZero_flexLayout"
-                tools:text="Immune to"/>
-
-                <com.google.android.flexbox.FlexboxLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/xZero_flexLayout"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:orientation="horizontal"
-                    app:flexWrap="wrap"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@id/tv_xZero"
-                    app:layout_constraintTop_toBottomOf="@+id/xHalf_flexLayout" >
-
-                </com.google.android.flexbox.FlexboxLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </layout>

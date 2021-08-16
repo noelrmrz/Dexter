@@ -198,12 +198,7 @@ public class InformationFragment extends Fragment {
 
                 // No damage
                 List<TypeCompoundView> textViews = removeTypeEffectivenessView(bind.xOneFlexLayout, typeHelper.getImmune().toArray(new Type[0]));
-                if (textViews.size() == 0) {
-                    bind.xZeroFlexLayout.setVisibility(View.GONE);
-                    bind.tvXZero.setVisibility(View.GONE);
-                } else {
-                    addTypeEffectivenessView(bind.xZeroFlexLayout, textViews, getString(R.string.immune));
-                }
+                addTypeEffectivenessView(bind.xHalfFlexLayout, textViews, getString(R.string.immune));
 
                 // Super-effective
                 textViews = removeTypeEffectivenessView(bind.xOneFlexLayout, typeHelper.getSuperEffective().toArray(new Type[0]));
