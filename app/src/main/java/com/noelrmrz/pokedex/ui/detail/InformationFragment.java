@@ -1,14 +1,9 @@
 package com.noelrmrz.pokedex.ui.detail;
 
-import static android.view.Gravity.CENTER;
-
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -140,74 +135,50 @@ public class InformationFragment extends Fragment {
 
     private void createTypeEffectivenessView(FlexboxLayout layout, List<String> list) {
         for (int y = 0; y < list.size(); y++) {
-            // create a new textview
-            TextView rowTextView = new TextView(getActivity());
-            rowTextView.setId(HelperTools.getTypeId(getContext(), list.get(y)));
 
-            // set the background
-            rowTextView.setBackgroundResource(R.drawable.rectangle);
+            // Create a new instance of the view
+            TypeCompoundView typeCompoundView = new TypeCompoundView(getContext());
 
-            // set the background color
-            GradientDrawable typeBackground = (GradientDrawable) rowTextView.getBackground();
-            typeBackground.setColor(getContext().getResources().getColor(HelperTools
+            // Give the view an ID
+            typeCompoundView.setId(HelperTools.getTypeId(getContext(), list.get(y)));
+
+            // Set the type name
+            typeCompoundView.setTypeName(list.get(y));
+
+            // Set the effectiveness
+            typeCompoundView.setTypeEffect(getString(R.string.one_x));
+
+            // Set the background to correspond to the the type Color
+            typeCompoundView.setValueColor(getContext().getResources().getColor(HelperTools
                     .getColor(getContext(), list.get(y))));
 
-            // set the text
-            rowTextView.setText(list.get(y) + " " + getString(R.string.one_x));
-
-            // set the text color based on luminance
-            rowTextView.setTextColor(HelperTools
-                    .getTextColor(HelperTools.getColor(getContext(), list.get(y))));
-
-            // set the padding
-            float paddingTopBottom = HelperTools.convertDpToPixel(8, getContext());
-            float paddingLeftRight = HelperTools.convertDpToPixel(2, getContext());
-            rowTextView.setPadding((int) paddingTopBottom,
-                    (int) paddingLeftRight, (int) paddingTopBottom
-                    , (int) paddingLeftRight);
-
-            FlexboxLayout.LayoutParams params= new FlexboxLayout.LayoutParams
-                    (LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-            int margins = (int) HelperTools.convertDpToPixel(1, getContext());
-            params.setMargins(margins, margins, margins, margins);
-
-            rowTextView.setGravity(CENTER);
-
-            // set the size
-            rowTextView.setTextSize(12);
-
-            // set our parameters to the TextView
-            rowTextView.setLayoutParams(params);
-
-            // add the TextView to the LinearLayout
-            layout.addView(rowTextView);
+            // Add the view to the layout
+            layout.addView(typeCompoundView);
         }
     }
 
-    public List<TextView> removeTypeEffectivenessView(FlexboxLayout layout, Type[] list) {
-        List<TextView> textViews = new ArrayList<>();
+    public List<TypeCompoundView> removeTypeEffectivenessView(FlexboxLayout layout, Type[] list) {
+        List<TypeCompoundView> views = new ArrayList<>();
 
         for (Type type : list) {
             if (layout.findViewById(HelperTools.getTypeId(getContext(), type.getName())) != null) {
                 // Find the TextView within the layout. Reset the text to just the type name.
                 // Add the item to the list to return.
-                TextView textView = (TextView) layout.findViewById(HelperTools.getTypeId(getContext(),
+                TypeCompoundView textView = (TypeCompoundView) layout.findViewById(HelperTools.getTypeId(getContext(),
                         type.getName()));
-                textView.setText(type.getName());
-                textViews.add(textView);
+                views.add(textView);
 
                 layout.removeView(textView);
             }
         }
-        return textViews;
+        return views;
     }
 
-    public void addTypeEffectivenessView(FlexboxLayout layout, List<TextView> textViews, String addition) {
+    public void addTypeEffectivenessView(FlexboxLayout layout, List<TypeCompoundView> views, String addition) {
         // Append the text modifications before adding the TextView to the layout
-        for (TextView textView : textViews) {
-            textView.setText(textView.getText().toString()  + " " + addition);
-            layout.addView(textView);
+        for (TypeCompoundView view : views) {
+            view.setTypeEffect(addition);
+            layout.addView(view);
         }
     }
 
@@ -226,8 +197,13 @@ public class InformationFragment extends Fragment {
                 typeHelper.calculateTypeEffectivness();
 
                 // No damage
-                List<TextView> textViews = removeTypeEffectivenessView(bind.xOneFlexLayout, typeHelper.getImmune().toArray(new Type[0]));
-                addTypeEffectivenessView(bind.xHalfFlexLayout, textViews, getString(R.string.immune));
+                List<TypeCompoundView> textViews = removeTypeEffectivenessView(bind.xOneFlexLayout, typeHelper.getImmune().toArray(new Type[0]));
+                if (textViews.size() == 0) {
+                    bind.xZeroFlexLayout.setVisibility(View.GONE);
+                    bind.tvXZero.setVisibility(View.GONE);
+                } else {
+                    addTypeEffectivenessView(bind.xZeroFlexLayout, textViews, getString(R.string.immune));
+                }
 
                 // Super-effective
                 textViews = removeTypeEffectivenessView(bind.xOneFlexLayout, typeHelper.getSuperEffective().toArray(new Type[0]));

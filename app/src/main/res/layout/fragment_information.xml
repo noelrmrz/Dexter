@@ -225,228 +225,117 @@
                 app:layout_constraintStart_toStartOf="@+id/tv_label_evolutions"
                 app:layout_constraintTop_toBottomOf="@+id/iv_first_stage" />
 
-            <LinearLayout
-                android:id="@+id/xFour_layout"
-                android:layout_width="match_parent"
-                android:layout_height="?android:attr/listPreferredItemHeight"
-                android:layout_marginTop="8dp"
-                android:orientation="horizontal"
+            <TextView
+                android:id="@+id/tv_xTwo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:text="@string/weakness_to"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_label_training_data">
+                app:layout_constraintTop_toBottomOf="@id/tv_label_training_data"
+                app:layout_constraintBottom_toTopOf="@id/xTwo_flexLayout"
+                tools:text="Weak to" />
 
-                <TextView
-                    android:id="@+id/tv_xFour"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:layout_gravity="center_vertical"
-                    android:background="@drawable/circle"
-                    android:gravity="center"
-                    android:text="@string/four_x"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp"
-                    tools:text="x4" />
-
-                <com.google.android.flexbox.FlexboxLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/xFour_flexLayout"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_weight="1"
-                    android:orientation="horizontal"
-                    app:flexWrap="wrap">
-
-                </com.google.android.flexbox.FlexboxLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/xTwo_layout"
-                android:layout_width="match_parent"
-                android:layout_height="?android:attr/listPreferredItemHeight"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/xFour_layout">
-
-                <TextView
-                    android:id="@+id/tv_xTwo"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:layout_gravity="center_vertical"
-                    android:background="@drawable/circle"
-                    android:gravity="center"
-                    android:text="@string/two_x"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp"
-                    tools:text="x2" />
-
-                <com.google.android.flexbox.FlexboxLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                <com.google.android.flexbox.FlexboxLayout xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/xTwo_flexLayout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_weight="1"
                     android:orientation="horizontal"
-                    app:flexWrap="wrap">
+                    app:flexWrap="wrap"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_xTwo">
 
                 </com.google.android.flexbox.FlexboxLayout>
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/xOne_layout"
-                android:layout_width="match_parent"
-                android:layout_height="?android:attr/listPreferredItemHeightLarge"
-                android:orientation="horizontal"
+            <TextView
+                android:id="@+id/tv_xOne"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:text="@string/normal_damage_from"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/xTwo_layout">
+                app:layout_constraintTop_toBottomOf="@id/xTwo_flexLayout"
+                app:layout_constraintBottom_toTopOf="@id/xOne_flexLayout"
+                tools:text="x1" />
 
-                <TextView
-                    android:id="@+id/tv_xOne"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:layout_gravity="center_vertical"
-                    android:background="@drawable/circle"
-                    android:gravity="center"
-                    android:text="@string/one_x"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp"
-                    tools:text="x1" />
-
-                <com.google.android.flexbox.FlexboxLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                <com.google.android.flexbox.FlexboxLayout xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/xOne_flexLayout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_weight="1"
                     android:orientation="horizontal"
-                    app:flexWrap="wrap">
+                    app:flexWrap="wrap"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_xOne" >
 
                 </com.google.android.flexbox.FlexboxLayout>
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/xHalf_layout"
-                android:layout_width="match_parent"
-                android:layout_height="?android:attr/listPreferredItemHeight"
-                android:orientation="horizontal"
+            <TextView
+                android:id="@+id/tv_xHalf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:text="@string/resistance_to"
+                android:textSize="14sp"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/xOne_layout">
+                app:layout_constraintTop_toBottomOf="@id/xOne_flexLayout"
+                app:layout_constraintBottom_toTopOf="@id/xHalf_flexLayout"
+                tools:text="Resistant to" />
 
-                <TextView
-                    android:id="@+id/tv_xHalf"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:layout_gravity="center_vertical"
-                    android:background="@drawable/circle"
-                    android:gravity="center"
-                    android:text="@string/half_x"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp"
-                    tools:text="x1/2" />
-
-                <com.google.android.flexbox.FlexboxLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                <com.google.android.flexbox.FlexboxLayout xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/xHalf_flexLayout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_weight="1"
                     android:orientation="horizontal"
-                    app:flexWrap="wrap">
+                    app:flexWrap="wrap"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_xHalf" >
 
                 </com.google.android.flexbox.FlexboxLayout>
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/xQuarter_layout"
-                android:layout_width="match_parent"
-                android:layout_height="?android:attr/listPreferredItemHeight"
-                android:orientation="horizontal"
+            <TextView
+                android:id="@+id/tv_xZero"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:text="@string/no_damage_from"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/xHalf_layout">
+                app:layout_constraintTop_toBottomOf="@id/xHalf_flexLayout"
+                app:layout_constraintBottom_toTopOf="@id/xZero_flexLayout"
+                tools:text="Immune to"/>
 
-                <TextView
-                    android:id="@+id/tv_xQuarter"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:layout_gravity="center_vertical"
-                    android:background="@drawable/circle"
-                    android:gravity="center"
-                    android:text="@string/quarter_x"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp"
-                    tools:text="x1/4" />
-
-                <com.google.android.flexbox.FlexboxLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/xQuarter_flexLayout"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_weight="1"
-                    android:orientation="horizontal"
-                    app:flexWrap="wrap">
-
-                </com.google.android.flexbox.FlexboxLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/xZero_layout"
-                android:layout_width="match_parent"
-                android:layout_height="?android:attr/listPreferredItemHeight"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/xQuarter_layout">
-
-                <TextView
-                    android:id="@+id/tv_xZero"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:layout_gravity="center_vertical"
-                    android:background="@drawable/circle"
-                    android:gravity="center"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp"
-                    android:text="@string/immune" />
-
-                <com.google.android.flexbox.FlexboxLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                <com.google.android.flexbox.FlexboxLayout xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/xZero_flexLayout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_weight="1"
                     android:orientation="horizontal"
-                    app:flexWrap="wrap">
+                    app:flexWrap="wrap"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/tv_xZero"
+                    app:layout_constraintTop_toBottomOf="@+id/xHalf_flexLayout" >
 
                 </com.google.android.flexbox.FlexboxLayout>
-
-            </LinearLayout>
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </layout>

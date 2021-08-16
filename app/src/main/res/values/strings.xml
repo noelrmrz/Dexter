@@ -69,4 +69,8 @@
     <string name="ad_unit_id">ca-app-pub-3940256099942544/1033173712</string>
     <string name="cd_attack_flavor">Image representing if the attack is physical, special, or status based</string>
     <string name="profileImage">profile %s</string>
+    <string name="weakness_to">Weak against</string>
+    <string name="normal_damage_from">Normal damage from</string>
+    <string name="resistance_to">Resistant against</string>
+    <string name="no_damage_from">No damage from</string>
 </resources>
