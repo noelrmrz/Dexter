@@ -75,11 +75,12 @@
     <string name="fist_stage_evolution">First stage evolution</string>
     <string name="second_stage_evolution">Second stage evolution</string>
     <string name="third_stage_evolution">Third stage evolution</string>
-    <string name="happiness">Happiness</string>
-    <string name="affection">Affection</string>
-    <string name="beauty">Beauty</string>
+    <string name="happiness">Happiness %1$d</string>
+    <string name="affection">Affection %1$d</string>
+    <string name="beauty">Beauty %1$d</string>
     <string name="day">Day</string>
     <string name="night">Night</string>
     <string name="use_item">Item</string>
-    <string name="level_up">Level</string>
+    <string name="level_up">Level %1$d</string>
+    <string name="arrow">arrow</string>
 </resources>

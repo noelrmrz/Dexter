@@ -34,11 +34,7 @@ import java.util.List;
 public class InformationFragment extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
-    private final String LEVEL_UP = "level-up";
-    private final String USE_ITEM = "use-item";
-    private final String TRADE = "trade";
     static Pokemon savedPokemon;
-    private final HelperTools helperTools = HelperTools.getInstance();
     private FragmentInformationBinding bind;
     private MainViewModel mainViewModel;
 
@@ -70,7 +66,7 @@ public class InformationFragment extends Fragment {
     }
 
     /*
-    Called when the fragment should create its view object heirarchy
+    Called when the fragment should create its view object hierarchy
     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -103,14 +99,14 @@ public class InformationFragment extends Fragment {
         BindingAdapters.setAbilities(bind.tvAbilityHiddenName,
                 savedPokemon.getAbilityList().length > 2 ? savedPokemon.getAbilityList()[2] : null);
 
-        createTypeEffectivenessView(bind.xOneFlexLayout, Arrays.asList(helperTools.getTypeNames()));
+        createTypeEffectivenessView(bind.xOneFlexLayout, Arrays.asList(HelperTools.getTypeNames()));
 
         setTypeMultipliers();
 
         String evolutionLink = savedPokemon.getPokemonSpecies().getEvolutionChainLink().getUrl().substring(41);
         String evolutionChainId = evolutionLink.replace("/", "").trim();
 
-        mainViewModel.getEvolutionChainLinkMutableLiveData().observe(getViewLifecycleOwner(), new Observer<EvolutionChainLink>() {
+        mainViewModel.getEvolutionChainLinkMutableLiveData().observe(getViewLifecycleOwner(), new Observer<>() {
             @Override
             public void onChanged(EvolutionChainLink evolutionChainLink) {
                 // Set the image for the first evolution stage
@@ -151,7 +147,7 @@ public class InformationFragment extends Fragment {
             TypeCompoundView typeCompoundView = new TypeCompoundView(getContext());
 
             // Give the view an ID
-            typeCompoundView.setId(HelperTools.getTypeId(getContext(), list.get(y)));
+            typeCompoundView.setId(HelperTools.getTypeId(requireContext(), list.get(y)));
 
             // Set the type name
             typeCompoundView.setTypeName(list.get(y));
@@ -160,8 +156,8 @@ public class InformationFragment extends Fragment {
             typeCompoundView.setTypeEffect(getString(R.string.one_x));
 
             // Set the background to correspond to the the type Color
-            typeCompoundView.setValueColor(getContext().getResources().getColor(HelperTools
-                    .getColor(getContext(), list.get(y))));
+            typeCompoundView.setValueColor(requireContext().getResources().getColor(HelperTools
+                    .getColor(requireContext(), list.get(y))));
 
             // Add the view to the layout
             layout.addView(typeCompoundView);
@@ -172,10 +168,10 @@ public class InformationFragment extends Fragment {
         List<TypeCompoundView> views = new ArrayList<>();
 
         for (Type type : list) {
-            if (layout.findViewById(HelperTools.getTypeId(getContext(), type.getName())) != null) {
+            if (layout.findViewById(HelperTools.getTypeId(requireContext(), type.getName())) != null) {
                 // Find the TextView within the layout. Reset the text to just the type name.
                 // Add the item to the list to return.
-                TypeCompoundView textView = (TypeCompoundView) layout.findViewById(HelperTools.getTypeId(getContext(),
+                TypeCompoundView textView = (TypeCompoundView) layout.findViewById(HelperTools.getTypeId(requireContext(),
                         type.getName()));
                 views.add(textView);
 
@@ -195,16 +191,16 @@ public class InformationFragment extends Fragment {
 
     private void setTypeMultipliers() {
 
-        mainViewModel.getTypeMutableLiveData().observe(getViewLifecycleOwner(), new Observer<Type>() {
+        mainViewModel.getTypeMutableLiveData().observe(getViewLifecycleOwner(), new Observer<>() {
             @Override
             public void onChanged(Type type) {
 
                 // Get the primary and secondary Types from the ViewModel. Having issues with the
                 // Callback method not getting executed for dual types
-                Type primary = mainViewModel.getType(mainViewModel.getAllPokemonList().get(mainViewModel.position).getTypeList()[0].getType().getName());
-                Type secondary = mainViewModel.getAllPokemonList().get(mainViewModel.position).getTypeList().length > 1 ? mainViewModel.getType(mainViewModel.getAllPokemonList().get(mainViewModel.position).getTypeList()[1].getType().getName()) : null;
+                Type primary = mainViewModel.getType(mainViewModel.getAllPokemonList().get(MainViewModel.position).getTypeList()[0].getType().getName());
+                Type secondary = mainViewModel.getAllPokemonList().get(MainViewModel.position).getTypeList().length > 1 ? mainViewModel.getType(mainViewModel.getAllPokemonList().get(MainViewModel.position).getTypeList()[1].getType().getName()) : null;
 
-                TypeHelper typeHelper = new TypeHelper(primary, secondary, mainViewModel.getAllPokemonList().get(mainViewModel.position).getTypeList().length);
+                TypeHelper typeHelper = new TypeHelper(primary, secondary, mainViewModel.getAllPokemonList().get(MainViewModel.position).getTypeList().length);
                 typeHelper.calculateTypeEffectivness();
 
                 // No damage
@@ -229,24 +225,28 @@ public class InformationFragment extends Fragment {
             }
         });
 
-        for (TypeLink typeLink : mainViewModel.getAllPokemonList().get(mainViewModel.position).getTypeList()) {
+        for (TypeLink typeLink : mainViewModel.getAllPokemonList().get(MainViewModel.position).getTypeList()) {
             mainViewModel.getPokemonTypeData(typeLink.getType().getName());
         }
     }
 
     public void setEvolutionText(TextView textview, EvolutionDetail evolutionDetail) {
+        final String USE_ITEM = "use-item";
+        final String TRADE = "trade";
+        final String LEVEL_UP = "level-up";
+
         switch(evolutionDetail.getTrigger().getName()){
             case(LEVEL_UP):
                 if (evolutionDetail.getMinHappiness() != 0)
-                    textview.setText(getString(R.string.happiness) + " " + evolutionDetail.getMinHappiness());
+                    textview.setText(String.format(getString(R.string.happiness), evolutionDetail.getMinHappiness()));
                 else if(evolutionDetail.getMinBeauty() != 0)
-                    textview.setText(getString(R.string.beauty) + " " + evolutionDetail.getMinBeauty());
+                    textview.setText(String.format(getString(R.string.beauty), evolutionDetail.getMinBeauty()));
                 else if(evolutionDetail.getMinAffection() != 0)
-                    textview.setText(getString(R.string.affection) + " " + evolutionDetail.getMinAffection());
+                    textview.setText(String.format(getString(R.string.affection), evolutionDetail.getMinAffection()));
                 else if (!evolutionDetail.getTimeOfDay().equals(""))
                     textview.setText(evolutionDetail.getTimeOfDay());
                 else
-                    textview.setText(getString(R.string.level_up) + " " + evolutionDetail.getMinLevel());
+                    textview.setText(String.format(getString(R.string.level_up), evolutionDetail.getMinLevel()));
                 break;
             case(USE_ITEM):
                 textview.setText(evolutionDetail.getItem().getName());

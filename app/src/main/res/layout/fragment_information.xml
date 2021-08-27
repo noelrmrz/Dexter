@@ -192,7 +192,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                android:textSize="10sp"
+                android:textSize="11sp"
                 app:layout_constraintBottom_toTopOf="@+id/iv_first_level_up_arrow"
                 app:layout_constraintEnd_toStartOf="@+id/iv_second_stage"
                 app:layout_constraintStart_toEndOf="@+id/iv_first_stage" />
@@ -203,6 +203,7 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 android:src="@drawable/ic_arrow"
+                android:contentDescription="@string/arrow"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_second_stage"
                 app:layout_constraintEnd_toStartOf="@+id/iv_second_stage"
                 app:layout_constraintStart_toEndOf="@+id/iv_first_stage"
@@ -224,7 +225,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                android:textSize="10sp"
+                android:textSize="11sp"
                 app:layout_constraintBottom_toTopOf="@+id/iv_second_level_up_arrow"
                 app:layout_constraintEnd_toStartOf="@+id/iv_third_stage"
                 app:layout_constraintStart_toEndOf="@+id/iv_second_stage" />
@@ -235,6 +236,7 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 android:src="@drawable/ic_arrow"
+                android:contentDescription="@string/arrow"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_second_stage"
                 app:layout_constraintEnd_toStartOf="@+id/iv_third_stage"
                 app:layout_constraintStart_toEndOf="@+id/iv_second_stage"
@@ -305,7 +307,7 @@
                 app:layout_constraintTop_toBottomOf="@id/xTwo_flexLayout"
                 tools:text="x1" />
 
-            <com.google.android.flexbox.FlexboxLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+            <com.google.android.flexbox.FlexboxLayout
                 android:id="@+id/xOne_flexLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -333,7 +335,7 @@
                 app:layout_constraintTop_toBottomOf="@id/xOne_flexLayout"
                 tools:text="Resistant to" />
 
-            <com.google.android.flexbox.FlexboxLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+            <com.google.android.flexbox.FlexboxLayout
                 android:id="@+id/xHalf_flexLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
