@@ -2,27 +2,28 @@ package com.noelrmrz.pokedex.pojo;
 
 import com.google.gson.annotations.SerializedName;
 
-class EvolutionDetail {
+public class EvolutionDetail {
+
     @SerializedName("item")
-    private String item;
+    private Item item;
 
     @SerializedName("trigger")
-    private String trigger;
+    private EvolutionTrigger trigger;
 
     @SerializedName("gender")
-    private String gender;
+    private int gender;
 
     @SerializedName("known_move")
-    private String move;
+    private Move move;
 
     @SerializedName("held_item")
-    private String heldItem;
+    private Item heldItem;
 
     @SerializedName("known_move_type")
-    private String knownMoveType;
+    private Type knownMoveType;
 
     @SerializedName("location")
-    private String location;
+    private Location location;
 
     @SerializedName("min_level")
     private int minLevel;
@@ -31,61 +32,85 @@ class EvolutionDetail {
     private int minHappiness;
 
     @SerializedName("min_beauty")
-    private int beauty;
+    private int minBeauty;
 
-    public String getItem() {
+    @SerializedName("min_affection")
+    private int minAffection;
+
+    @SerializedName("needs_overworld_rain")
+    private boolean needsOverworldRain;
+
+    @SerializedName("party_species")
+    private PokemonSpecies partySpecies;
+
+    @SerializedName("party_type")
+    private Type partyType;
+
+    @SerializedName("relative_physical_stats")
+    private int relativePhysicalStats;
+
+    @SerializedName("time_of_day")
+    private String timeOfDay;
+
+    @SerializedName("trade_species")
+    private PokemonSpecies tradeSpecies;
+
+    @SerializedName("turn_upside_down")
+    private Boolean turnUpsideDown;
+
+    public Item getItem() {
         return item;
     }
 
-    public void setItem(String item) {
+    public void setItem(Item item) {
         this.item = item;
     }
 
-    public String getTrigger() {
+    public EvolutionTrigger getTrigger() {
         return trigger;
     }
 
-    public void setTrigger(String trigger) {
+    public void setTrigger(EvolutionTrigger trigger) {
         this.trigger = trigger;
     }
 
-    public String getGender() {
+    public int getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(int gender) {
         this.gender = gender;
     }
 
-    public String getMove() {
+    public Move getMove() {
         return move;
     }
 
-    public void setMove(String move) {
+    public void setMove(Move move) {
         this.move = move;
     }
 
-    public String getHeldItem() {
+    public Item getHeldItem() {
         return heldItem;
     }
 
-    public void setHeldItem(String heldItem) {
+    public void setHeldItem(Item heldItem) {
         this.heldItem = heldItem;
     }
 
-    public String getKnownMoveType() {
+    public Type getKnownMoveType() {
         return knownMoveType;
     }
 
-    public void setKnownMoveType(String knownMoveType) {
+    public void setKnownMoveType(Type knownMoveType) {
         this.knownMoveType = knownMoveType;
     }
 
-    public String getLocation() {
+    public Location getLocation() {
         return location;
     }
 
-    public void setLocation(String location) {
+    public void setLocation(Location location) {
         this.location = location;
     }
 
@@ -106,10 +131,58 @@ class EvolutionDetail {
     }
 
     public int getBeauty() {
-        return beauty;
+        return minBeauty;
     }
 
-    public void setBeauty(int beauty) {
-        this.beauty = beauty;
+    public void setBeauty(int minBeauty) {
+        this.minBeauty = minBeauty;
+    }
+
+    public int getMinBeauty() {
+        return minBeauty;
+    }
+
+    public void setMinBeauty(int minBeauty) {
+        this.minBeauty = minBeauty;
+    }
+
+    public int getMinAffection() {
+        return minAffection;
+    }
+
+    public void setMinAffection(int minAffection) {
+        this.minAffection = minAffection;
+    }
+
+    public boolean isNeedsOverworldRain() {
+        return needsOverworldRain;
+    }
+
+    public void setNeedsOverworldRain(boolean needsOverworldRain) {
+        this.needsOverworldRain = needsOverworldRain;
+    }
+
+    public int getRelativePhysicalStats() {
+        return relativePhysicalStats;
+    }
+
+    public void setRelativePhysicalStats(int relativePhysicalStats) {
+        this.relativePhysicalStats = relativePhysicalStats;
+    }
+
+    public String getTimeOfDay() {
+        return timeOfDay;
+    }
+
+    public void setTimeOfDay(String timeOfDay) {
+        this.timeOfDay = timeOfDay;
+    }
+
+    public Boolean getTurnUpsideDown() {
+        return turnUpsideDown;
+    }
+
+    public void setTurnUpsideDown(Boolean turnUpsideDown) {
+        this.turnUpsideDown = turnUpsideDown;
     }
 }

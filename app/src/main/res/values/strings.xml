@@ -72,4 +72,14 @@
     <string name="weakness_to">Weak against</string>
     <string name="normal_damage_from">Normal damage from</string>
     <string name="resistance_to">Resistant against</string>
+    <string name="fist_stage_evolution">First stage evolution</string>
+    <string name="second_stage_evolution">Second stage evolution</string>
+    <string name="third_stage_evolution">Third stage evolution</string>
+    <string name="happiness">Happiness</string>
+    <string name="affection">Affection</string>
+    <string name="beauty">Beauty</string>
+    <string name="day">Day</string>
+    <string name="night">Night</string>
+    <string name="use_item">Item</string>
+    <string name="level_up">Level</string>
 </resources>

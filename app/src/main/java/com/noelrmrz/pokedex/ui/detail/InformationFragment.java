@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -15,6 +16,7 @@ import com.noelrmrz.pokedex.R;
 import com.noelrmrz.pokedex.databinding.FragmentInformationBinding;
 import com.noelrmrz.pokedex.pojo.EvolutionChain;
 import com.noelrmrz.pokedex.pojo.EvolutionChainLink;
+import com.noelrmrz.pokedex.pojo.EvolutionDetail;
 import com.noelrmrz.pokedex.pojo.Pokemon;
 import com.noelrmrz.pokedex.pojo.Type;
 import com.noelrmrz.pokedex.pojo.TypeLink;
@@ -32,6 +34,9 @@ import java.util.List;
 public class InformationFragment extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
+    private final String LEVEL_UP = "level-up";
+    private final String USE_ITEM = "use-item";
+    private final String TRADE = "trade";
     static Pokemon savedPokemon;
     private final HelperTools helperTools = HelperTools.getInstance();
     private FragmentInformationBinding bind;
@@ -118,6 +123,9 @@ public class InformationFragment extends Fragment {
                     EvolutionChain secondStage = firstStage.getNextEvolutions()[0];
                     String idTwo = secondStage.getSpecies().getUrl().substring(42).replace("/", "").trim();
                     bind.ivSecondStage.setVisibility(View.VISIBLE);
+                    bind.tvFirstLevelUp.setVisibility((View.VISIBLE));
+                    bind.ivFirstLevelUpArrow.setVisibility(View.VISIBLE);
+                    setEvolutionText(bind.tvFirstLevelUp, secondStage.getEvolutionDetails()[0]);
                     GlideClient.downloadSpriteImage(idTwo, bind.ivSecondStage);
 
                     // Check and set for the third evolution stage
@@ -125,6 +133,9 @@ public class InformationFragment extends Fragment {
                         EvolutionChain thirdStage = secondStage.getNextEvolutions()[0];
                         String idThree = thirdStage.getSpecies().getUrl().substring(42).replace("/", "").trim();
                         bind.ivThirdStage.setVisibility(View.VISIBLE);
+                        bind.tvSecondLevelUp.setVisibility((View.VISIBLE));
+                        bind.ivSecondLevelUpArrow.setVisibility(View.VISIBLE);
+                        setEvolutionText(bind.tvSecondLevelUp, thirdStage.getEvolutionDetails()[0]);
                         GlideClient.downloadSpriteImage(idThree, bind.ivThirdStage);
                     }
                 }
@@ -220,6 +231,29 @@ public class InformationFragment extends Fragment {
 
         for (TypeLink typeLink : mainViewModel.getAllPokemonList().get(mainViewModel.position).getTypeList()) {
             mainViewModel.getPokemonTypeData(typeLink.getType().getName());
+        }
+    }
+
+    public void setEvolutionText(TextView textview, EvolutionDetail evolutionDetail) {
+        switch(evolutionDetail.getTrigger().getName()){
+            case(LEVEL_UP):
+                if (evolutionDetail.getMinHappiness() != 0)
+                    textview.setText(getString(R.string.happiness) + " " + evolutionDetail.getMinHappiness());
+                else if(evolutionDetail.getMinBeauty() != 0)
+                    textview.setText(getString(R.string.beauty) + " " + evolutionDetail.getMinBeauty());
+                else if(evolutionDetail.getMinAffection() != 0)
+                    textview.setText(getString(R.string.affection) + " " + evolutionDetail.getMinAffection());
+                else if (!evolutionDetail.getTimeOfDay().equals(""))
+                    textview.setText(evolutionDetail.getTimeOfDay());
+                else
+                    textview.setText(getString(R.string.level_up) + " " + evolutionDetail.getMinLevel());
+                break;
+            case(USE_ITEM):
+                textview.setText(evolutionDetail.getItem().getName());
+                break;
+            case(TRADE):
+                textview.setText(TRADE);
+                break;
         }
     }
 }

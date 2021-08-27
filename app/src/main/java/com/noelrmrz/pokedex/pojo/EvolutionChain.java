@@ -12,23 +12,23 @@ public class EvolutionChain {
     @SerializedName("evolves_to")
     private EvolutionChain[] nextEvolutions;
 
-/*    @SerializedName("evolution_details")
-    private String evolutionDetails;*/
+    @SerializedName("evolution_details")
+    private EvolutionDetail[] evolutionDetails;
 
     public EvolutionChain(boolean isBaby, PokemonSpeciesLink species, EvolutionChain[] nextEvolutions,
-                          String evolutionDetails) {
+                          EvolutionDetail[] evolutionDetails) {
         this.isBaby = isBaby;
         this.species = species;
         this.nextEvolutions = nextEvolutions;
-        //this.evolutionDetails = evolutionDetails;
+        this.evolutionDetails = evolutionDetails;
     }
 
     public boolean isBaby() {
         return isBaby;
     }
 
-    public void setBaby(boolean baby) {
-        isBaby = baby;
+    public void setBaby(boolean isBaby) {
+        this.isBaby = isBaby;
     }
 
     public PokemonSpeciesLink getSpecies() {
@@ -47,11 +47,11 @@ public class EvolutionChain {
         this.nextEvolutions = nextEvolutions;
     }
 
-/*    public String getEvolutionDetails() {
+    public EvolutionDetail[] getEvolutionDetails() {
         return evolutionDetails;
     }
 
-    public void setEvolutionDetails(String evolutionDetails) {
+    public void setEvolutionDetails(EvolutionDetail[] evolutionDetails) {
         this.evolutionDetails = evolutionDetails;
-    }*/
+    }
 }
