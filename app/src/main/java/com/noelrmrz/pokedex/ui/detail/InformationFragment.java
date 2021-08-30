@@ -1,5 +1,6 @@
 package com.noelrmrz.pokedex.ui.detail;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -20,7 +22,6 @@ import com.noelrmrz.pokedex.pojo.EvolutionDetail;
 import com.noelrmrz.pokedex.pojo.Pokemon;
 import com.noelrmrz.pokedex.pojo.Type;
 import com.noelrmrz.pokedex.pojo.TypeLink;
-import com.noelrmrz.pokedex.utilities.BindingAdapters;
 import com.noelrmrz.pokedex.utilities.GlideClient;
 import com.noelrmrz.pokedex.utilities.GsonClient;
 import com.noelrmrz.pokedex.utilities.HelperTools;
@@ -84,20 +85,9 @@ public class InformationFragment extends Fragment {
     only called if the view from onCreateView is non-null
     View setup should occur here
     */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstance) {
-
-        // data binding displays wrong data when using with view pager
-        BindingAdapters.setPokemonDescription(bind.tvDescription, savedPokemon.getPokemonSpecies().getFlavorTextEntries());
-        bind.tvWeight.setText(String.valueOf(savedPokemon.getWeight()));
-        bind.tvHeight.setText(String.valueOf(savedPokemon.getHeight()));
-        BindingAdapters.setPokemonGenus(bind.tvSpecies, savedPokemon.getPokemonSpecies().getGenera());
-
-        BindingAdapters.setAbilities(bind.tvAbilityPrimaryName, savedPokemon.getAbilityList()[0]);
-        BindingAdapters.setAbilities(bind.tvAbilitySecondaryName,
-                savedPokemon.getAbilityList().length > 1 ? savedPokemon.getAbilityList()[1] : null);
-        BindingAdapters.setAbilities(bind.tvAbilityHiddenName,
-                savedPokemon.getAbilityList().length > 2 ? savedPokemon.getAbilityList()[2] : null);
 
         createTypeEffectivenessView(bind.xOneFlexLayout, Arrays.asList(HelperTools.getTypeNames()));
 

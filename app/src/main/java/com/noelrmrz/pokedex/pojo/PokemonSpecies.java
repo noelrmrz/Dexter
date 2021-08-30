@@ -24,10 +24,13 @@ public class PokemonSpecies {
     @SerializedName("genera")
     private Genera[] genera;
 
+    @SerializedName("habitat")
+    private Habitat habitat;
+
     public PokemonSpecies(int genderRate, int captureRate, int baseHappiness,
                           EvolvesFromSpeciesLink evolvesFromSpeciesLink,
                           EvolutionChainLink evolutionChainLink,
-                          FlavorTextEntry[] flavorTextEntries, Genera[] genera) {
+                          FlavorTextEntry[] flavorTextEntries, Genera[] genera, Habitat habitat) {
         this.genderRate = genderRate;
         this.captureRate = captureRate;
         this.baseHappiness = baseHappiness;
@@ -35,6 +38,7 @@ public class PokemonSpecies {
         this.evolutionChainLink = evolutionChainLink;
         this.flavorTextEntries = flavorTextEntries;
         this.genera = genera;
+        this.habitat = habitat;
     }
 
     public int getGenderRate() {
@@ -91,5 +95,13 @@ public class PokemonSpecies {
 
     public void setGenera(Genera[] genera) {
         this.genera = genera;
+    }
+
+    public Habitat getHabitat() {
+        return habitat;
+    }
+
+    public void setHabitat(Habitat habitat) {
+        this.habitat = habitat;
     }
 }

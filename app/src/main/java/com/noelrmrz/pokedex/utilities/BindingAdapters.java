@@ -3,12 +3,18 @@ package com.noelrmrz.pokedex.utilities;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.databinding.BindingAdapter;
 
+import com.noelrmrz.pokedex.R;
 import com.noelrmrz.pokedex.pojo.AbilityLink;
 import com.noelrmrz.pokedex.pojo.FlavorTextEntry;
 import com.noelrmrz.pokedex.pojo.Genera;
@@ -17,12 +23,13 @@ public class BindingAdapters {
 
     private static final String LANGUAGE = "EN";
     private static final String VERSION_NAME = "omega-ruby";  //"ultra-sun-ultra-moon";
+    private static final int ONE = 1;
 
     public BindingAdapters() {}
 
     @BindingAdapter("hideIfZero")
     public static void hideIfZero(View view, int number) {
-        if (number > 1)
+        if (number > ONE)
             view.setVisibility(View.VISIBLE);
         else
             view.setVisibility(View.GONE);
@@ -73,24 +80,49 @@ public class BindingAdapters {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @BindingAdapter("setPokemonGenus")
     public static void setPokemonGenus(TextView textView, Genera[] generaList) {
         for (Genera genera : generaList) {
             if (genera.getLanguage().getLanguage().equalsIgnoreCase(LANGUAGE)) {
-                textView.setText(genera.getGenus());
+                Spanned styledText = Html.fromHtml(textView.getContext().getString(R.string.tv_species,
+                        genera.getGenus()), Html.FROM_HTML_MODE_LEGACY);
+                textView.setText(styledText);
                 return;
             }
         }
     }
 
     @BindingAdapter("setAbilities")
-    public static void setAbilities(TextView textview, AbilityLink abilityLink) {
-        if (abilityLink == null) {
-            return;
+    public static void setAbilities(Button button, AbilityLink abilityLink) {
+        if (abilityLink != null) {
+            // Get the Ability name and make everything after the first character lowercase
+            button.setVisibility(View.VISIBLE);
+            button.setText(abilityLink.getAbility().getName());
         }
-        else {
-            textview.setVisibility(View.VISIBLE);
-            textview.setText(abilityLink.getAbility().getName());
-        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @BindingAdapter("setWeight")
+    public static void setWeight(TextView textView, int weight) {
+        Spanned styledText = Html.fromHtml(textView.getContext().getString(R.string.tv_weight,
+                weight), Html.FROM_HTML_MODE_LEGACY);
+        textView.setText(styledText);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @BindingAdapter("setHeight")
+    public static void setHeight(TextView textView, int height) {
+        Spanned styledText = Html.fromHtml(textView.getContext().getString(R.string.tv_height,
+                height), Html.FROM_HTML_MODE_LEGACY);
+        textView.setText(styledText);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @BindingAdapter("setHabitat")
+    public static void setHabitat(TextView textView, String habitat) {
+        Spanned styledText = Html.fromHtml(textView.getContext().getString(R.string.tv_habitat,
+                habitat), Html.FROM_HTML_MODE_LEGACY);
+        textView.setText(styledText);
     }
 }

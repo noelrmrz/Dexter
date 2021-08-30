@@ -20,6 +20,7 @@
                 android:id="@+id/tv_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:setPokemonDescription="@{pokemon.pokemonSpecies.flavorTextEntries}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -37,60 +38,45 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_description" />
 
             <TextView
-                android:id="@+id/tv_label_species"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/tv_label_species"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/tv_label_pokemon_data"
-                app:layout_constraintTop_toBottomOf="@+id/tv_label_pokemon_data" />
-
-            <TextView
                 android:id="@+id/tv_species"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:setPokemonGenus="@{pokemon.pokemonSpecies.genera}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/tv_label_pokemon_data"
-                app:layout_constraintTop_toTopOf="@+id/tv_label_species"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_label_pokemon_data"
                 tools:text="Lizard Pokemon" />
-
-            <TextView
-                android:id="@+id/tv_label_height"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/tv_label_height"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/tv_label_species"
-                app:layout_constraintTop_toBottomOf="@+id/tv_label_species" />
 
             <TextView
                 android:id="@+id/tv_height"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="@+id/tv_species"
-                app:layout_constraintTop_toTopOf="@+id/tv_label_height"
+                android:layout_marginTop="8dp"
+                app:setHeight="@{pokemon.height}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_species"
                 tools:text="0.6m" />
-
-            <TextView
-                android:id="@+id/tv_label_weight"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/tv_label_weight"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/tv_label_height"
-                app:layout_constraintTop_toBottomOf="@+id/tv_label_height" />
 
             <TextView
                 android:id="@+id/tv_weight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="@+id/tv_height"
-                app:layout_constraintTop_toTopOf="@+id/tv_label_weight"
+                android:layout_marginTop="8dp"
+                app:setWeight="@{pokemon.weight}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_height"
                 tools:text="8.5kg" />
+
+            <TextView
+                android:id="@+id/tv_habitat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:setHabitat="@{pokemon.pokemonSpecies.habitat.name}"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_species"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tv_species" />
 
             <TextView
                 android:id="@+id/tv_label_Abilities"
@@ -100,69 +86,51 @@
                 android:text="@string/tv_label_abilities"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/tv_label_weight"
-                app:layout_constraintTop_toBottomOf="@+id/tv_label_weight" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_weight" />
 
-            <TextView
-                android:id="@+id/tv_ability_primary_name"
+            <Button
+                android:id="@+id/btn_ability_primary"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="4dp"
-                android:background="@drawable/rectangle"
-                android:backgroundTint="@color/dragon"
-                android:elevation="2dp"
-                android:paddingTop="16dp"
-                android:paddingBottom="16dp"
-                android:textAlignment="center"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@+id/tv_ability_secondary_name"
+                android:textSize="12sp"
+                android:textAllCaps="false"
+                app:layout_constraintEnd_toStartOf="@+id/btn_ability_secondary"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_label_Abilities"
                 app:setAbilities="@{pokemon.abilityList[0]}"
-                tools:text="Solar Power" />
+                tools:text="Solar Power"/>
 
-            <TextView
-                android:id="@+id/tv_ability_secondary_name"
+            <Button
+                android:id="@+id/btn_ability_secondary"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:background="@drawable/rectangle"
-                android:backgroundTint="@color/dragon"
-                android:elevation="2dp"
-                android:paddingTop="16dp"
-                android:paddingBottom="16dp"
-                android:textAlignment="center"
-                android:textStyle="bold"
                 android:visibility="gone"
-                app:layout_constraintEnd_toStartOf="@+id/tv_ability_hidden_name"
+                android:textSize="12sp"
+                android:textAllCaps="false"
+                app:setAbilities="@{pokemon.abilityList.length > 1 ? pokemon.abilityList[1] : null}"
+                app:layout_constraintEnd_toStartOf="@+id/btn_ability_hidden"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
                 app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toEndOf="@+id/tv_ability_primary_name"
-                app:layout_constraintTop_toTopOf="@+id/tv_ability_primary_name"
-                tools:text="Solar Power" />
+                app:layout_constraintStart_toEndOf="@+id/btn_ability_primary"
+                app:layout_constraintTop_toTopOf="@+id/btn_ability_primary" />
 
-            <TextView
-                android:id="@+id/tv_ability_hidden_name"
+            <Button
+                android:id="@+id/btn_ability_hidden"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:background="@drawable/rectangle"
-                android:elevation="2dp"
-                android:paddingTop="16dp"
-                android:paddingBottom="16dp"
-                android:textAlignment="center"
-                android:textStyle="bold"
                 android:visibility="gone"
+                android:textSize="12sp"
+                android:textAllCaps="false"
+                app:setAbilities="@{pokemon.abilityList.length > 2 ? pokemon.abilityList[2] : null}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
                 app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toEndOf="@+id/tv_ability_secondary_name"
-                app:layout_constraintTop_toTopOf="@+id/tv_ability_secondary_name"
-                tools:text="Solar Power" />
+                app:layout_constraintStart_toEndOf="@+id/btn_ability_secondary"
+                app:layout_constraintTop_toTopOf="@+id/btn_ability_secondary" />
 
             <TextView
                 android:id="@+id/tv_label_evolutions"
@@ -174,8 +142,8 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/tv_label_weight"
-                app:layout_constraintTop_toBottomOf="@+id/tv_ability_primary_name" />
+                app:layout_constraintStart_toStartOf="@+id/btn_ability_primary"
+                app:layout_constraintTop_toBottomOf="@+id/btn_ability_primary" />
 
             <ImageView
                 android:id="@+id/iv_first_stage"
