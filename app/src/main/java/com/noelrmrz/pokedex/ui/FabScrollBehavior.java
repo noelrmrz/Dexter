@@ -10,6 +10,9 @@ import androidx.core.view.ViewCompat;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.List;
 
 class FabScrollBehavior extends AppBarLayout.ScrollingViewBehavior {
 
@@ -19,8 +22,7 @@ class FabScrollBehavior extends AppBarLayout.ScrollingViewBehavior {
 
     @Override
     public boolean layoutDependsOn(CoordinatorLayout parent, View child, View dependency) {
-        return super.layoutDependsOn(parent, child, dependency) ||
-                dependency instanceof FloatingActionButton;
+        return dependency instanceof Snackbar.SnackbarLayout;
     }
 
     @Override
@@ -31,6 +33,29 @@ class FabScrollBehavior extends AppBarLayout.ScrollingViewBehavior {
         return axes == ViewCompat.SCROLL_AXIS_VERTICAL ||
                 super.onStartNestedScroll(coordinatorLayout, child, directTargetChild, target,
                         axes, type);
+    }
+
+    @Override
+    public boolean onDependentViewChanged(@NonNull CoordinatorLayout parent, @NonNull View child,
+                                          @NonNull View dependency) {
+        float translationY = getFabTranslationYForSnackbar(parent, child);
+        child.setTranslationY(translationY);
+        return false;
+    }
+
+    private float getFabTranslationYForSnackbar(CoordinatorLayout parent,
+                                                View fab) {
+        float minOffset = 0;
+        final List<View> dependencies = parent.getDependencies(fab);
+        for (int i = 0, z = dependencies.size(); i < z; i++) {
+            final View view = dependencies.get(i);
+            if (view instanceof Snackbar.SnackbarLayout && parent.doViewsOverlap(fab, view)) {
+                minOffset = Math.min(minOffset,
+                        view.getTranslationY() - view.getHeight());
+            }
+        }
+
+        return minOffset;
     }
 
     @Override

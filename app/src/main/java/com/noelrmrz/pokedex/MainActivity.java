@@ -9,6 +9,7 @@ import android.speech.RecognizerIntent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.SearchView;
@@ -16,6 +17,7 @@ import android.widget.SearchView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Observer;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.gms.ads.AdError;
@@ -27,7 +29,10 @@ import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.noelrmrz.pokedex.pojo.Ability;
+import com.noelrmrz.pokedex.pojo.EffectEntry;
 import com.noelrmrz.pokedex.pojo.Pokemon;
 import com.noelrmrz.pokedex.pojo.PokemonSpecies;
 import com.noelrmrz.pokedex.settings.SettingsActivity;
@@ -35,6 +40,7 @@ import com.noelrmrz.pokedex.ui.detail.SearchFragment;
 import com.noelrmrz.pokedex.ui.main.MainFragment;
 import com.noelrmrz.pokedex.utilities.GsonClient;
 import com.noelrmrz.pokedex.utilities.RetrofitClient;
+import com.noelrmrz.pokedex.viewmodel.MainViewModel;
 import com.noelrmrz.pokedex.widget.PokedexWidgetService;
 
 import java.util.List;
@@ -343,6 +349,25 @@ public class MainActivity extends AppCompatActivity implements
             Timber.d(spokenText);
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void someFancyMethod(View view) {
+        String tag = view.getTag().toString();
+        MainViewModel mainViewModel = new MainViewModel();
+        mainViewModel.getAbilityMutableLiveData().observe(this, new Observer<Ability>() {
+            @Override
+            public void onChanged(Ability ability) {
+                for (EffectEntry entry : ability.getEffectEntries()) {
+                    if (entry.getLanguage().getLanguage().equalsIgnoreCase("EN")) {
+                        // Pass in the layout containing the FAB so that it moves with Snackbar
+                        Snackbar snackbar = Snackbar.make(findViewById(R.id.detail), entry.getShortEffect(), Snackbar.LENGTH_SHORT);
+                        snackbar.show();
+                        return;
+                    }
+                }
+            }
+        });
+        mainViewModel.getAbilityData(tag);
     }
 }
 

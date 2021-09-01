@@ -15,7 +15,6 @@ import retrofit2.http.Query;
 
 public interface PokemonService {
 
-    // TODO change URL
     @GET("pokemon")
     Call<PokemonJsonList> getPokemonList(@Query("limit") int limit, @Query("offset") int offset);
 

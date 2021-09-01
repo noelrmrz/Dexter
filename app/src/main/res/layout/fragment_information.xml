@@ -96,13 +96,15 @@
                 android:layout_marginTop="16dp"
                 android:textSize="12sp"
                 android:textAllCaps="false"
+                android:onClick="someFancyMethod"
+                android:tag="@{pokemon.abilityList[0].ability.name}"
                 app:layout_constraintEnd_toStartOf="@+id/btn_ability_secondary"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_label_Abilities"
                 app:setAbilities="@{pokemon.abilityList[0]}"
-                tools:text="Solar Power"/>
+                tools:text="Solar Power" />
 
             <Button
                 android:id="@+id/btn_ability_secondary"
@@ -111,6 +113,8 @@
                 android:visibility="gone"
                 android:textSize="12sp"
                 android:textAllCaps="false"
+                android:onClick="someFancyMethod"
+                android:tag="@{pokemon.abilityList.length > 1 ? pokemon.abilityList[1].ability.name : null}"
                 app:setAbilities="@{pokemon.abilityList.length > 1 ? pokemon.abilityList[1] : null}"
                 app:layout_constraintEnd_toStartOf="@+id/btn_ability_hidden"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
@@ -125,6 +129,8 @@
                 android:visibility="gone"
                 android:textSize="12sp"
                 android:textAllCaps="false"
+                android:onClick="someFancyMethod"
+                android:tag="@{pokemon.abilityList.length > 2 ? pokemon.abilityList[2].ability.name : null}"
                 app:setAbilities="@{pokemon.abilityList.length > 2 ? pokemon.abilityList[2] : null}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
