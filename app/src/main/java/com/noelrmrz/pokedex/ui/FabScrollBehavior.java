@@ -43,8 +43,7 @@ class FabScrollBehavior extends AppBarLayout.ScrollingViewBehavior {
         return false;
     }
 
-    private float getFabTranslationYForSnackbar(CoordinatorLayout parent,
-                                                View fab) {
+    private float getFabTranslationYForSnackbar(CoordinatorLayout parent, View fab) {
         float minOffset = 0;
         final List<View> dependencies = parent.getDependencies(fab);
         for (int i = 0, z = dependencies.size(); i < z; i++) {
@@ -54,28 +53,25 @@ class FabScrollBehavior extends AppBarLayout.ScrollingViewBehavior {
                         view.getTranslationY() - view.getHeight());
             }
         }
-
         return minOffset;
     }
 
     @Override
-    public void onNestedPreScroll(@NonNull CoordinatorLayout coordinatorLayout,
-                                  @NonNull View child, @NonNull View target, int dx, int dy,
-                                  @NonNull int[] consumed, int type) {
-        super.onNestedPreScroll(coordinatorLayout, child, target, dx, dy, consumed, type);
+    public void onNestedScroll(@NonNull CoordinatorLayout coordinatorLayout, @NonNull View child,
+                               @NonNull View target, int dxConsumed, int dyConsumed, int dxUnconsumed,
+                               int dyUnconsumed, int type, @NonNull int[] consumed) {
+        super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed, dxUnconsumed,
+                dyUnconsumed, type, consumed);
 
-        if (dy > 0) {
-            // User scrolled down -> hide the FAB
-            ((FloatingActionButton) child).hide(new FloatingActionButton
-                    .OnVisibilityChangedListener() {
+        if (dyConsumed > 0 && child.getVisibility() == View.VISIBLE) {
+            ((FloatingActionButton) child).hide(new FloatingActionButton.OnVisibilityChangedListener() {
                 @Override
-                public void onHidden(FloatingActionButton fab) {
-                    super.onHidden(fab);
-                    fab.setVisibility(View.INVISIBLE);
+                public void onHidden(FloatingActionButton floatingActionButton) {
+                    super.onHidden(floatingActionButton);
+                    floatingActionButton.setVisibility(View.INVISIBLE);
                 }
             });
-        } else if (dy < 0) {
-            // User scrolled up -> show the FAB
+        } else if (dyConsumed < 0 && child.getVisibility() != View.VISIBLE) {
             ((FloatingActionButton) child).show();
         }
     }

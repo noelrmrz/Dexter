@@ -60,7 +60,7 @@ public class MainFragment extends Fragment {
 
         mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
-        mainViewModel.getPokemonMutableLiveData().observe(getViewLifecycleOwner(), new Observer<Pokemon>() {
+        mainViewModel.getPokemonMutableLiveData().observe(getViewLifecycleOwner(), new Observer<>() {
             @Override
             public void onChanged(Pokemon pokemon) {
                 if (mainViewModel.getOffset() == mainViewModel.getAllPokemonList().size()) {
@@ -119,7 +119,6 @@ public class MainFragment extends Fragment {
     }
 
     private void loadData() {
-        // TODO figure out how to change views depending on shared preferences
         isLoading = true;
         // Insert null object, this is the empty loading indicator
         gridAdapter.addToPokemonList(null);
