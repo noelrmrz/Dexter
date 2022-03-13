@@ -108,4 +108,7 @@ dependencies {
 
     // Flexbox
     implementation 'com.google.android:flexbox:0.3.2'
+
+    // Pallete
+    implementation 'androidx.palette:palette:1.0.0'
 }

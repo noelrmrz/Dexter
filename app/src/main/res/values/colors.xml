@@ -10,17 +10,17 @@
     <color name="grass">#66BB6A</color>
     <color name="bug">#D4E157</color>
     <color name="flying">#26A69A</color>
-    <color name="normal">#F5F5DC</color>
+    <color name="normal">#F5F5F5</color>
     <color name="electric">#FFEE58</color>
     <color name="poison">#7E57C2</color>
-    <color name="ground">#8D6E63</color>
+    <color name="ground">#C2B280</color>
     <color name="ice">#29B6F6</color>
     <color name="psychic">#AB47BC</color>
     <color name="fighting">#FF7043</color>
-    <color name="steel">#8E8E8E</color>
-    <color name="rock">#6C544B</color>
+    <color name="steel">#607D8B</color>
+    <color name="rock">#9E9E9E</color>
     <color name="dragon">#FFA726</color>
     <color name="fairy">#EC407A</color>
-    <color name="dark">#333333</color>
+    <color name="dark">#424242</color>
     <color name="ghost">#5C6BC0</color>
 </resources>

@@ -2,14 +2,21 @@ package com.noelrmrz.pokedex.utilities;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.util.DisplayMetrics;
+
+import androidx.palette.graphics.Palette;
 
 import com.noelrmrz.pokedex.R;
 
+import java.util.List;
+
 public class HelperTools {
 
-    private static final String[] typeNames = new String[] {"ice",
+    private static final String[] typeNames = new String[]{"ice",
             "water",
             "fire",
             "fighting",
@@ -28,7 +35,7 @@ public class HelperTools {
             "dragon",
             "electric"};
 
-    private static HelperTools helperTools = new HelperTools();
+    private static final HelperTools helperTools = new HelperTools();
 
     private HelperTools() {
 
@@ -141,10 +148,40 @@ public class HelperTools {
     public static float convertDpToPixel(float dp, Context context) {
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
-        return dp * ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+        return dp * ((float) metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
     }
 
     public static String[] getTypeNames() {
         return typeNames;
+    }
+
+    /**
+     * A one color image.
+     *
+     * @param width
+     * @param height
+     * @param color
+     * @return A one color image with the given width and height.
+     */
+    public static Bitmap createImage(int width, int height, int color) {
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        Paint paint = new Paint();
+        paint.setColor(color);
+        canvas.drawRect(0F, 0F, (float) width, (float) height, paint);
+        return bitmap;
+    }
+
+    public static Palette.Swatch getSwatch(int color) {
+        Palette palette = Palette.from(createImage(2, 2, color)).generate();
+        List<Palette.Swatch> swatches = palette.getSwatches();
+
+        // Check that the swatch is available
+        for (Palette.Swatch swatch : swatches) {
+            if (swatch != null) {
+                return swatch;
+            }
+        }
+        return null;
     }
 }

@@ -1,8 +1,6 @@
 package com.noelrmrz.pokedex.utilities;
 
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.text.Html;
 import android.text.Spanned;
@@ -13,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 import androidx.databinding.BindingAdapter;
+import androidx.palette.graphics.Palette;
 
 import com.noelrmrz.pokedex.R;
 import com.noelrmrz.pokedex.pojo.AbilityLink;
@@ -59,14 +58,27 @@ public class BindingAdapters {
     }
 
     @BindingAdapter("setBackgroundColor")
-    public static void setBackgroundColor(View view, String someString) {
+    public static void setBackgroundColor(View view, String type) {
         // Change the background color depending on the primary type
-        Drawable drawable = view.getBackground().mutate();
-        PorterDuffColorFilter filter = new PorterDuffColorFilter(view.getResources()
-                .getColor(HelperTools.getColor(view.getContext(), someString)),
-                PorterDuff.Mode.SRC_ATOP);
-        drawable.setColorFilter(filter);
-        drawable.invalidateSelf();
+        GradientDrawable typeBackground = (GradientDrawable) view.getBackground();
+        int color = view.getResources()
+                .getColor(HelperTools.getColor(view.getContext(), type));
+        Palette.Swatch swatch = HelperTools.getSwatch(color);
+
+        if (swatch != null) {
+            typeBackground.setColor(swatch.getRgb());
+        }
+    }
+
+    @BindingAdapter("setTextColor")
+    public static void setTextColor(TextView textView, String type) {
+        int color = textView.getResources()
+                .getColor(HelperTools.getColor(textView.getContext(), type));
+        Palette.Swatch swatch = HelperTools.getSwatch(color);
+
+        if (swatch != null) {
+            textView.setTextColor(swatch.getTitleTextColor());
+        }
     }
 
     @BindingAdapter("setPokemonDescription")

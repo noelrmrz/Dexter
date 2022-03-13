@@ -146,7 +146,7 @@ public class InformationFragment extends Fragment {
             typeCompoundView.setTypeEffect(getString(R.string.one_x));
 
             // Set the background to correspond to the the type Color
-            typeCompoundView.setValueColor(requireContext().getResources().getColor(HelperTools
+            typeCompoundView.setColors(requireContext().getResources().getColor(HelperTools
                     .getColor(requireContext(), list.get(y))));
 
             // Add the view to the layout
@@ -161,7 +161,7 @@ public class InformationFragment extends Fragment {
             if (layout.findViewById(HelperTools.getTypeId(requireContext(), type.getName())) != null) {
                 // Find the TextView within the layout. Reset the text to just the type name.
                 // Add the item to the list to return.
-                TypeCompoundView textView = (TypeCompoundView) layout.findViewById(HelperTools.getTypeId(requireContext(),
+                TypeCompoundView textView = layout.findViewById(HelperTools.getTypeId(requireContext(),
                         type.getName()));
                 views.add(textView);
 

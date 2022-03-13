@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.palette.graphics.Palette;
 
 import com.google.android.flexbox.FlexboxLayout;
 import com.noelrmrz.pokedex.R;
@@ -47,16 +48,25 @@ public class TypeCompoundView extends FlexboxLayout {
         this(context, null);
     }
 
-    public void setValueColor(int color) {
-        // set the background
-        typeBackground.setColor(color);
-    }
-
     public void setTypeName(String typeName) {
         textViewTypeName.setText(typeName);
     }
 
     public void setTypeEffect(String effectiveness) {
         textViewEffectiveness.setText(effectiveness);
+    }
+
+    public void setColors(int color) {
+        int backgroundColor = color;
+        int textColor = getResources().getColor(R.color.white);
+        Palette.Swatch swatch = HelperTools.getSwatch(color);
+
+        if (swatch != null) {
+            backgroundColor = swatch.getRgb();
+            textColor = swatch.getTitleTextColor();
+        }
+
+        typeBackground.setColor(backgroundColor);
+        textViewTypeName.setTextColor(textColor);
     }
 }

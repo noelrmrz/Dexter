@@ -49,6 +49,7 @@
                     android:fontFamily="sans-serif"
                     android:textAllCaps="false"
                     android:textSize="14sp"
+                    app:setTextColor="@{pokemon.typeList[0].type.name}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="001" />
@@ -60,6 +61,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-medium"
                     android:textSize="16sp"
+                    app:setTextColor="@{pokemon.typeList[0].type.name}"
                     app:layout_constraintStart_toStartOf="@+id/tv_pokemon_id"
                     app:layout_constraintTop_toBottomOf="@+id/tv_pokemon_id"
                     tools:text="Bulbasaur" />
@@ -70,6 +72,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    app:setTextColor="@{pokemon.typeList[0].type.name}"
                     app:layout_constraintStart_toStartOf="@+id/tv_pokemon_name"
                     app:layout_constraintTop_toBottomOf="@+id/tv_pokemon_name"
                     tools:text="Primary" />
@@ -80,6 +83,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
+                    app:setTextColor="@{pokemon.typeList[0].type.name}"
                     app:hideIfZero="@{pokemon.typeList.length}"
                     app:layout_constraintStart_toEndOf="@+id/tv_pokemon_primary_type"
                     app:layout_constraintTop_toTopOf="@+id/tv_pokemon_primary_type"
