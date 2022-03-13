@@ -6,9 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
@@ -28,8 +28,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import timber.log.Timber;
-
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link StatsFragment#newInstance} factory method to
@@ -40,7 +38,6 @@ public class StatsFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private FragmentStatsBinding bind;
-
     private Stat[] statList;
     public StatsFragment() {
         // Required empty public constructor
@@ -72,7 +69,7 @@ public class StatsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         bind = FragmentStatsBinding.inflate(inflater, container, false);
@@ -82,7 +79,9 @@ public class StatsFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        final float X_GRANULARITY = 2f;
+        final float Y_AXIS_MIN = 0f;
 
         bind.horizontalChart.setDrawGridBackground(false);
         bind.horizontalChart.setDrawBarShadow(false);
@@ -95,18 +94,18 @@ public class StatsFragment extends Fragment {
         xAxis.setDrawGridLines(false);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawAxisLine(true);
-        xAxis.setGranularity(2f);
+        xAxis.setGranularity(X_GRANULARITY);
 
         xAxis.setValueFormatter(new XAxisFormatter());
 
         // Setup the Y-axis
         YAxis yAxisLeft = bind.horizontalChart.getAxisLeft();
-        yAxisLeft.setAxisMinimum(0f); // this replaces setStartAtZero(true)
+        yAxisLeft.setAxisMinimum(Y_AXIS_MIN); // this replaces setStartAtZero(true)
         yAxisLeft.setDrawAxisLine(true);
         yAxisLeft.setDrawGridLines(true);
 
         YAxis yAxisRight = bind.horizontalChart.getAxisRight();
-        yAxisRight.setAxisMinimum(0f);
+        yAxisRight.setAxisMinimum(Y_AXIS_MIN);
         yAxisRight.setDrawAxisLine(true);
         yAxisRight.setDrawGridLines(false);
 
@@ -124,7 +123,7 @@ public class StatsFragment extends Fragment {
     }
 
     public void setChartData(HorizontalBarChart horizontalChart) {
-        float barWidth = 1f;
+        final float BAR_WIDTH = 1f;
 
         // Setup the dataset
         BarDataSet barDataset = new BarDataSet(setChartEntries(statList, horizontalChart), "");
@@ -135,7 +134,7 @@ public class StatsFragment extends Fragment {
         // Hookup the chart
         BarData barData = new BarData(barDataset);
         barData.addDataSet(barDataset);
-        barData.setBarWidth(barWidth);
+        barData.setBarWidth(BAR_WIDTH);
 
         horizontalChart.setData(barData);
         horizontalChart.fitScreen();
@@ -144,31 +143,29 @@ public class StatsFragment extends Fragment {
     public List<BarEntry> setChartEntries(Stat[] stats, HorizontalBarChart barChart) {
         List<BarEntry> entries = new ArrayList<>();
         int sum = 0;
-        float spaceForBar = 2f;
 
         for (int i = 0; i < stats.length; i++) {
-            entries.add(new BarEntry(i * spaceForBar, (float) stats[i].getBaseStat()));
+            final float BAR_SPACE = 2f;
+            entries.add(new BarEntry(i * BAR_SPACE, (float) stats[i].getBaseStat()));
             sum += stats[i].getBaseStat();
         }
 
         setChartDescription(barChart, sum);
-
         return entries;
     }
 
-    public static void setChartDescription(Chart chart, int sum) {
+    public void setChartDescription(HorizontalBarChart chart, int sum) {
+        final float DESC_Y_POS = 1425f;
+        final float DESC_X_POS = 220f;
         Description description = chart.getDescription();
         description.setEnabled(true);
         description.setText("Total: " + sum);
-        //TODO:  remove hardcoded positions
-        description.setPosition(225f, 1425f);
+        description.setPosition(DESC_X_POS, DESC_Y_POS);
         chart.setDescription(description);
     }
 
     public static class XAxisFormatter extends ValueFormatter {
-
         String[] labels = new String[]{"HP", "Atk", "SpAtk", "Def", "SpDef", "Spd"};
-
         DecimalFormat decimalFormat = new DecimalFormat("###");
 
         @Override
@@ -179,13 +176,11 @@ public class StatsFragment extends Fragment {
         @Override
         public String getAxisLabel(float value, AxisBase axis) {
             // value is in increments of 10
-            Timber.d("value " + value);
             return labels[Math.round(value / 2)];
         }
     }
 
     public static class YAxisFormatter extends ValueFormatter {
-
         DecimalFormat decimalFormat = new DecimalFormat("###");
 
         @Override
